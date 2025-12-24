@@ -1,0 +1,28 @@
+{
+  "schema": "hyprprof/0.1",
+
+  "hyprprof":
+  {
+    "profile_name": "meu sistema hyprland",
+    "version": "0.2.3",
+    "required_payload": true
+  },
+  
+  "apps":
+  {
+    "terminal":
+    {
+      "provider": "kitty"
+    },
+    "browser": "firefox",
+    "file_manager": "dolphin",
+    "file_picker": "rofi"
+  },
+
+  "services":
+  {
+    "clipboard": "auto",
+    "screen_recorder": "disabled",
+    "screenshot": "disabled"
+  }
+}
