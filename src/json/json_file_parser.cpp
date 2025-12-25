@@ -50,6 +50,17 @@ bool json::JsonFileParser::_HaveAppsObject() {
     return true;
 }
 
+bool json::JsonFileParser::_HaveHyprprofObject()
+{
+  if(!_HaveObject("hyprprof"))
+  {
+    json::log::object_not_found("hyprprof");
+    return false;
+  }
+  hyprpof = _GetObject("hyprprof");
+  return true;
+}
+
 bool json::JsonFileParser::_HaveEnvironmentObject() {
     if (!_HaveObject("environment")) {
     json::log::object_not_found("apps");
@@ -88,6 +99,8 @@ void json::JsonFileParser::Parse() {
         return;
     if (!_ValidateSchema())
         return;
+    if(!_HaveHyprprofObject())
+      return;
     if (!_HaveAppsObject())
         return;
     if (!_HaveRequiredApps())

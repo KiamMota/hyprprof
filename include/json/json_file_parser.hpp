@@ -13,11 +13,13 @@ private:
   rapidjson::Document d;
   rapidjson::Value environment;
   rapidjson::Value apps;
+  rapidjson::Value hyprpof;
 
   bool _TryJsonParse();
   bool _HaveObject(const std::string &name);
   rapidjson::Value &_GetObject(const std::string &name);
   bool _ValidateSchema();
+  bool _HaveHyprprofObject();
   bool _HaveAppsObject();
   bool _HaveEnvironmentObject();
   bool _HaveAppsTerminalObject();

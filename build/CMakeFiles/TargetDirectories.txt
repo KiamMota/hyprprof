@@ -1,3 +1,0 @@
-/home/kimas/Documentos/hyprprof/build/CMakeFiles/hyprprof.dir
-/home/kimas/Documentos/hyprprof/build/CMakeFiles/edit_cache.dir
-/home/kimas/Documentos/hyprprof/build/CMakeFiles/rebuild_cache.dir
