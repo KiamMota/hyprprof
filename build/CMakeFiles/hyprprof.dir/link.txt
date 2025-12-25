@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/hyprprof.dir/link.d CMakeFiles/hyprprof.dir/src/environment.cpp.o CMakeFiles/hyprprof.dir/src/fs.cpp.o CMakeFiles/hyprprof.dir/src/json/json_file_parser.cpp.o CMakeFiles/hyprprof.dir/src/json/log.cpp.o CMakeFiles/hyprprof.dir/src/main.cpp.o -o hyprprof

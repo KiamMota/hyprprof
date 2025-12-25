@@ -1,0 +1,32 @@
+[
+{
+  "directory": "/home/kimas/Documentos/hyprprof/build",
+  "command": "/usr/bin/c++  -I/home/kimas/Documentos/hyprprof/include -I/home/kimas/Documentos/hyprprof/rapidjson/include  -o CMakeFiles/hyprprof.dir/src/environment.cpp.o -c /home/kimas/Documentos/hyprprof/src/environment.cpp",
+  "file": "/home/kimas/Documentos/hyprprof/src/environment.cpp",
+  "output": "CMakeFiles/hyprprof.dir/src/environment.cpp.o"
+},
+{
+  "directory": "/home/kimas/Documentos/hyprprof/build",
+  "command": "/usr/bin/c++  -I/home/kimas/Documentos/hyprprof/include -I/home/kimas/Documentos/hyprprof/rapidjson/include  -o CMakeFiles/hyprprof.dir/src/fs.cpp.o -c /home/kimas/Documentos/hyprprof/src/fs.cpp",
+  "file": "/home/kimas/Documentos/hyprprof/src/fs.cpp",
+  "output": "CMakeFiles/hyprprof.dir/src/fs.cpp.o"
+},
+{
+  "directory": "/home/kimas/Documentos/hyprprof/build",
+  "command": "/usr/bin/c++  -I/home/kimas/Documentos/hyprprof/include -I/home/kimas/Documentos/hyprprof/rapidjson/include  -o CMakeFiles/hyprprof.dir/src/json/json_file_parser.cpp.o -c /home/kimas/Documentos/hyprprof/src/json/json_file_parser.cpp",
+  "file": "/home/kimas/Documentos/hyprprof/src/json/json_file_parser.cpp",
+  "output": "CMakeFiles/hyprprof.dir/src/json/json_file_parser.cpp.o"
+},
+{
+  "directory": "/home/kimas/Documentos/hyprprof/build",
+  "command": "/usr/bin/c++  -I/home/kimas/Documentos/hyprprof/include -I/home/kimas/Documentos/hyprprof/rapidjson/include  -o CMakeFiles/hyprprof.dir/src/json/log.cpp.o -c /home/kimas/Documentos/hyprprof/src/json/log.cpp",
+  "file": "/home/kimas/Documentos/hyprprof/src/json/log.cpp",
+  "output": "CMakeFiles/hyprprof.dir/src/json/log.cpp.o"
+},
+{
+  "directory": "/home/kimas/Documentos/hyprprof/build",
+  "command": "/usr/bin/c++  -I/home/kimas/Documentos/hyprprof/include -I/home/kimas/Documentos/hyprprof/rapidjson/include  -o CMakeFiles/hyprprof.dir/src/main.cpp.o -c /home/kimas/Documentos/hyprprof/src/main.cpp",
+  "file": "/home/kimas/Documentos/hyprprof/src/main.cpp",
+  "output": "CMakeFiles/hyprprof.dir/src/main.cpp.o"
+}
+]
