@@ -1,0 +1,20 @@
+# Base em LLVM para C++
+BasedOnStyle: LLVM
+IndentWidth: 4
+ColumnLimit: 100
+UseTab: Never
+
+# Ponteiros e referências à esquerda (int* p)
+PointerAlignment: Left
+
+# Quebras de linha
+BreakBeforeBraces: Attach
+
+# Não forçar ordenação automática de includes
+SortIncludes: false
+
+# Regras específicas para C++
+Language: Cpp
+# Mantém indentação de namespaces “plana”
+NamespaceIndentation: None
+

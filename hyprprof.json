@@ -15,7 +15,6 @@
       "provider": "kitty"
     },
     "browser": "firefox",
-    "file_manager": "dolphin",
     "file_picker": "rofi"
   },
 
