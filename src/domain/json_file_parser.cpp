@@ -1,12 +1,9 @@
-#include "json/json_file_parser.hpp"
+#include "domain/json_file_parser.hpp"
 
-#include "json/json_log.hpp"
-#include <cstddef>
+#include "infra/log/json_log.hpp"
 #include <iostream>
 #include <rapidjson/error/en.h>
 #include <unistd.h>
-#include "fs/dir.hpp"
-#include "fs/file.hpp"
 
 bool json::JsonFileParser::_TryJsonParse() {
     rapidjson::ParseResult ok = d.Parse(_json_file_str.c_str());
