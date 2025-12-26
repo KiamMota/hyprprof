@@ -1,5 +1,5 @@
-#include "app/app_service.hpp"
+#include "app/install.hpp"
 int main(int argn, char** argv) {
-  app_service::AppService app{".."};
+  app_service::Install app{".."};
   
 }

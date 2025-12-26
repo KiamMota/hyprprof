@@ -19,6 +19,8 @@ namespace log
     (std::cout << ... << args);
     std::cout << "\n";
   }
+
+  void debug(const std::string& s);
 }
 
 

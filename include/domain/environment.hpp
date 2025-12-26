@@ -3,8 +3,8 @@
 
 #include <string>
 
-#include "package_manager.hpp"
-#include "xdg_session_type.hpp"
+#include "enum/package_manager.hpp"
+#include "enum/xdg_session_type.hpp"
 
 namespace env {
 

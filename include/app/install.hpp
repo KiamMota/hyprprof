@@ -1,11 +1,11 @@
 #ifndef APP_SERVICE_HPP
 #define APP_SERVICE_HPP
 
-#include "json/json_file_parser.hpp"
+#include "domain/json_file_parser.hpp"
 #include <string>
 namespace app_service
 {
-  class AppService
+  class Install
   {
     private:
       std::string _curr_path;
@@ -14,7 +14,7 @@ namespace app_service
       bool _ValidateJSONManifest();
       bool _ValidatePayload();
     public:
-      AppService(const std::string& curr_path);
+      Install(const std::string& curr_path);
 
   
   };
