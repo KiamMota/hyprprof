@@ -1,8 +1,5 @@
-#include "environment.hpp"
-#include "json/json_file_parser.hpp"
-
+#include "app/app_service.hpp"
 int main(int argn, char** argv) {
-  env::Environment env;
-  json::JsonFileParser json("../hyprprof.json");
-  json.Parse();
+  app_service::AppService app{".."};
+  
 }

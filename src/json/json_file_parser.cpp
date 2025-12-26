@@ -1,10 +1,12 @@
 #include "json/json_file_parser.hpp"
-#include "fs.hpp"
 
-#include "json/log.hpp"
+#include "json/json_log.hpp"
+#include <cstddef>
 #include <iostream>
 #include <rapidjson/error/en.h>
-
+#include <unistd.h>
+#include "fs/dir.hpp"
+#include "fs/file.hpp"
 
 bool json::JsonFileParser::_TryJsonParse() {
     rapidjson::ParseResult ok = d.Parse(_json_file_str.c_str());
@@ -43,27 +45,33 @@ bool json::JsonFileParser::_ValidateSchema() {
 
 bool json::JsonFileParser::_HaveAppsObject() {
     if (!_HaveObject("apps")) {
-      json::log::object_not_found("apps");
+        json::log::object_not_found("apps");
         return false;
     }
     apps = _GetObject("apps");
     return true;
 }
 
-bool json::JsonFileParser::_HaveHyprprofObject()
-{
-  if(!_HaveObject("hyprprof"))
-  {
-    json::log::object_not_found("hyprprof");
-    return false;
-  }
-  hyprpof = _GetObject("hyprprof");
-  return true;
+bool json::JsonFileParser::_HaveHyprprofObject() {
+    if (!_HaveObject("hyprprof")) {
+        json::log::object_not_found("hyprprof");
+        return false;
+    }
+    hyprpof = _GetObject("hyprprof");
+    return true;
+}
+
+bool json::JsonFileParser::_HavePayload() {
+    if (!hyprpof.HasMember("required_payload"))
+        return false;
+    if (!hyprpof["required_payload"].IsBool())
+        return false;
+    return true;
 }
 
 bool json::JsonFileParser::_HaveEnvironmentObject() {
     if (!_HaveObject("environment")) {
-      json::log::object_not_found("apps");
+        json::log::object_not_found("apps");
         return false;
     }
     environment = _GetObject("environment");
@@ -72,39 +80,48 @@ bool json::JsonFileParser::_HaveEnvironmentObject() {
 
 bool json::JsonFileParser::_HaveAppsTerminalObject() {
     if (!apps.HasMember("terminal") || !apps["terminal"].IsObject()) {
-      json::log::member_not_found("apps", "terminal");  
-      return false;
+        json::log::member_not_found("apps", "terminal");
+        return false;
     }
     return true;
 }
 
 bool json::JsonFileParser::_HaveRequiredApps() {
     if (!apps.HasMember("browser")) {
-      json::log::member_not_found("apps", "browser");
+        json::log::member_not_found("apps", "browser");
         return false;
     }
     if (!apps.HasMember("file_manager")) {
-      json::log::member_not_found("apps", "file_manager");
+        json::log::member_not_found("apps", "file_manager");
         return false;
     }
     return true;
 }
 
-json::JsonFileParser::JsonFileParser(const std::string& file_path) : schema("0.1") {
-    _json_file_str = fs::get_file_content(file_path);
-}
+json::JsonFileParser::JsonFileParser() : schema("0.1") {}
 
-void json::JsonFileParser::Parse() {
+void json::JsonFileParser::Parse(const std::string& json_str) {
+
+    if (json_str.empty()) {
+        json::log::err("the json content is empty!");
+        return;
+    }
+
+    _json_file_str = json_str;
+
     if (!_TryJsonParse())
         return;
     if (!_ValidateSchema())
         return;
-    if(!_HaveHyprprofObject())
-      return;
+    if (!_HaveHyprprofObject())
+        return;
     if (!_HaveAppsObject())
         return;
     if (!_HaveRequiredApps())
         return;
+    _havePayload = _HavePayload();
 }
+
+bool json::JsonFileParser::hasPayload() { return _havePayload; }
 
 std::string json::JsonFileParser::json_str() const { return _json_file_str; }

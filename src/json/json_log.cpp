@@ -1,4 +1,4 @@
-#include "json/log.hpp"
+#include "json/json_log.hpp"
 
 void json::log::member_not_found(const std::string &object, const std::string &member_name)
 {

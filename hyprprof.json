@@ -5,7 +5,7 @@
   {
     "profile_name": "meu sistema hyprland",
     "version": "0.2.3",
-    "required_payload": true
+    "required_payload": true 
   },
   
   "apps":

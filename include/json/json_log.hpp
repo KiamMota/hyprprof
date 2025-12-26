@@ -1,6 +1,6 @@
-#ifndef JSON_MESSAGE_HPP
-#define JSON_MESSAGE_HPP
+#ifndef JSON_LOG_HPP
 
+#define JSON_LOG_HPP
 #include <iostream>
 #include <string>
 namespace json {
