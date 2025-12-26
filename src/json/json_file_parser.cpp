@@ -63,7 +63,7 @@ bool json::JsonFileParser::_HaveHyprprofObject()
 
 bool json::JsonFileParser::_HaveEnvironmentObject() {
     if (!_HaveObject("environment")) {
-    json::log::object_not_found("apps");
+      json::log::object_not_found("apps");
         return false;
     }
     environment = _GetObject("environment");

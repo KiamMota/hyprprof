@@ -19,7 +19,7 @@ template <typename... Args> void err(const std::string& s, Args&&... rest) {
 
 void object_not_found(const std::string& object);
 void member_not_found(const std::string& object, const std::string& member_name);
-
+void member_not_found(const std::string& member_name);
 } // namespace log
 
 } // namespace json
