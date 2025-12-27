@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(hyprprof)
 # this helps me with clangd
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 file(GLOB_RECURSE LIB_SRC
@@ -17,7 +18,7 @@ file(GLOB_RECURSE CLI_SRC
 # creating the hyprprof lib
 
 add_library(hyprprof ${LIB_SRC})
-target_include_directories(hyprprof PRIVATE include ${CMAKE_CURRENT_SOURCE_DIR}/third_party)
+target_include_directories(hyprprof PUBLIC include ${CMAKE_CURRENT_SOURCE_DIR}/third_party)
 
 # creating the executable cli
 

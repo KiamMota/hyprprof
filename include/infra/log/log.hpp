@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <string>
-namespace log
+namespace hypr_log
 {
   template <typename... Args> void log(const std::string& s, Args&&... args)
   {
@@ -19,8 +19,15 @@ namespace log
     (std::cout << ... << args);
     std::cout << "\n";
   }
+  template <typename... Args> void warn(const std::string& s, Args&&... args)
+  {
+    std::cout << "hyprprof warn: ";
+    std::cout << s;
+    (std::cout << ... << args);
+    std::cout << "\n";
+}
 
-  void debug(const std::string& s);
+
 }
 
 

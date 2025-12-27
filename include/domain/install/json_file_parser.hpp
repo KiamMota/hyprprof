@@ -15,8 +15,6 @@ enum class JsonFileParserError
   EmptyJSON,
   JsonFileIsEmpty,
   NoHyprProfObject,
-  NoAppsObject,
-  NoTerminalObject,
 };
 
 const char* JsonErrorToString(JsonFileParserError e);
@@ -27,14 +25,11 @@ private:
   std::string schema;
 
   rapidjson::Document d;
-  rapidjson::Value apps;
   rapidjson::Value hyprprof;
 
   bool _TryJsonParse();
   bool _ValidateSchema();
   bool _HaveHyprprofObject();
-  bool _HaveAppsObject();
-  bool _HaveRequiredApps();
   bool _HavePayload() const;
   bool _HaveObject(const std::string& obj_name);
   rapidjson::Value& _GetObject(const std::string& obj_name); 

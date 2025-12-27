@@ -17,10 +17,6 @@ const char* domain::install::JsonErrorToString(JsonFileParserError e)
             return "json file is empty";
         case JsonFileParserError::NoHyprProfObject:
             return "missing hyprprof object";
-        case JsonFileParserError::NoAppsObject:
-            return "missing apps object";
-        case JsonFileParserError::NoTerminalObject:
-            return "missing terminal object";
     }
     std::abort(); 
 }

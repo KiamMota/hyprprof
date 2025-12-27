@@ -22,13 +22,6 @@ bool domain::install::JsonFileParser::_ValidateSchema() {
     return d.HasMember("schema") && d["schema"].IsString();
 }
 
-bool domain::install::JsonFileParser::_HaveAppsObject() {
-    if (!_HaveObject("apps"))
-        return false;
-    apps = _GetObject("apps");
-    return true;
-}
-
 bool domain::install::JsonFileParser::_HaveHyprprofObject() {
     if (!_HaveObject("hyprprof"))
         return false;
@@ -38,12 +31,6 @@ bool domain::install::JsonFileParser::_HaveHyprprofObject() {
 
 bool domain::install::JsonFileParser::_HavePayload() const {
     return hyprprof.HasMember("required_payload");
-}
-
-
-bool domain::install::JsonFileParser::_HaveRequiredApps() {
-    return apps.HasMember("browser")
-        && apps.HasMember("file_manager");
 }
 
 domain::install::JsonFileParser::JsonFileParser() : schema("0.1") {}
@@ -64,11 +51,6 @@ domain::install::JsonFileParserError domain::install::JsonFileParser::Parse(cons
     if (!_HaveHyprprofObject())
         return JsonFileParserError::NoHyprProfObject;
 
-    if (!_HaveAppsObject())
-        return JsonFileParserError::NoAppsObject;
-
-    if (!_HaveRequiredApps())
-        return JsonFileParserError::NoAppsObject;
 
     return JsonFileParserError::NoError;
 }
