@@ -23,7 +23,7 @@ target_include_directories(hyprprof PUBLIC include ${CMAKE_CURRENT_SOURCE_DIR}/t
 # creating the executable cli
 
 add_executable(hyprprof_cli ${CLI_SRC})
-target_include_directories(hyprprof_cli PRIVATE include/cli)
+target_include_directories(hyprprof_cli PRIVATE {CMAKE_CURRENT_SOURCE_DIR}/third_party/cli11/include include/cli)
 target_link_libraries(hyprprof_cli PRIVATE hyprprof)
 
 add_subdirectory(test/integration)
