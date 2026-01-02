@@ -19,16 +19,14 @@ Hyprprof performs no inference. Every component must be explicitly declared, eit
 
 ## Directory Structure
 
-
-
 ```
 profile/
 ├── hyprprof.json
 └── payload/
-├── hyprland/
-│ ├── hyprconf
-│ └── bg/
-└── bar/ (optional)
+    ├── hyprland/
+    │   └── hyprconf
+    ├── bg/            (optional)
+    └── bar/           (optional, conditional)
 ```
 
 
