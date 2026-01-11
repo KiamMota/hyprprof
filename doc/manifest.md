@@ -12,6 +12,8 @@ These are the objects that the manifesto allows:
 
 - This instructs the JSON interpreter on the schema it should follow.
 
+  Internally, hyprprof has a rule specified by a json file, which it interprets as a yacc to validate other manifests.
+  
   NOTE: It follows the "hyperprof/a.b" pattern.
 
 `"hyprprof"`: object (required).
