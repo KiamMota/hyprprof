@@ -1,0 +1,12 @@
+{
+  "schema": "hyprprof/0.1",
+
+  "hyprprof": {
+    "profile_name": "profile1",
+    "version": "0.1.2",
+    "run": ["install_apps.sh", "install_providers.sh"]
+  }
+}
+
+
+

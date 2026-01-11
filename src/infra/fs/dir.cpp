@@ -19,3 +19,8 @@ bool fs::dir::move(const std::string &src, const std::string &new_path)
   return ec ? true : false;
 }
 
+std::string fs::dir::get_absolute(const std::string &src)
+{
+    return std::filesystem::absolute(src).string();
+}
+

@@ -3,9 +3,12 @@
 #include <fstream>
 #include <string>
 
-bool fs::file::exists(const std::string &file_name)
-{
-  return std::filesystem::exists(file_name) ? true : false;
+bool fs::file::exists(const std::string &file_name) {
+    try {
+        return std::filesystem::exists(std::filesystem::path(file_name));
+    } catch (const std::filesystem::filesystem_error&) {
+        return false; // se houver problema de permissão ou caminho inválido
+    }
 }
 
 std::string fs::file::get_content(const std::string &file_name)

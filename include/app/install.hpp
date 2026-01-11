@@ -20,9 +20,9 @@ namespace app_service
       domain::PayloadValidator _payload_validator;
       domain::Environment _env;
       
-    void _ValidateJson();
-    void _ValidatePayload();
-
+      bool _ValidateJson();
+      bool _ValidatePayload();
+      std::string _TraitPath(const std::string& path) const;
     public:
       Install(const std::string& curr_path);
       

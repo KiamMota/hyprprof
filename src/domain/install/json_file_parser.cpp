@@ -1,4 +1,5 @@
 #include "domain/install/json_file_parser.hpp"
+#include "domain/payload_validator.hpp"
 
 #include <rapidjson/error/en.h>
 #include <unistd.h>
@@ -20,6 +21,31 @@ rapidjson::Value& domain::install::JsonFileParser::_GetObject(const std::string&
 
 bool domain::install::JsonFileParser::_ValidateSchema() {
     return d.HasMember("schema") && d["schema"].IsString();
+}
+
+domain::install::JsonFileParserError domain::install::JsonFileParser::_ValidateRunScripts() const
+{
+    if (!hyprprof.HasMember("run_scripts")) return JsonFileParserError::NoError;
+
+    const auto& arr = hyprprof["run_scripts"];
+    if (!arr.IsArray())
+      return JsonFileParserError::TypeError;
+
+    if (arr.Empty())
+      return JsonFileParserError::EmptyOrNullValue;
+    for (auto& v : arr.GetArray())
+        if (!v.IsString())
+      return JsonFileParserError::TypeError;
+    return JsonFileParserError::NoError;
+}
+
+void domain::install::JsonFileParser::_PopulateScripts()
+{
+  // first clear scripst;
+  //
+  _scripts.clear();
+    for (auto& v : hyprprof["run_scripts"].GetArray())
+        _scripts.push_back(v.GetString());
 }
 
 bool domain::install::JsonFileParser::_HaveHyprprofObject() {
@@ -50,7 +76,9 @@ domain::install::JsonFileParserError domain::install::JsonFileParser::Parse(cons
 
     if (!_HaveHyprprofObject())
         return JsonFileParserError::NoHyprProfObject;
-
+    
+    JsonFileParserError run_scripts_res = _ValidateRunScripts();
+    if(run_scripts_res != JsonFileParserError::NoError) _PopulateScripts();
 
     return JsonFileParserError::NoError;
 }

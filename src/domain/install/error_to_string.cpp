@@ -17,6 +17,10 @@ const char* domain::install::JsonErrorToString(JsonFileParserError e)
             return "json file is empty";
         case JsonFileParserError::NoHyprProfObject:
             return "missing hyprprof object";
+        case domain::install::JsonFileParserError::TypeError:
+            return "type is incorrect to current object";
+        case domain::install::JsonFileParserError::EmptyOrNullValue:
+            return "empty or null value to current object";
     }
     std::abort(); 
 }
