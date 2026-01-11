@@ -9,6 +9,5 @@ void install(const std::string& path)
 
 int main(int argn, char** argv)
 {
-  infra::cmd::pack::remove_package("vim");
 
 }
