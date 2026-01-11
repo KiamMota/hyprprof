@@ -1,0 +1,30 @@
+{
+  "schema_version": "hyprprof/0.9",
+
+  "hyprprof":
+  {
+    "required": true,
+    "type": "object",
+    "props":
+    {
+      "name": 
+      {
+        "required": true,
+        "type": "string",
+        "regex": ""
+      },
+      "version":
+      {
+        "required": true,
+        "type": "string",
+        "regex": ""
+      },
+      "run_scripts":
+      {
+        "required": false,
+        "type": "string[]",
+        "regex": ""
+      }
+    }
+  }
+}

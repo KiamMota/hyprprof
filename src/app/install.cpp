@@ -9,23 +9,21 @@
 
 std::string app_service::Install::_TraitPath(const std::string& path) const
 {
-  // not make yet
   std::string correct_path;
   return correct_path;
 }
-
 
 bool app_service::Install::_ValidateJson() {
     auto res = _json_validator.Parse(_json_str);
 
     if (!fs::file::exists(_manifest_path)) {
-        hypr_log::err("manifest doesn't exists in " + _current_path + ". aborted.");
+    infra::hypr_log::err("manifest doesn't exists in " + _current_path + ". aborted.");
         return false;
     }
 
     if (res != domain::install::JsonFileParserError::NoError) {
         domain::install::JsonFileParserError res = _json_validator.Parse(_json_str);
-        hypr_log::err("while trying to validate json: ", domain::install::JsonErrorToString(res),
+    infra::hypr_log::err("while trying to validate json: ", domain::install::JsonErrorToString(res),
                       " ", "(aborted).");
         return false;
     }
@@ -36,7 +34,7 @@ bool app_service::Install::_ValidatePayload() {
     auto payload_res = _payload_validator.Validate(_current_path);
 
     if (payload_res != domain::PayloadValidatorError::NoError) {
-        hypr_log::err("while trying to validate payload: ",
+    infra::hypr_log::err("while trying to validate payload: ",
                       domain::PayloadErrorToString(payload_res));
         return false;
     }

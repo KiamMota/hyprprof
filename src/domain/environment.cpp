@@ -6,7 +6,6 @@
 #include <unistd.h>
 #include <cstdlib>
 
-
 domain::Environment::Environment() {
     _package_manager = _get_package_manager();
     _user_name = _get_user_name();
@@ -69,11 +68,21 @@ PACKAGE_MANAGER domain::Environment::_get_package_manager() {
         return PACKAGE_MANAGER::APT;
     if (id == "fedora")
         return PACKAGE_MANAGER::DNF;
+    if (id == "centos" || id == "rhel")
+        return PACKAGE_MANAGER::YUM;
+    if (id == "opensuse" || id == "suse")
+        return PACKAGE_MANAGER::ZYPPER;
+    if (id == "gentoo")
+        return PACKAGE_MANAGER::EMERGE;
     if (id == "alpine")
         return PACKAGE_MANAGER::APK;
+    if (id == "nixos")
+        return PACKAGE_MANAGER::NIX;
 
+    // flatpak, snap e brew não dependem da distro, então retornamos UNKNOWN aqui
     return PACKAGE_MANAGER::UNKNOWN;
 }
+
 
 bool domain::Environment::sudo() const { return _is_sudo; }
 std::string domain::Environment::user_name() const { return _user_name; }
@@ -112,4 +121,33 @@ std::string domain::Environment::package_manager_str() const {
         return "unknown";
     }
 }
+
+std::string domain::Environment::install_command() const {
+    switch (_package_manager) {
+        case PACKAGE_MANAGER::APT:
+        case PACKAGE_MANAGER::APK:
+            return "install";
+        case PACKAGE_MANAGER::DNF:
+        case PACKAGE_MANAGER::YUM:
+            return "dnf install";
+        case PACKAGE_MANAGER::PACMAN:
+            return "pacman -S";
+        case PACKAGE_MANAGER::EMERGE:
+            return "emerge";
+        case PACKAGE_MANAGER::ZYPPER:
+            return "zypper install";
+        case PACKAGE_MANAGER::NIX:
+            return "nix profile install";
+        case PACKAGE_MANAGER::FLATPAK:
+            return "flatpak install";
+        case PACKAGE_MANAGER::SNAP:
+            return "snap install";
+        case PACKAGE_MANAGER::BREW:
+            return "brew install";
+        default:
+            return "";
+    }
+}
+
+
 
