@@ -8,6 +8,12 @@ Before any validation, the HyprProf engine will first look for this file in the 
 
 These are the objects that the manifesto allows:
 
+`schema`: string (required).
+
+- This instructs the JSON interpreter on the schema it should follow.
+
+  NOTE: It follows the "hyperprof/a.b" pattern.
+
 `"hyprprof"`: object (required).
 
 - `hyprprof.name`: string (required).
