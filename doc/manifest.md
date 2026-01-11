@@ -37,7 +37,7 @@ example:
 
 ``` json
 {
-  "schema": "hyprprof/0.1"
+  "schema": "hyprprof/0.1",
  
   "hyprprof": {
     "name": "MeuPerfil",
