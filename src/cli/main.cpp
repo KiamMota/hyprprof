@@ -1,5 +1,4 @@
 #include "app/install.hpp"
-#include "infra/cmd.hpp"
 #include <unistd.h>
 
 void install(const std::string& path)
@@ -9,6 +8,4 @@ void install(const std::string& path)
 
 int main(int argn, char** argv)
 {
-  infra::cmd::install_package_in_background("vim");
-  infra::cmd::execute_fork("echo 'hello'");
 }

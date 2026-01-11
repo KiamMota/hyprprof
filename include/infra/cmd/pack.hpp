@@ -1,6 +1,6 @@
 #ifndef PACK
 #define PACK
-#include "infra/cmd.hpp"
+#include "infra/cmd/cmd.hpp"
 #include <list>
 #include <string>
 namespace infra {
