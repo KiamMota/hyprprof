@@ -4,33 +4,31 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <array>
+#include "infra/log.hpp"
 
 void infra::cmd::execute_fork(const std::string& command) {
     pid_t pid = fork();
     if (pid < 0) {
-        std::cerr << "Falha ao criar processo\n";
+    hypr_log::err("failed to create process.");
         return;
     }
 
     if (pid == 0) {
-        // Filho: herda stdout/stderr do pai, imprime direto no terminal
         execl("/bin/sh", "sh", "-c", command.c_str(), nullptr);
 
-        // se execl falhar
-        std::cerr << "Falha ao executar comando\n";
+    hypr_log::err("failed to execute command.");
         _exit(127);
     } else {
-        // Pai: espera o filho terminar
         int status;
         if (waitpid(pid, &status, 0) == -1) {
-            std::cerr << "Falha ao esperar pelo processo filho\n";
+      hypr_log::err("failed to wait child process.");
             return;
         }
 
         if (WIFEXITED(status)) {
             int code = WEXITSTATUS(status);
             if (code != 0)
-                std::cerr << "Comando terminou com código de saída: " << code << "\n";
+                hypr_log::err("Comando terminou com código de saída: ", code);
         } else {
             std::cerr << "Processo filho terminou de forma anormal\n";
         }

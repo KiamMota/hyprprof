@@ -3,7 +3,7 @@
 #include "domain/payload_validator.hpp"
 #include "infra/fs/dir.hpp"
 #include "infra/fs/file.hpp"
-#include "infra/log/log.hpp"
+#include "infra/log.hpp"
 #include <string>
 #include <unistd.h>
 

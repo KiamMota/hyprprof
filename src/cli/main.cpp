@@ -1,5 +1,4 @@
 #include "app/install.hpp"
-#include "infra/cmd/pack.hpp"
 #include <unistd.h>
 
 void install(const std::string& path)
