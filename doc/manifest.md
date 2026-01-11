@@ -16,16 +16,17 @@ These are the objects that the manifesto allows:
 
 `"hyprprof"`: object (required).
 
-- `hyprprof.name`: string (required).
+- `name`: string (required).
 
   - your hyprprof profile name
+  - It should not contain spaces, special characters such as commas, accents, or exclamation marks
 
-- `hyprprof.version` : string (required).
+- `version` : string (required).
 
   - The version of your HyprProf profile.
   - The field value follows an a.b.c. rule.
 
-- `hyprprof.run_scripts`: string array (optional).
+- `run_scripts`: string array (optional).
 
   - This allows HyprProf to run the scripts you provide.
 
@@ -40,7 +41,7 @@ example:
   "schema": "hyprprof/0.1",
  
   "hyprprof": {
-    "name": "MeuPerfil",
+    "name": "MySimpleProfile",
     "version": "1.0.0",
     "run_scripts": [
       "script1.sh",

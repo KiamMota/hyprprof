@@ -77,6 +77,7 @@ domain::install::JsonFileParserError domain::install::JsonFileParser::Parse(cons
         return JsonFileParserError::NoHyprProfObject;
     
     JsonFileParserError run_scripts_res = _ValidateRunScripts();
+  
     if(run_scripts_res != JsonFileParserError::NoError) _PopulateScripts();
 
     return JsonFileParserError::NoError;
