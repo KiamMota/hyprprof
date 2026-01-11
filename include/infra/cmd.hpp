@@ -14,7 +14,8 @@ typedef struct {
 Result execute_pipe(const std::string& command);
 void execute_fork(const std::string& command);
 Result execute_script(const std::string& script_path);
-Result install_package(domain::Environment& env, const std::string& pack_name);
+void install_package_y(const std::string& pack_name);
+Result install_package_in_background(const std::string &pack_name);
 } // namespace cmd
 
 } // namespace infra

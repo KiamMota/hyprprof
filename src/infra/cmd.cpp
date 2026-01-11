@@ -1,4 +1,5 @@
 #include "infra/cmd.hpp"
+#include "domain/environment.hpp"
 #include <iostream>
 #include <sys/stat.h>
 #include <sys/wait.h>
@@ -85,9 +86,18 @@ infra::cmd::Result infra::cmd::execute_script(const std::string& script_path) {
     return execute_pipe(script_path);
 }
 
-infra::cmd::Result infra::cmd::install_package(domain::Environment& env,
-                                               const std::string& pack_name) {
+void infra::cmd::install_package_y(const std::string& pack_name) {
+    domain::Environment env{};
     std::string line_string;
-    line_string = "sudo " + env.install_command() + pack_name;
-    return execute_pipe(line_string);
+    line_string = "sudo " + env.install_command() + " " + pack_name + " -y";
+    execute_fork(line_string);
+}
+
+infra::cmd::Result infra::cmd::install_package_in_background(const std::string &pack_name)
+{
+  domain::Environment env{};
+  std::string line_string;
+  line_string = "sudo " + env.install_command() + " " + pack_name + " -y" ;
+  std::cout << "installing dependencies in background..." << std::endl;
+  return execute_pipe(line_string);
 }
