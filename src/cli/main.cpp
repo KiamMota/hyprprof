@@ -8,5 +8,5 @@ void install(const std::string& path)
 
 int main(int argn, char** argv)
 {
-
+  install("profile1");
 }
