@@ -17,18 +17,24 @@ bool app_service::Install::_ValidateJson() {
     auto res = _json_validator.Parse(_json_str);
 
     if (!fs::file::exists(_manifest_path)) {
-    infra::hypr_log::err("manifest doesn't exists in " + _current_path + ". aborted.");
+        infra::hypr_log::err("manifest doesn't exists in " + _current_path + ". aborted.");
         return false;
     }
 
     if (res != domain::install::JsonFileParserError::NoError) {
-        domain::install::JsonFileParserError res = _json_validator.Parse(_json_str);
-    infra::hypr_log::err("while trying to validate json: ", domain::install::JsonErrorToString(res),
-                      " ", "(aborted).");
+        infra::hypr_log::err("while trying to validate json: ",
+                              domain::install::JsonErrorToString(res),
+                              " ", "(aborted).");
         return false;
     }
-    return true;
+    if(!_json_validator.scripts().empty())
+    {
+        infra::hypr_log::warn("This profile contains shell scripts; we suggest you read them.");
+    }
+
+    return true;  // <- garante que sempre retorna bool
 }
+
 
 bool app_service::Install::_ValidatePayload() {
     auto payload_res = _payload_validator.Validate(_current_path);

@@ -1,12 +1,7 @@
 #include "app/install.hpp"
 #include <unistd.h>
 
-void install(const std::string& path)
-{
-  app_service::Install app(path);
-}
-
 int main(int argn, char** argv)
 {
-  install("profile1");
+  app_service::Install a{"profile1"};  
 }

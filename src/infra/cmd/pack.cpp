@@ -18,12 +18,10 @@ void infra::cmd::pack::install_packages_y(domain::Environment& env, const std::l
 
     std::string cmd = "sudo " + env.install_command();
 
-    // adiciona todos os pacotes à linha de comando
     for (const auto& pkg : packages) {
         cmd += " " + pkg;
     }
 
-    // adiciona -y para não pedir confirmação
     cmd += " -y";
 
     std::cout << "Installing packages: ";
@@ -31,7 +29,7 @@ void infra::cmd::pack::install_packages_y(domain::Environment& env, const std::l
         std::cout << pkg << " ";
     std::cout << "...\n";
 
-    execute_fork(cmd); // imprime tudo no terminal em tempo real
+    execute_fork(cmd); // prints on terminal
 }
 
 

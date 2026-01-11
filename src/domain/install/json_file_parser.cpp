@@ -1,5 +1,6 @@
 #include "domain/install/json_file_parser.hpp"
 
+#include <list>
 #include <rapidjson/error/en.h>
 #include <unistd.h>
 
@@ -40,8 +41,6 @@ domain::install::JsonFileParserError domain::install::JsonFileParser::_ValidateR
 
 void domain::install::JsonFileParser::_PopulateScripts()
 {
-  // first clear scripst;
-  //
   _scripts.clear();
     for (auto& v : hyprprof["run_scripts"].GetArray())
         _scripts.push_back(v.GetString());
@@ -78,7 +77,7 @@ domain::install::JsonFileParserError domain::install::JsonFileParser::Parse(cons
     
     JsonFileParserError run_scripts_res = _ValidateRunScripts();
   
-    if(run_scripts_res != JsonFileParserError::NoError) _PopulateScripts();
+    if(run_scripts_res == JsonFileParserError::NoError) _PopulateScripts();
 
     return JsonFileParserError::NoError;
 }
@@ -86,6 +85,11 @@ domain::install::JsonFileParserError domain::install::JsonFileParser::Parse(cons
 bool domain::install::JsonFileParser::hasPayload() const 
 { 
   return _HavePayload();  
+}
+
+std::list<std::string> domain::install::JsonFileParser::scripts()
+{
+  return _scripts;
 }
 
 std::string domain::install::JsonFileParser::json_str() const { return _json_file_str; }
