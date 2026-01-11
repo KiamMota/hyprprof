@@ -36,6 +36,7 @@ class Environment {
     PACKAGE_MANAGER package_manager() const;
     std::string package_manager_str() const;
     std::string install_command() const;
+    std::string remove_command() const;
 };
 
 } // namespace env

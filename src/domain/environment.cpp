@@ -149,5 +149,32 @@ std::string domain::Environment::install_command() const {
     }
 }
 
+std::string domain::Environment::remove_command() const {
+    switch (_package_manager) {
+        case PACKAGE_MANAGER::APT:
+        case PACKAGE_MANAGER::APK:
+            return "remove";
+        case PACKAGE_MANAGER::DNF:
+            return "dnf remove";
+        case PACKAGE_MANAGER::YUM:
+            return "yum remove";
+        case PACKAGE_MANAGER::PACMAN:
+            return "pacman -R";
+        case PACKAGE_MANAGER::EMERGE:
+            return "emerge --unmerge";
+        case PACKAGE_MANAGER::ZYPPER:
+            return "zypper remove";
+        case PACKAGE_MANAGER::NIX:
+            return "nix profile remove";
+        case PACKAGE_MANAGER::FLATPAK:
+            return "flatpak uninstall";
+        case PACKAGE_MANAGER::SNAP:
+            return "snap remove";
+        case PACKAGE_MANAGER::BREW:
+            return "brew uninstall";
+        default:
+            return "";
+    }
+}
 
 
