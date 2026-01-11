@@ -81,7 +81,6 @@ infra::cmd::Result infra::cmd::execute_script(const std::string& script_path) {
         if (res.error_code != 0)
             return res;
     }
-
     return execute_pipe(script_path);
 }
 
