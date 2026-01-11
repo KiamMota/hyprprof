@@ -2,8 +2,6 @@
 #ifndef _XDG_SESSION_TYPE_HPP_
 #define _XDG_SESSION_TYPE_HPP_
 
-namespace env
-{
 
   enum class XDG_SESSION_TYPE 
   {
@@ -13,7 +11,6 @@ namespace env
     X11
   };
 
-}
 
 
 #endif

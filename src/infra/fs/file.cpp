@@ -15,3 +15,4 @@ std::string fs::file::get_content(const std::string &file_name)
   std::string file_contents { std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>() };
   return file_contents;
 }
+

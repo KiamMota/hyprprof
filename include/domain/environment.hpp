@@ -6,7 +6,7 @@
 #include "enum/package_manager.hpp"
 #include "enum/xdg_session_type.hpp"
 
-namespace env {
+namespace domain {
 
 class Environment {
   private:
@@ -16,6 +16,9 @@ class Environment {
     XDG_SESSION_TYPE _session_type{XDG_SESSION_TYPE::UNKNOWN};
     PACKAGE_MANAGER _package_manager{PACKAGE_MANAGER::UNKNOWN};
 
+    /*
+     * getters 
+     * */
     bool _get_sudo();
     XDG_SESSION_TYPE _get_session_type();
     std::string _get_user_name();
