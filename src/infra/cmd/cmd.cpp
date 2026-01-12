@@ -28,9 +28,9 @@ void infra::cmd::execute_fork(const std::string& command) {
         if (WIFEXITED(status)) {
             int code = WEXITSTATUS(status);
             if (code != 0)
-                hypr_log::err("Comando terminou com código de saída: ", code);
+                hypr_log::err("task end with the code: ", code);
         } else {
-            std::cerr << "Processo filho terminou de forma anormal\n";
+            hypr_log:err("The children's process ends abnormally.");
         }
     }
 }
@@ -41,7 +41,7 @@ infra::cmd::Result infra::cmd::execute_pipe(const std::string& command) {
 
     FILE* pipe = popen(command.c_str(), "r");
     if (!pipe) {
-        res.error_code = -1; // falha ao abrir pipe
+        res.error_code = -1; // failed to open pipe
         return res;
     }
 
@@ -69,7 +69,7 @@ infra::cmd::Result infra::cmd::execute_script(const std::string& script_path) {
 
     struct stat st;
     if (stat(script_path.c_str(), &st) != 0) {
-        res.error_code = -1; // arquivo não existe
+        res.error_code = -1; // file doesn't exists
         res.output = "file not found";
         return res;
     }
