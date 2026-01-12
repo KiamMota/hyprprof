@@ -1,7 +1,7 @@
-#include "domain/payload_validator.hpp"
+#include "core/payload_validator.hpp"
 #include <cstdlib>
 
-const char* domain::PayloadErrorToString(const domain::PayloadValidatorError& e) {
+const char* core::PayloadErrorToString(const core::PayloadValidatorError& e) {
     switch (e) {
     case PayloadValidatorError::NoError:
         return "no error";

@@ -5,7 +5,7 @@
 #include <rapidjson/document.h>
 #include <string>
 
-namespace domain {
+namespace core {
 namespace install {
 
 enum class JsonFileParserError

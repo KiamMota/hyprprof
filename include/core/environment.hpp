@@ -6,7 +6,7 @@
 #include "enum/package_manager.hpp"
 #include "enum/xdg_session_type.hpp"
 
-namespace domain {
+namespace core {
 
 class Environment {
   private:

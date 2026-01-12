@@ -1,6 +1,6 @@
 #include "app/install.hpp"
-#include "domain/install/json_file_parser.hpp"
-#include "domain/payload_validator.hpp"
+#include "core/install/json_file_parser.hpp"
+#include "core/payload_validator.hpp"
 #include "infra/fs/dir.hpp"
 #include "infra/fs/file.hpp"
 #include "infra/log.hpp"
@@ -21,9 +21,9 @@ bool app_service::Install::_ValidateJson() {
         return false;
     }
 
-    if (res != domain::install::JsonFileParserError::NoError) {
+    if (res != core::install::JsonFileParserError::NoError) {
         infra::hypr_log::err("while trying to validate json: ",
-                              domain::install::JsonErrorToString(res),
+                              core::install::JsonErrorToString(res),
                               " ", "(aborted).");
         return false;
     }
@@ -38,9 +38,9 @@ bool app_service::Install::_ValidateJson() {
 bool app_service::Install::_ValidatePayload() {
     auto payload_res = _payload_validator.Validate(_current_path);
 
-    if (payload_res != domain::PayloadValidatorError::NoError) {
+    if (payload_res != core::PayloadValidatorError::NoError) {
     infra::hypr_log::err("while trying to validate payload: ",
-                      domain::PayloadErrorToString(payload_res));
+                      core::PayloadErrorToString(payload_res));
         return false;
     }
     return true;

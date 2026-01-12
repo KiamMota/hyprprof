@@ -2,7 +2,7 @@
 #define PAYLOAD_VALIDATOR_HPP
 
 #include <string>
-namespace domain {
+namespace core {
 
 enum class PayloadValidatorError
 {
@@ -14,7 +14,7 @@ enum class PayloadValidatorError
   HyprlandBgEmpty
 };
 
-const char* PayloadErrorToString(const domain::PayloadValidatorError& e);
+const char* PayloadErrorToString(const core::PayloadValidatorError& e);
 
 class PayloadValidator {
   private:
@@ -29,7 +29,7 @@ class PayloadValidator {
     bool _BgIsEmpty() const; 
   public:
     explicit PayloadValidator();
-    domain::PayloadValidatorError Validate(const std::string& _current_path);
+    core::PayloadValidatorError Validate(const std::string& _current_path);
 };
 
 } // namespace domain

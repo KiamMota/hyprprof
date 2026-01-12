@@ -3,6 +3,8 @@
 
 #include <endian.h>
 #include <string>
+namespace core
+{
 class Hyprprof {
   private:
     std::string _prof_name;
@@ -22,5 +24,6 @@ class Hyprprof {
     std::string browser();
     std::string file_manager();
 };
+}
 
 #endif

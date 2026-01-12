@@ -1,12 +1,11 @@
-#include "domain/environment.hpp"
+#include "core/environment.hpp"
 
 #include <algorithm>
 #include <fstream>
 #include <pwd.h>
 #include <unistd.h>
-#include <cstdlib>
 
-domain::Environment::Environment() {
+core::Environment::Environment() {
     _package_manager = _get_package_manager();
     _user_name = _get_user_name();
     _home_path = _get_user_home_path();
@@ -14,9 +13,9 @@ domain::Environment::Environment() {
     _session_type = _get_session_type();
 }
 
-bool domain::Environment::_get_sudo() { return geteuid() == 0; }
+bool core::Environment::_get_sudo() { return geteuid() == 0; }
 
-XDG_SESSION_TYPE domain::Environment::_get_session_type() {
+XDG_SESSION_TYPE core::Environment::_get_session_type() {
     const char* v = getenv("XDG_SESSION_TYPE");
     if (!v)
         return XDG_SESSION_TYPE::UNKNOWN;
@@ -25,27 +24,27 @@ XDG_SESSION_TYPE domain::Environment::_get_session_type() {
     if (line == "wayland")
         return XDG_SESSION_TYPE::WAYLAND;
     if (line == "tty")
-        return XDG_SESSION_TYPE::TTY;
+          return XDG_SESSION_TYPE::TTY;
     if (line == "x11")
         return XDG_SESSION_TYPE::X11;
 
     return XDG_SESSION_TYPE::UNKNOWN;
 }
 
-std::string domain::Environment::_get_user_name() {
+std::string core::Environment::_get_user_name() {
     struct passwd* pw = getpwuid(geteuid());
     if (pw)
         return pw->pw_name;
     return {};
 }
 
-std::string domain::Environment::_get_user_home_path() {
+std::string core::Environment::_get_user_home_path() {
     if (const char* home = getenv("HOME"))
         return home;
     return {};
 }
 
-PACKAGE_MANAGER domain::Environment::_get_package_manager() {
+PACKAGE_MANAGER core::Environment::_get_package_manager() {
     std::ifstream f("/etc/os-release");
     if (!f.is_open())
         return PACKAGE_MANAGER::UNKNOWN;
@@ -84,11 +83,11 @@ PACKAGE_MANAGER domain::Environment::_get_package_manager() {
 }
 
 
-bool domain::Environment::sudo() const { return _is_sudo; }
-std::string domain::Environment::user_name() const { return _user_name; }
-XDG_SESSION_TYPE domain::Environment::session() const { return _session_type; }
+bool core::Environment::sudo() const { return _is_sudo; }
+std::string core::Environment::user_name() const { return _user_name; }
+XDG_SESSION_TYPE core::Environment::session() const { return _session_type; }
 
-std::string domain::Environment::session_str() const {
+std::string core::Environment::session_str() const {
     switch (_session_type) {
     case XDG_SESSION_TYPE::TTY:
         return "tty";
@@ -101,9 +100,9 @@ std::string domain::Environment::session_str() const {
     }
 }
 
-PACKAGE_MANAGER domain::Environment::package_manager() const { return _package_manager; }
+PACKAGE_MANAGER core::Environment::package_manager() const { return _package_manager; }
 
-std::string domain::Environment::package_manager_str() const {
+std::string core::Environment::package_manager_str() const {
     switch (_package_manager) {
     case PACKAGE_MANAGER::APK:
         return "apk";
@@ -122,7 +121,7 @@ std::string domain::Environment::package_manager_str() const {
     }
 }
 
-std::string domain::Environment::install_command() const {
+std::string core::Environment::install_command() const {
     switch (_package_manager) {
         case PACKAGE_MANAGER::APT:
         case PACKAGE_MANAGER::APK:
@@ -149,7 +148,7 @@ std::string domain::Environment::install_command() const {
     }
 }
 
-std::string domain::Environment::remove_command() const {
+std::string core::Environment::remove_command() const {
     switch (_package_manager) {
         case PACKAGE_MANAGER::APT:
         case PACKAGE_MANAGER::APK:

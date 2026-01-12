@@ -1,35 +1,35 @@
-#include "domain/payload_validator.hpp"
+#include "core/payload_validator.hpp"
 #include "infra/fs/dir.hpp"
 
-domain::PayloadValidator::PayloadValidator()
+core::PayloadValidator::PayloadValidator()
 {
 }
 
-bool domain::PayloadValidator::_IsEmpty() const
+bool core::PayloadValidator::_IsEmpty() const
 {
   if(fs::dir::exists(_current_path) && fs::dir::is_emp(_current_path)) return true;
   return {};
 }
 
-bool domain::PayloadValidator::_HyprlandSubdirIsEmpty() const
+bool core::PayloadValidator::_HyprlandSubdirIsEmpty() const
 {
   if(fs::dir::exists(_hyprland_subdir) && fs::dir::is_emp(_hyprland_subdir)) return true;
   return {};
 }
 
-bool domain::PayloadValidator::_BarSubdirIsEmpty() const
+bool core::PayloadValidator::_BarSubdirIsEmpty() const
 {
   if(fs::dir::exists(_bar_subdir) && fs::dir::is_emp(_bar_subdir)) return true;
   return {};
 }
 
-bool domain::PayloadValidator::_BgIsEmpty() const
+bool core::PayloadValidator::_BgIsEmpty() const
 {
   if(fs::dir::exists(_hyprland_bg_subdir) && fs::dir::is_emp(_hyprland_bg_subdir)) return true;
   return {};
 }
 
-domain::PayloadValidatorError domain::PayloadValidator::Validate(const std::string& curr_path) 
+core::PayloadValidatorError core::PayloadValidator::Validate(const std::string& curr_path) 
 {
   _current_path = curr_path + "/payload";
   _hyprland_bg_subdir = _current_path + "/hyprland/bg";

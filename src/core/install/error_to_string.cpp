@@ -1,6 +1,6 @@
-#include "domain/install/json_file_parser.hpp"  
+#include "core/install/json_file_parser.hpp"  
 
-const char* domain::install::JsonErrorToString(JsonFileParserError e)
+const char* core::install::JsonErrorToString(JsonFileParserError e)
 {
    switch (e) {
         case JsonFileParserError::NoError:
@@ -17,9 +17,9 @@ const char* domain::install::JsonErrorToString(JsonFileParserError e)
             return "json file is empty";
         case JsonFileParserError::NoHyprProfObject:
             return "missing hyprprof object";
-        case domain::install::JsonFileParserError::TypeError:
+        case JsonFileParserError::TypeError:
             return "type is incorrect to current object";
-        case domain::install::JsonFileParserError::EmptyOrNullValue:
+        case JsonFileParserError::EmptyOrNullValue:
             return "empty or null value to current object";
     }
     std::abort(); 

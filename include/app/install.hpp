@@ -1,10 +1,10 @@
 #ifndef APP_SERVICE_HPP
 #define APP_SERVICE_HPP
 
-#include "domain/environment.hpp"
-#include "domain/install/json_file_parser.hpp"
-#include "domain/payload_validator.hpp"
 #include <string>
+#include "core/install/json_file_parser.hpp"
+#include "core/payload_validator.hpp"
+#include "core/environment.hpp"
 
 namespace app_service
 {
@@ -16,9 +16,9 @@ namespace app_service
       std::string _json_str;
 
       std::string _manifest_path;
-      domain::install::JsonFileParser _json_validator;
-      domain::PayloadValidator _payload_validator;
-      domain::Environment _env;
+      core::install::JsonFileParser _json_validator;
+      core::PayloadValidator _payload_validator;
+      core::Environment _env;
       
       bool _ValidateJson();
       bool _ValidatePayload();
