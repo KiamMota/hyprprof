@@ -1,9 +1,9 @@
 #include "infra/fs/file.hpp"  
-#include <filesystem>
 #include <fstream>
 #include <string>
+#include <filesystem>
 
-bool fs::file::exists(const std::string &file_name) {
+bool infra::fs::file::exists(const std::string &file_name) {
     try {
         return std::filesystem::exists(std::filesystem::path(file_name));
     } catch (const std::filesystem::filesystem_error&) {
@@ -11,7 +11,7 @@ bool fs::file::exists(const std::string &file_name) {
     }
 }
 
-std::string fs::file::get_content(const std::string &file_name)
+std::string infra::fs::file::get_content(const std::string &file_name)
 {
   if(!fs::file::exists(file_name)) return {};
   std::ifstream file(file_name);

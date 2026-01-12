@@ -5,7 +5,7 @@
 #include <array>
 #include "infra/log.hpp"
 
-void infra::cmd::execute_fork(const std::string& command) {
+void infra::sys::execute_fork(const std::string& command) {
     pid_t pid = fork();
     if (pid < 0) {
     hypr_log::err("failed to create process.");
@@ -14,8 +14,8 @@ void infra::cmd::execute_fork(const std::string& command) {
 
     if (pid == 0) {
         execl("/bin/sh", "sh", "-c", command.c_str(), nullptr);
-
     hypr_log::err("failed to execute command.");
+
         _exit(127);
     } else {
         int status;
@@ -34,7 +34,7 @@ void infra::cmd::execute_fork(const std::string& command) {
     }
 }
 
-infra::cmd::Result infra::cmd::execute_pipe(const std::string& command) {
+infra::sys::Result infra::sys::execute_pipe(const std::string& command) {
     Result res;
     std::array<char, 256> buffer;
 
@@ -57,7 +57,7 @@ infra::cmd::Result infra::cmd::execute_pipe(const std::string& command) {
     return res;
 }
 
-infra::cmd::Result infra::cmd::execute_script(const std::string& script_path) {
+infra::sys::Result infra::sys::execute_script(const std::string& script_path) {
     Result res;
 
     if (script_path.empty()) {

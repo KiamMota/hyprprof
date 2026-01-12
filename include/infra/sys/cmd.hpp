@@ -3,7 +3,7 @@
 
 #include <string>
 namespace infra {
-namespace cmd {
+namespace sys {
 
 typedef struct {
     std::string output;
@@ -47,7 +47,6 @@ void execute_fork(const std::string& command);
  * @note Requires execute permission and respects the script shebang.
  */
 Result execute_script(const std::string& script_path);
-
 
 
 }

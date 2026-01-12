@@ -7,25 +7,25 @@ core::PayloadValidator::PayloadValidator()
 
 bool core::PayloadValidator::_IsEmpty() const
 {
-  if(fs::dir::exists(_current_path) && fs::dir::is_emp(_current_path)) return true;
+  if(infra::fs::dir::exists(_current_path) && infra::fs::dir::is_emp(_current_path)) return true;
   return {};
 }
 
 bool core::PayloadValidator::_HyprlandSubdirIsEmpty() const
 {
-  if(fs::dir::exists(_hyprland_subdir) && fs::dir::is_emp(_hyprland_subdir)) return true;
+  if(infra::fs::dir::exists(_hyprland_subdir) && infra::fs::dir::is_emp(_hyprland_subdir)) return true;
   return {};
 }
 
 bool core::PayloadValidator::_BarSubdirIsEmpty() const
 {
-  if(fs::dir::exists(_bar_subdir) && fs::dir::is_emp(_bar_subdir)) return true;
+  if(infra::fs::dir::exists(_bar_subdir) && infra::fs::dir::is_emp(_bar_subdir)) return true;
   return {};
 }
 
 bool core::PayloadValidator::_BgIsEmpty() const
 {
-  if(fs::dir::exists(_hyprland_bg_subdir) && fs::dir::is_emp(_hyprland_bg_subdir)) return true;
+  if(infra::fs::dir::exists(_hyprland_bg_subdir) && infra::fs::dir::is_emp(_hyprland_bg_subdir)) return true;
   return {};
 }
 
@@ -37,10 +37,10 @@ core::PayloadValidatorError core::PayloadValidator::Validate(const std::string& 
   _bar_subdir = _current_path + "/bar";
 
   if(_IsEmpty()) return PayloadValidatorError::PayloadIsEmpty;
-  if(!fs::dir::exists(_hyprland_subdir)) return PayloadValidatorError::HyprlandNoExists;
-  if(!fs::dir::exists(_hyprland_subdir)) return PayloadValidatorError::HyprlandEmpty;
+  if(!infra::fs::dir::exists(_hyprland_subdir)) return PayloadValidatorError::HyprlandNoExists;
+  if(!infra::fs::dir::exists(_hyprland_subdir)) return PayloadValidatorError::HyprlandEmpty;
   if(_HyprlandSubdirIsEmpty()) return PayloadValidatorError::HyprlandEmpty;
   if(_BarSubdirIsEmpty()) return PayloadValidatorError::BarEmpty;
-  if(fs::dir::exists(_hyprland_bg_subdir) && _BgIsEmpty()) return PayloadValidatorError::HyprlandBgEmpty; 
+  if(infra::fs::dir::exists(_hyprland_bg_subdir) && _BgIsEmpty()) return PayloadValidatorError::HyprlandBgEmpty; 
   return PayloadValidatorError::NoError;
 }

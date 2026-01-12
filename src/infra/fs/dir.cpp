@@ -1,25 +1,25 @@
 #include "infra/fs/dir.hpp" 
 #include <filesystem>
-#include <system_error>
+#include <string>
 
-bool fs::dir::exists(const std::string &path_name)
+bool infra::fs::dir::exists(const std::string &path_name)
 {
   return std::filesystem::exists(path_name) ? true : false;
 }
 
-bool fs::dir::is_emp(const std::string &path_name)
+bool infra::fs::dir::is_emp(const std::string &path_name)
 {
   return std::filesystem::is_empty(path_name) ? true : false;
 }
 
-bool fs::dir::move(const std::string &src, const std::string &new_path)
+bool infra::fs::dir::move(const std::string &src, const std::string &new_path)
 {
   std::error_code ec;
   std::filesystem::rename(src, new_path, ec);
   return ec ? true : false;
 }
 
-std::string fs::dir::get_absolute(const std::string &src)
+std::string infra::fs::dir::get_absolute(const std::string &src)
 {
     return std::filesystem::absolute(src).string();
 }

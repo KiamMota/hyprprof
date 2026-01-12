@@ -1,7 +1,8 @@
 #include "app/install.hpp"
+#include "infra/sys/env.hpp"
 #include <unistd.h>
 
 int main(int argn, char** argv)
 {
-  app_service::Install a{"profile1"};  
+  infra::sys::detect_distro_str();
 }
