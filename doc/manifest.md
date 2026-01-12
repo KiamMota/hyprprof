@@ -28,11 +28,15 @@ These are the objects that the manifesto allows:
   - The version of your HyprProf profile.
   - The field value follows an a.b.c. rule.
 
-- `run_scripts`: string array (optional).
+- `scripts`: string array (optional).
 
   - This allows HyprProf to run the scripts you provide.
 
     NOTE: The scripts are stored in a list and will be executed in the same sequence they were entered into the array.
+    These scripts will be searched for in the scripts/ folder.
+
+    No need to specify any directory, just the names.
+  
 
 ---
 
@@ -45,7 +49,7 @@ example:
   "hyprprof": {
     "name": "MySimpleProfile",
     "version": "1.0.0",
-    "run_scripts": [
+    "scripts": [
       "script1.sh",
       "script2.sh"
     ]

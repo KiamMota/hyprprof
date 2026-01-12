@@ -1,18 +1,15 @@
-# How HyprProf Works
+# HyprProf
 
-HyprProf is a simple tool to **import and export Hyprland configurations** between different systems using a structured payload. It relies on a specific folder layout and a manifest file (`hyprprof.json`) to work correctly.
+HyprProf is a simple tool to import and export Hyprland configurations, between different systems using a structured payload.
 
----
-
-## Directory Structure
-
-```
-profile/
+Hyprprof works with both .hyprprof files and folders, however they must all have the same structure:
+``` ascii
+your_profile/
 ├── hyprprof.json
 └── payload/
     ├── hyprland/
     │   └── hyprconf
-    ├── bg/            (optional)
+    |   └── bg/
     └── bar/           (optional, conditional)
 ```
 
