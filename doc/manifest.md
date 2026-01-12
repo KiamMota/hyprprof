@@ -49,7 +49,7 @@ example:
   "hyprprof": {
     "name": "MySimpleProfile",
     "version": "1.0.0",
-    "run_scripts": [
+    "scripts": [
       "script1.sh",
       "script2.sh"
     ]
