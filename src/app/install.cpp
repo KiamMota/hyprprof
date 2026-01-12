@@ -35,7 +35,6 @@ bool app_service::Install::_ValidateJson() {
     return true;  // <- garante que sempre retorna bool
 }
 
-
 bool app_service::Install::_ValidatePayload() {
     auto payload_res = _payload_validator.Validate(_current_path);
 
