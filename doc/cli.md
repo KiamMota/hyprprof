@@ -8,14 +8,17 @@ The CLI is the official and primary client for accessing HyprProf. Primarily, hy
 
 ## princial commands 
 
-`install <file/url>`:
+`prof install <file/url>`:
 
 - Install the hyprprof environment on your machine, running the entire execution pipeline.
   It is recommended to use sudo when using it. It can install dependencies if necessary.
 
-`export <name>`:
+`prof export <name>`:
 
 - Export your environment to a tangible profile for hyprprof as a .hyprprof file.
 
   That is: scan folders, find, copy files, and create a JSON.
 
+`prof info`
+
+- Information about your profile, such as the name, version, and, if retrieved by URL, the repository.
