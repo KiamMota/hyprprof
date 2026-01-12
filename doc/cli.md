@@ -11,6 +11,9 @@ The CLI is the official and primary client for accessing HyprProf. Primarily, hy
 - Install the hyprprof environment on your machine, running the entire execution pipeline.
   It is recommended to use sudo when using it. It can install dependencies if necessary.
 
+- `--no-run-scripts`:
+  - This causes the HyprProf engine to install the environment without running the scripts, which can lead to system inconsistencies.
+
 `prof export <name>`:
 
 - Export your environment to a tangible profile for hyprprof as a .hyprprof file.
