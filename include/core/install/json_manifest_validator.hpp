@@ -23,7 +23,7 @@ enum class JsonFileParserError
 
 const char* JsonErrorToString(JsonFileParserError e);
 
-class JsonFileParser {
+class JsonManifestValidator {
 private:
   std::string _json_file_str;
   std::string schema;
@@ -36,6 +36,7 @@ private:
   bool _ValidateSchema();
   bool _HaveHyprprofObject();
   bool _HavePayload() const;
+  bool _HaveBar() const;
   
   JsonFileParserError _ValidateRunScripts() const;
   void _PopulateScripts();
@@ -43,7 +44,7 @@ private:
   bool _HaveObject(const std::string& obj_name);
   rapidjson::Value& _GetObject(const std::string& obj_name); 
 public:
-  JsonFileParser();
+  JsonManifestValidator();
   JsonFileParserError Parse(const std::string& json_str);
   bool hasPayload() const;
   std::list<std::string> scripts();

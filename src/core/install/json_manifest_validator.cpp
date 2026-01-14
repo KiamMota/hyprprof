@@ -4,25 +4,26 @@
 #include <unistd.h>
 
 
-bool core::install::JsonFileParser::_TryJsonParse() {
+bool core::install::JsonManifestValidator::_TryJsonParse() {
     return !d.Parse(_json_file_str.c_str()).HasParseError();
 }
 
-bool core::install::JsonFileParser::_HaveObject(const std::string& name) {
+bool core::install::JsonManifestValidator::_HaveObject(const std::string& name) {
     return d.IsObject()
         && d.HasMember(name.c_str())
         && d[name.c_str()].IsObject();
 }
 
-rapidjson::Value& core::install::JsonFileParser::_GetObject(const std::string& name) {
+rapidjson::Value& core::install::JsonManifestValidator::_GetObject(const std::string& name) {
     return d[name.c_str()];
 }
 
-bool core::install::JsonFileParser::_ValidateSchema() {
+bool core::install::JsonManifestValidator::_ValidateSchema() {
     return d.HasMember("schema") && d["schema"].IsString();
 }
 
-core::install::JsonFileParserError core::install::JsonFileParser::_ValidateRunScripts() const
+
+core::install::JsonFileParserError core::install::JsonManifestValidator::_ValidateRunScripts() const
 {
     if (!hyprprof.HasMember("run_scripts")) return JsonFileParserError::NoError;
 
@@ -38,27 +39,27 @@ core::install::JsonFileParserError core::install::JsonFileParser::_ValidateRunSc
     return JsonFileParserError::NoError;
 }
 
-void core::install::JsonFileParser::_PopulateScripts()
+void core::install::JsonManifestValidator::_PopulateScripts()
 {
   _scripts.clear();
     for (auto& v : hyprprof["run_scripts"].GetArray())
         _scripts.push_back(v.GetString());
 }
 
-bool core::install::JsonFileParser::_HaveHyprprofObject() {
+bool core::install::JsonManifestValidator::_HaveHyprprofObject() {
     if (!_HaveObject("hyprprof"))
         return false;
     hyprprof = _GetObject("hyprprof");
     return true;
 }
 
-bool core::install::JsonFileParser::_HavePayload() const {
+bool core::install::JsonManifestValidator::_HavePayload() const {
     return hyprprof.HasMember("required_payload");
 }
 
-core::install::JsonFileParser::JsonFileParser() : schema("0.1") {}
+core::install::JsonManifestValidator::JsonManifestValidator() : schema("0.1") {}
 
-core::install::JsonFileParserError core::install::JsonFileParser::Parse(const std::string& json_str) {
+core::install::JsonFileParserError core::install::JsonManifestValidator::Parse(const std::string& json_str) {
 
     if (json_str.empty())
         return JsonFileParserError::EmptyJSON;
@@ -81,24 +82,24 @@ core::install::JsonFileParserError core::install::JsonFileParser::Parse(const st
     return JsonFileParserError::NoError;
 }
 
-bool core::install::JsonFileParser::hasPayload() const 
+bool core::install::JsonManifestValidator::hasPayload() const 
 { 
   return _HavePayload();  
 }
 
-std::list<std::string> core::install::JsonFileParser::scripts()
+std::list<std::string> core::install::JsonManifestValidator::scripts()
 {
   return _scripts;
 }
 
-std::string core::install::JsonFileParser::profile_name() const
+std::string core::install::JsonManifestValidator::profile_name() const
 {
   return hyprprof["profile_name"].GetString();
 }
 
-std::string core::install::JsonFileParser::version() const
+std::string core::install::JsonManifestValidator::version() const
 {
   return hyprprof["version"].GetString();
 }
 
-std::string core::install::JsonFileParser::json_str() const { return _json_file_str; }
+std::string core::install::JsonManifestValidator::json_str() const { return _json_file_str; }
