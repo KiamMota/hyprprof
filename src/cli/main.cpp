@@ -1,7 +1,7 @@
-#include "app/install.hpp"
+#include "infra/fs/dir.hpp"
 #include <unistd.h>
 
 int main(int argn, char** argv)
 {
-  app_service::Install inst{"profile1"};
+  infra::fs::dir::make_bak("test");
 }
