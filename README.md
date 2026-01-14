@@ -45,3 +45,18 @@ to export your profile, simply:
 ``` bash
 hyprprof prof export <profile_name>
 ```
+
+to view your profile specifications:
+
+``` bash
+hyprprof prof info
+```
+
+info return example:
+
+``` bash
+profile name: my_profile
+profile version: 1.0.0
+```
+
+
