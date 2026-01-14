@@ -4,6 +4,7 @@
 #include "infra/fs/dir.hpp"
 #include "infra/fs/file.hpp"
 #include "infra/log.hpp"
+#include "infra/sys/hyprctl.hpp"
 #include <string>
 #include <unistd.h>
 
@@ -85,8 +86,11 @@ app_service::Install::Install(const std::string& curr_path) {
       return;
     } 
     
-    std::cout << "profile: " << _json_validator.profile_name() << std::endl;
-      std::cout << "version: " << _json_validator.version() << std::endl;
-    
+    auto res = infra::sys::hyprctl::reload();
+  
+    std::cout << "res: " << res.output << std::endl;
+  
+  std::cout << "profile: " << _json_validator.profile_name() << std::endl;
+    std::cout << "version: " << _json_validator.version() << std::endl;
     _Message();
 }
