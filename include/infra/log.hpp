@@ -34,7 +34,7 @@ inline void file_not_exists(const std::string& file_path)
 {
     std::filesystem::path p(file_path);
     std::string file_name = p.filename().string(); // pega só o nome do arquivo
-    hypr_log::err("file named '" + file_name + "' doesn't exists");
+    hypr_log::err(file_path + ": " "file named '" + file_name + "' doesn't exists");
 }
 
 
