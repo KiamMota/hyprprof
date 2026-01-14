@@ -68,12 +68,25 @@ core::PackageManagerEnum infra::sys::detect_package_manager()
     return core::PackageManagerEnum::UNKNOWN; // fallback seguro
 }
 
+std::string infra::sys::detect_xdg_session_str()
+{
+    const char* xdg = std::getenv("XDG_SESSION_TYPE");
+    if (!xdg) {
+        return "tty";
+    }
+
+    std::string session = xdg;
+    for (auto &c : session) c = std::tolower(c);
+
+    return session;
+}
+
 core::XdgSessionTypeEnum infra::sys::detect_xdg_session()
 {
   std::string xdg = detect_xdg_session_str();
   if(xdg == "wayland")
     return core::XdgSessionTypeEnum::WAYLAND;
-  if(xdg == "hyprland" || xdg == "Hyprland")
+  if(xdg == "hyprland" && xdg == "Hyprland")
     return core::XdgSessionTypeEnum::HYPRLAND;
   if(xdg == "tty")
     return core::XdgSessionTypeEnum::TTY;
