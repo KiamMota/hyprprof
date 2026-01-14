@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e  
 
+mkdir build
 cd "$(dirname "$0")/build"
 
 cmake ..
