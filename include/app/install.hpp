@@ -22,7 +22,7 @@ namespace app_service
       core::Environment _env;
      
       void _Message();
-       
+      bool _ValidateEnvironmentState(); 
       bool _ValidateJson();
       bool _ValidatePayload();
 

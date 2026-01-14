@@ -9,22 +9,6 @@
 namespace core {
 
 class Environment {
-  private:
-    bool _is_sudo{};
-    std::string _home_path;
-    std::string _user_name;
-    XdgSessionTypeEnum _session_type{XdgSessionTypeEnum::UNKNOWN};
-    PackageManagerEnum _package_manager{PackageManagerEnum::UNKNOWN};
-
-    /*
-     * getters 
-     * */
-    bool _get_sudo();
-    XdgSessionTypeEnum _get_session_type();
-    std::string _get_user_name();
-    std::string _get_user_home_path();
-    PackageManagerEnum _get_package_manager();
-
   public:
     Environment();
 
