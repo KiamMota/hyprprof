@@ -1,4 +1,4 @@
-#include "core/install/json_file_parser.hpp"
+#include "core/install/json_manifest_validator.hpp"
 
 #include <rapidjson/error/en.h>
 #include <unistd.h>

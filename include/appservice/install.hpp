@@ -2,7 +2,7 @@
 #define APP_SERVICE_HPP
 
 #include <string>
-#include "core/install/json_file_parser.hpp"
+#include "core/install/json_manifest_validator.hpp"
 #include "core/payload_validator.hpp"
 #include "core/environment.hpp"
 
