@@ -3,6 +3,7 @@
 #include "core/payload_validator.hpp"
 #include "infra/fs/dir.hpp"
 #include "infra/fs/file.hpp"
+#include "infra/log.hpp"
 #include <string>
 #include <unistd.h>
 
@@ -14,8 +15,11 @@ std::string app_service::Install::_TraitPath(const std::string& path) const
 
 bool app_service::Install::_ValidateJson() {
     auto res = _json_validator.Parse(_json_str);
+    
+    infra::hypr_log::log("parsing json...");
 
     if (!infra::fs::file::exists(_manifest_path)) {
+      infra::hypr_log::err("hyprprof.json not found on " + _manifest_path);
         return false;
     }
 
@@ -31,12 +35,28 @@ bool app_service::Install::_ValidateJson() {
 
 bool app_service::Install::_ValidatePayload() {
     auto payload_res = _payload_validator.Validate(_current_path);
+    
+    infra::hypr_log::log("validating payload...");
 
     if (payload_res != core::PayloadValidatorError::NoError) {
-                      core::PayloadErrorToString(payload_res);
+        infra::hypr_log::err(core::PayloadErrorToString(payload_res));
         return false;
     }
     return true;
+}
+
+bool app_service::Install::_CopyHyprlandFolder()
+{
+  if(infra::fs::dir::exists("./config/hypr/hyprland.conf"))
+  {
+    infra::hypr_log::warn("hyprland configuration already exists");
+  }
+  return infra::fs::dir::move(_hyprconf_path, "./config/hypr");
+}
+
+void app_service::Install::_Message()
+{
+  std::cout << "i run a command and my hyprland changed!" << std::endl;
 }
 
 app_service::Install::Install(const std::string& curr_path) {
@@ -44,6 +64,7 @@ app_service::Install::Install(const std::string& curr_path) {
     _current_path = infra::fs::dir::get_absolute(curr_path);
     _payload_path = _current_path + "/payload";
     _manifest_path = _current_path + "/hyprprof.json";
+    _hyprconf_path = _current_path + "/payoad/hyprland/hyprland.conf";
 
     _json_str = infra::fs::file::get_content(_manifest_path);
 
@@ -51,4 +72,14 @@ app_service::Install::Install(const std::string& curr_path) {
         return;
     if (!_ValidatePayload())
         return;
+    if(!_CopyHyprlandFolder())
+    {
+      infra::hypr_log::err("failed to copy config to ./config/hyprland");
+      return;
+    } 
+    
+    std::cout << "profile: " << _json_validator.profile_name() << std::endl;
+      std::cout << "version: " << _json_validator.version() << std::endl;
+    
+    _Message();
 }

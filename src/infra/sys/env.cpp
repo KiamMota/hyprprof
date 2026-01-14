@@ -1,7 +1,10 @@
 #include "infra/sys/env.hpp"
+#include "core/enum/package_manager_enum.hpp"
+#include "core/enum/xdg_session_type_enum.hpp"
 #include "infra/fs/file.hpp"
 #include "infra/log.hpp"
 #include <cstdlib>
+#include <pwd.h>
 #include <string>
 #include <algorithm>
 
@@ -25,7 +28,6 @@ std::string infra::sys::detect_distro_str()
   return distro;
 
 }
-
 
 std::string infra::sys::detect_package_manager_str()
 {
@@ -51,3 +53,36 @@ std::string infra::sys::detect_package_manager_str()
     std::abort();
 }
 
+core::PackageManagerEnum infra::sys::detect_package_manager()
+{
+    std::string pm = detect_package_manager_str();
+
+    if(pm == "pacman") return core::PackageManagerEnum::PACMAN;
+    if(pm == "apt") return core::PackageManagerEnum::APT;
+    if(pm == "dnf") return core::PackageManagerEnum::DNF;
+    if(pm == "yum") return core::PackageManagerEnum::YUM;
+    if(pm == "zypper") return core::PackageManagerEnum::ZYPPER;
+    if(pm == "apk") return core::PackageManagerEnum::APK;
+    if(pm == "xbps") return core::PackageManagerEnum::XBPS;
+
+    return core::PackageManagerEnum::UNKNOWN; // fallback seguro
+}
+
+core::XdgSessionTypeEnum infra::sys::detect_xdg_session()
+{
+  std::string xdg = detect_xdg_session_str();
+  if(xdg == "wayland")
+    return core::XdgSessionTypeEnum::WAYLAND;
+  if(xdg == "hyprland" || xdg == "Hyprland")
+    return core::XdgSessionTypeEnum::HYPRLAND;
+  if(xdg == "tty")
+    return core::XdgSessionTypeEnum::TTY;
+  if(xdg == "x11")
+    return core::XdgSessionTypeEnum::X11;
+  return core::XdgSessionTypeEnum::UNKNOWN;
+}
+
+std::string infra::sys::detect_user_name()
+{
+  return getenv("USER");
+}

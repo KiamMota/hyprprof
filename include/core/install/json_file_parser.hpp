@@ -48,6 +48,8 @@ public:
   bool hasPayload() const;
   std::list<std::string> scripts();
   std::string json_str() const;
+  std::string profile_name() const;
+  std::string version() const;
 };
 
 } // namespace install

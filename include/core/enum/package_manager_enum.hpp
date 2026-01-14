@@ -1,7 +1,9 @@
 #ifndef _PACKAGE_MANAGE_HPP_
 #define _PACKAGE_MANAGE_HPP_
 
-enum class PACKAGE_MANAGER {
+namespace core
+{
+enum class PackageManagerEnum {
     UNKNOWN,
     PACMAN,     // Arch Linux
     APT,        // Debian/Ubuntu
@@ -13,8 +15,9 @@ enum class PACKAGE_MANAGER {
     NIX,        // NixOS
     FLATPAK,    // Flatpak
     SNAP,       // Snap
-    BREW        // Linuxbrew/Homebrew
+    BREW,       // Linuxbrew/Homebrew
+    XBPS        // void
 };
-
+}
 
 #endif

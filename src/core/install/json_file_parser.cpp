@@ -91,4 +91,14 @@ std::list<std::string> core::install::JsonFileParser::scripts()
   return _scripts;
 }
 
+std::string core::install::JsonFileParser::profile_name() const
+{
+  return hyprprof["profile_name"].GetString();
+}
+
+std::string core::install::JsonFileParser::version() const
+{
+  return hyprprof["version"].GetString();
+}
+
 std::string core::install::JsonFileParser::json_str() const { return _json_file_str; }
