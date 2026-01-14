@@ -24,11 +24,7 @@ git clone https://github.com/KiamMota/hyprprof.git
 cd hyprprof
 chmod +x ./install.sh
 ./install.sh
-
-
 ```
-
-
 
 ## To understand more:
 
@@ -36,4 +32,16 @@ chmod +x ./install.sh
 
 [hyprprof.json](https://github.com/KiamMota/hyprprof/blob/main/doc/manifest.md)
 
+# usage 
 
+To install profiles, simply:
+
+``` bash
+hyprprof prof install <path> 
+```
+
+to export your profile, simply:
+
+``` bash
+hyprprof prof export <profile_name>
+```
