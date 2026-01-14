@@ -1,13 +1,28 @@
-#!/bin/bash
-set -e  
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
-mkdir build
-cd "$(dirname "$0")/build"
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BUILD_DIR="$PROJECT_ROOT/build"
+BIN_NAME="hyprprof"
+INSTALL_PATH="/usr/local/bin/$BIN_NAME"
+
+echo "[*] Building $BIN_NAME"
+
+command -v cmake >/dev/null || { echo "cmake not found"; exit 1; }
+command -v make  >/dev/null || { echo "make not found"; exit 1; }
+
+mkdir -p "$BUILD_DIR"
+cd "$BUILD_DIR"
 
 cmake ..
-make -j$(nproc)
+make -j"$(nproc)"
 
-sudo cp hyprprof /usr/local/bin/
-sudo chmod +x /usr/local/bin/hyprprof
+if [[ ! -f "$BIN_NAME" ]]; then
+  echo "Binary was not generated"
+  exit 1
+fi
 
-echo "hyprprof installed!"
+echo "[*] Installing to $INSTALL_PATH"
+sudo install -m 755 "$BIN_NAME" "$INSTALL_PATH"
+
+echo "[✓] $BIN_NAME installed successfully"
