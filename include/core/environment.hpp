@@ -9,6 +9,11 @@
 namespace core {
 
 class Environment {
+  private:
+    std::string _user_name;
+    std::string _xdg_session;
+    std::string _package_manager;
+    bool _sudo;
   public:
     Environment();
 
@@ -16,7 +21,6 @@ class Environment {
     std::string user_name() const;
     XdgSessionTypeEnum session() const;
     std::string session_str() const;
-
     PackageManagerEnum package_manager() const;
     std::string package_manager_str() const;
     std::string install_command() const;

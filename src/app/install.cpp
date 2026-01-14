@@ -33,6 +33,8 @@ bool app_service::Install::_ValidateJson() {
     return true;  // <- garante que sempre retorna bool
 }
 
+
+
 bool app_service::Install::_ValidatePayload() {
     auto payload_res = _payload_validator.Validate(_current_path);
     
@@ -53,8 +55,13 @@ bool app_service::Install::_CopyHyprlandFolder()
   }
   return infra::fs::dir::move(_hyprconf_path, "./config/hypr");
 }
+bool app_service::Install::_ValidateEnvironmentState() const
+{
+    
 
-void app_service::Install::_Message()
+
+}
+void app_service::Install::_Message() const
 {
   std::cout << "i run a command and my hyprland changed!" << std::endl;
 }

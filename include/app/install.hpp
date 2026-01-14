@@ -21,8 +21,8 @@ namespace app_service
       core::PayloadValidator _payload_validator;
       core::Environment _env;
      
-      void _Message();
-      bool _ValidateEnvironmentState(); 
+      void _Message() const;
+      bool _ValidateEnvironmentState() const; 
       bool _ValidateJson();
       bool _ValidatePayload();
 
