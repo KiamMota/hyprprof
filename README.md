@@ -18,8 +18,8 @@ your_profile/
 ## install 
 
 To install, simply use this in your shell:
-``` bash
 
+``` shell script
 git clone https://github.com/KiamMota/hyprprof.git 
 cd hyprprof
 chmod +x ./install.sh
@@ -36,7 +36,7 @@ chmod +x ./install.sh
 
 To install profiles, simply:
 
-``` bash
+``` shell
 hyprprof prof install <path> 
 ```
 
