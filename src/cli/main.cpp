@@ -1,18 +1,15 @@
-#include "core/install/json_manifest_validator.hpp"
-#include "infra/fs/file.hpp"
-#include <iostream>
 #include <unistd.h>
+#include "CLI11/CLI/CLI.hpp"
 
-int main() {
-        std::string json_str;
-        try {
-        } catch(const std::error_code& ec) {
-            json_str = infra::fs::file::get_content("hyprprof.json");
-            std::cerr << "Filesystem error: " << ec.message() << "\n";
-            return 1;
-        }
+int main(int argc, char** argv) {
+  CLI::App app{"profile manager to hyprland"};
+  argv = app.ensure_utf8(argv);
 
-        core::install::JsonManifestValidator jsonVal{};
-        jsonVal.Parse(json_str);
+    std::string filename = "default";
+    app.add_option("-f,--file", filename, "A help string");
+  CLI11_PARSE(app, argc, argv);
+    return 0;
 }
+
+
 

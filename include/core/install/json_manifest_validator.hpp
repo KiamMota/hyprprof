@@ -1,7 +1,7 @@
 #ifndef JSON_FILE_PARSER_HPP
 #define JSON_FILE_PARSER_HPP
 
-#include <rapidjson/document.h>
+#include "rapidjson/document.h"
 #include <string>
 
 namespace core {

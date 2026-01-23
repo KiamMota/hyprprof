@@ -15,12 +15,19 @@ file(GLOB_RECURSE CLI_SRC
 )
 
 add_library(hyprprof_lib ${LIB_SRC})
-target_include_directories(hyprprof_lib PUBLIC include ${CMAKE_CURRENT_SOURCE_DIR}/third_party)
+target_include_directories(hyprprof_lib
+    PUBLIC include
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/third_party/
+)
 
 # creating the executable cli
 
-add_executable(hyprprof ${CLI_SRC})
-  target_include_directories(hyprprof PRIVATE {CMAKE_CURRENT_SOURCE_DIR}/third_party/cli11/include include/cli)
-target_link_libraries(hyprprof PRIVATE hyprprof_lib)
 
+add_executable(hyprprof ${CLI_SRC})
+target_include_directories(hyprprof 
+    PRIVATE 
+        ${CMAKE_CURRENT_SOURCE_DIR}/third_party
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/cli
+)
+target_link_libraries(hyprprof PRIVATE hyprprof_lib)
 
