@@ -42,6 +42,7 @@ bool infra::fs::dir::make_bak(const std::string& file_src) {
 
     if (ec)
         throw std::filesystem::filesystem_error("backup failed", src_path, dest_path, ec);
+  return true;
 }
 
 bool infra::fs::dir::is_dir(const std::string& src) {

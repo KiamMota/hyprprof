@@ -3,14 +3,11 @@
 #include "rapidjson/schema.h"
 #include <stdexcept>
 
-
-
-void is_json_valid(const std::string& json) {
+bool infra::json::is_json_valid(const std::string& json) {
     rapidjson::Document doc;
     rapidjson::ParseResult result = doc.Parse(json.c_str());
 
     if (!result) {
-        // RapidJSON dá offset, precisamos converter para linha/coluna
         size_t error_offset = result.Offset();
         size_t line = 1, col = 1;
         for (size_t i = 0; i < error_offset && i < json.size(); ++i) {
@@ -26,7 +23,10 @@ void is_json_valid(const std::string& json) {
 
         throw infra::json::JsonParseException(msg, line, col);
     }
+
+    return true;
 }
+
 
 bool infra::json::validate_schema(const std::string &json, const std::string &json_schema)
 {
