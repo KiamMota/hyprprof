@@ -17,10 +17,20 @@ Hyprprof is a profile manager for Hyprland, the Wayland compositor. It allows us
    You can download and install Hyprprof in a single line using `curl`:
 
    ```bash
-   curl -fsSL https://raw.githubusercontent.com/yourusername/hyprprof/main/install.sh | bash
+   curl -fsSL https://raw.githubusercontent.com/KiamMota/hyprprof/main/install.sh | bash
    ```
 
-   This command downloads the `install.sh` script and executes it directly. After installation, the script cleans up temporary files automatically.
+   This command downloads the `install.sh` script from the official repository and executes it directly. After installation, the script cleans up temporary files automatically.
+
+2. **Repository**:
+
+   If you want to clone the repository instead:
+
+   ```bash
+   git clone https://github.com/KiamMota/hyprprof.git
+   cd hyprprof
+   ./install.sh
+   ```
 
 ## JSON Manifest Example
 
@@ -55,11 +65,5 @@ Hyprprof is a profile manager for Hyprland, the Wayland compositor. It allows us
     "screen_recorder": "obs"
   }
 }
-```
-
-## License
-
-MIT License
-
 ```
 
