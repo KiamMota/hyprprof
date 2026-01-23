@@ -39,7 +39,7 @@ cd hyprprof
 ```json
 {
   "hyprprof": {
-    "authors": "Your Name",
+    "authors": ["Me", "Linus Torvalds"],
     "name": "my_profile",
     "version": "1.0.0",
     "description": "Minimal functional profile for Hyprland"
