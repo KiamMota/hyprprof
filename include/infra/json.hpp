@@ -1,10 +1,49 @@
 #ifndef JSON_HPP
 #define JSON_HPP
 
+#include <stdexcept>
 #include <string>
 
 namespace infra {
 namespace json {
+
+/**
+ * @class JsonParseException
+ * @brief Exception thrown when a JSON parsing error occurs.
+ *
+ * This class inherits from std::runtime_error and adds information
+ * about the position of the error in the JSON, such as line and column.
+ */
+class JsonParseException : public std::runtime_error {
+public:
+    /**
+     * @brief Constructor for the JSON parsing exception.
+     * 
+     * @param msg Detailed error message describing what went wrong.
+     * @param line Line number in the JSON where the error occurred (1-based).
+     * @param column Column number in the JSON where the error occurred (1-based).
+     */
+    JsonParseException(const std::string& msg, size_t line, size_t column)
+        : std::runtime_error(msg), line_(line), column_(column) {}
+
+    /**
+     * @brief Gets the line number of the error.
+     * 
+     * @return Line number (1-based) where the error occurred.
+     */
+    size_t line() const { return line_; }
+
+    /**
+     * @brief Gets the column number of the error.
+     * 
+     * @return Column number (1-based) where the error occurred.
+     */
+    size_t column() const { return column_; }
+
+private:
+    size_t line_;   /**< Line in the JSON where the error occurred (1-based) */
+    size_t column_; /**< Column in the JSON where the error occurred (1-based) */
+};
 
 std::string read_json_file(const std::string& json_file);
 /**

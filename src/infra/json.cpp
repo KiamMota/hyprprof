@@ -25,15 +25,27 @@ std::string infra::json::read_json_file(const std::string &file_path) {
 }
 
 
-bool infra::json::is_json_valid(const std::string& json) {
-
+void is_json_valid(const std::string& json) {
     rapidjson::Document doc;
-    if (doc.Parse(json.c_str()).HasParseError()) {
-        hypr_log::err("JSON parse error: ", rapidjson::GetParseError_En(doc.GetParseError()));
-        return false;
-    }
+    rapidjson::ParseResult result = doc.Parse(json.c_str());
 
-    return true;
+    if (!result) {
+        // RapidJSON dá offset, precisamos converter para linha/coluna
+        size_t error_offset = result.Offset();
+        size_t line = 1, col = 1;
+        for (size_t i = 0; i < error_offset && i < json.size(); ++i) {
+            if (json[i] == '\n') { line++; col = 1; }
+            else col++;
+        }
+
+        std::string expected = "Expected a valid JSON value (object, array, string, number, true, false, null)";
+        std::string msg = std::string("JSON parse error: ") + rapidjson::GetParseError_En(result.Code()) +
+                          " at line " + std::to_string(line) +
+                          ", column " + std::to_string(col) +
+                          ". " + expected;
+
+        throw JsonParseException(msg, line, col);
+    }
 }
 
 bool infra::json::validate_schema(const std::string &json, const std::string &json_schema)
