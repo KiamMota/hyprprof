@@ -69,7 +69,7 @@ Delete the currently active profile from the system.
 **Example:**
 
 ```bash
-hyprprof uninstall
+hyprprof remove <profile>
 ```
 
 ## Examples
@@ -91,7 +91,7 @@ hyprprof export my_profile
 hyprprof info
 
 # Delete the current profile
-hyprprof uninstall
+hyprprof remove
 ```
 
 ## Notes
