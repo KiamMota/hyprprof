@@ -54,7 +54,6 @@ Hyprprof is a profile manager for Hyprland, the Wayland compositor. It allows us
     "other_scripts": []
   },
   "components": {
-    "compositor": "hyprland",
     "terminal": "kitty",
     "launcher": "rofi",
     "notification": "mako",
