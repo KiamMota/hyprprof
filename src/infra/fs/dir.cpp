@@ -2,6 +2,7 @@
 #include "infra/log.hpp"
 #include <exception>
 #include <filesystem>
+#include <stdexcept>
 #include <string>
 #include <system_error>
 
@@ -27,8 +28,8 @@ bool infra::fs::dir::make_bak(const std::string& file_src) {
     std::filesystem::path src_path = infra::fs::dir::get_absolute(file_src);
 
     if (!std::filesystem::exists(src_path)) {
-    infra::hypr_log::file_not_exists(src_path);
-      return false;
+        infra::hypr_log::file_not_exists(src_path);
+        return false;
     }
     std::filesystem::path dest_path = src_path;
     dest_path += ".bak";
@@ -41,4 +42,13 @@ bool infra::fs::dir::make_bak(const std::string& file_src) {
 
     if (ec)
         throw std::filesystem::filesystem_error("backup failed", src_path, dest_path, ec);
+}
+
+bool infra::fs::dir::is_dir(const std::string& src) {
+    std::error_code ec;
+    if (std::filesystem::is_directory(src, ec))
+        return true;
+    if (ec)
+        throw std::runtime_error("failed to check directory '" + src + "': " + ec.message());
+    return false;
 }

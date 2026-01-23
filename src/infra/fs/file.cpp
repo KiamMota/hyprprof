@@ -2,13 +2,10 @@
 #include <fstream>
 #include <string>
 #include <filesystem>
+#include <system_error>
 
 bool infra::fs::file::exists(const std::string &file_name) {
-    try {
-        return std::filesystem::exists(std::filesystem::path(file_name));
-    } catch (const std::filesystem::filesystem_error&) {
-        return false; // se houver problema de permissão ou caminho inválido
-    }
+  return std::filesystem::exists(std::filesystem::path(file_name));
 }
 
 std::string infra::fs::file::get_content(const std::string &file_name)
@@ -19,3 +16,9 @@ std::string infra::fs::file::get_content(const std::string &file_name)
   return file_contents;
 }
 
+bool infra::fs::file::is_file(const std::string &file_name)
+{
+  std::string all_path = std::filesystem::absolute(file_name);
+  return std::filesystem::is_regular_file(all_path);
+  
+}

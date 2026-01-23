@@ -1,105 +1,86 @@
 #include "core/install/json_manifest_validator.hpp"
+#include "infra/json.hpp"
+#include "infra/log.hpp"
 
 #include <rapidjson/error/en.h>
+#include <stdexcept>
+#include <string>
 #include <unistd.h>
 
-
-bool core::install::JsonManifestValidator::_TryJsonParse() {
-    return !d.Parse(_json_file_str.c_str()).HasParseError();
-}
-
-bool core::install::JsonManifestValidator::_HaveObject(const std::string& name) {
-    return d.IsObject()
-        && d.HasMember(name.c_str())
-        && d[name.c_str()].IsObject();
-}
-
-rapidjson::Value& core::install::JsonManifestValidator::_GetObject(const std::string& name) {
-    return d[name.c_str()];
-}
-
-bool core::install::JsonManifestValidator::_ValidateSchema() {
-    return d.HasMember("schema") && d["schema"].IsString();
-}
-
-
-core::install::JsonFileParserError core::install::JsonManifestValidator::_ValidateRunScripts() const
+core::install::JsonManifestValidator::JsonManifestValidator() {
+    _json_schema = R"(
 {
-    if (!hyprprof.HasMember("run_scripts")) return JsonFileParserError::NoError;
-
-    const auto& arr = hyprprof["run_scripts"];
-    if (!arr.IsArray())
-      return JsonFileParserError::TypeError;
-
-    if (arr.Empty())
-      return JsonFileParserError::EmptyOrNullValue;
-    for (auto& v : arr.GetArray())
-        if (!v.IsString())
-      return JsonFileParserError::TypeError;
-    return JsonFileParserError::NoError;
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Hyprland Profile Schema",
+  "type": "object",
+  "required": ["hyprprof", "version_constraints", "build", "components", "providers"],
+  "properties": {
+    "hyprprof": {
+      "type": "object",
+      "required": ["authors", "name", "version", "description"],
+      "properties": {
+        "authors": { "type": "string" },
+        "name": { "type": "string" },
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+        "description": { "type": "string" }
+      }
+    },
+    "version_constraints": {
+      "type": "object",
+      "required": ["hyprland", "wayland"],
+      "properties": {
+        "hyprland": { "type": "string", "pattern": "^\\^?\\d+\\.\\d+\\.\\d+$" },
+        "wayland": { "type": "string", "pattern": "^\\^?\\d+\\.\\d+\\.\\d+$" }
+      }
+    },
+    "build": {
+      "type": "object",
+      "required": ["install_script", "uninstall_script", "other_scripts"],
+      "properties": {
+        "install_script": { "type": "string" },
+        "uninstall_script": { "type": "string" },
+        "other_scripts": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "components": {
+      "type": "object",
+      "required": ["compositor", "terminal", "launcher", "notification", "bar"],
+      "properties": {
+        "compositor": { "type": "string" },
+        "terminal": { "type": "string" },
+        "launcher": { "type": "string" },
+        "notification": { "type": "string" },
+        "bar": { "type": "string" }
+      }
+    },
+    "providers": {
+      "type": "object",
+      "required": ["wallpaper", "screenshot", "clipboard", "screen_recorder"],
+      "properties": {
+        "wallpaper": { "type": "string" },
+        "screenshot": { "type": "string" },
+        "clipboard": { "type": "string" },
+        "screen_recorder": { "type": "string" }
+      }
+    }
+  },
+  "additionalProperties": false
+}
+)";
 }
 
-void core::install::JsonManifestValidator::_PopulateScripts()
+void core::install::JsonManifestValidator::Parse(const std::string& json_str)
 {
-  _scripts.clear();
-    for (auto& v : hyprprof["run_scripts"].GetArray())
-        _scripts.push_back(v.GetString());
-}
-
-bool core::install::JsonManifestValidator::_HaveHyprprofObject() {
-    if (!_HaveObject("hyprprof"))
-        return false;
-    hyprprof = _GetObject("hyprprof");
-    return true;
-}
-
-bool core::install::JsonManifestValidator::_HavePayload() const {
-    return hyprprof.HasMember("required_payload");
-}
-
-core::install::JsonManifestValidator::JsonManifestValidator() : schema("0.1") {}
-
-core::install::JsonFileParserError core::install::JsonManifestValidator::Parse(const std::string& json_str) {
-
-    if (json_str.empty())
-        return JsonFileParserError::EmptyJSON;
-
-    _json_file_str = json_str;
-
-    if (!_TryJsonParse())
-        return JsonFileParserError::ParsingError;
-
-    if (!_ValidateSchema())
-        return JsonFileParserError::NoSchema;
-
-    if (!_HaveHyprprofObject())
-        return JsonFileParserError::NoHyprProfObject;
-    
-    JsonFileParserError run_scripts_res = _ValidateRunScripts();
+  if(json_str.empty())
+    throw std::runtime_error("empty JSON!");
   
-    if(run_scripts_res == JsonFileParserError::NoError) _PopulateScripts();
-
-    return JsonFileParserError::NoError;
+  if(infra::json::validate_schema(json_str, _json_schema))
+  {
+    infra::hypr_log::log("validated json!");
+    return;
+  }
+  infra::hypr_log::err("invalid json!");
 }
-
-bool core::install::JsonManifestValidator::hasPayload() const 
-{ 
-  return _HavePayload();  
-}
-
-std::list<std::string> core::install::JsonManifestValidator::scripts()
-{
-  return _scripts;
-}
-
-std::string core::install::JsonManifestValidator::profile_name() const
-{
-  return hyprprof["profile_name"].GetString();
-}
-
-std::string core::install::JsonManifestValidator::version() const
-{
-  return hyprprof["version"].GetString();
-}
-
-std::string core::install::JsonManifestValidator::json_str() const { return _json_file_str; }
