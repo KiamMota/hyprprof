@@ -1,62 +1,57 @@
-# HyprProf
+# Hyprprof
 
-HyprProf is a simple tool to import and export Hyprland configurations, between different systems using a structured payload.
-Essentially, hyprprof serves to transfer profiles from hyprland in a simpler way.
+Hyprprof is a profile manager for Hyprland, the Wayland compositor. It allows users to define, configure, and deploy a complete Hyprland environment through a structured JSON manifest, making setups modular, repeatable, and portable.
 
-Hyprprof works with both .hyprprof files and folders, however they must all have the same structure:
+## Features
 
-``` ascii
-your_profile/
-├── hyprprof.json
-└── payload/
-    ├── hyprland/
-    │   └── hyprconf
-    |   └── bg/
-    └── bar/           (optional, conditional)
+* **Core Components Configuration**: Configure compositor, terminal, launcher, notification system, and status bar.
+* **Providers**: Specify wallpaper managers, screenshot tools, clipboard managers, and screen recorders.
+* **Build Scripts**: Automate installation, uninstallation, and other setup scripts.
+* **Version Constraints**: Ensure compatibility with specific Hyprland or Wayland versions.
+* **Portable & Shareable**: Profiles can be shared or reused across systems without manual reconfiguration.
+
+## Getting Started
+
+1. Clone the repository.
+2. Create a profile JSON file (example: `meu_perfil.json`).
+3. Run `hyprprof` to install and apply the profile:
+
+   ```bash
+   ./hyprprof
+   ```
+
+## JSON Manifest Example
+
+```json
+{
+  "hyprprof": {
+    "authors": "Your Name",
+    "name": "my_profile",
+    "version": "1.0.0",
+    "description": "Minimal functional profile for Hyprland"
+  },
+  "version_constraints": {
+    "hyprland": "^0.15.0",
+    "wayland": "^1.18.0"
+  },
+  "build": {
+    "install_script": "install.sh",
+    "uninstall_script": "uninstall.sh",
+    "other_scripts": []
+  },
+  "components": {
+    "compositor": "hyprland",
+    "terminal": "kitty",
+    "launcher": "rofi",
+    "notification": "mako",
+    "bar": "waybar"
+  },
+  "providers": {
+    "wallpaper": "hyprpaper",
+    "screenshot": "grim",
+    "clipboard": "wl-clipboard",
+    "screen_recorder": "obs"
+  }
+}
 ```
-
-## install 
-
-To install, simply use this in your shell:
-
-``` shell script
-git clone https://github.com/KiamMota/hyprprof.git 
-cd hyprprof
-chmod +x ./install.sh
-./install.sh
-```
-
-## To understand more:
-
-[structure](https://github.com/KiamMota/hyprprof/blob/main/doc/profile.md)
-
-[hyprprof.json](https://github.com/KiamMota/hyprprof/blob/main/doc/manifest.md)
-
-# usage 
-
-To install profiles, simply:
-
-``` shell
-hyprprof prof install <path> 
-```
-
-to export your profile, simply:
-
-``` bash
-hyprprof prof export <profile_name>
-```
-
-to view your profile specifications:
-
-``` bash
-hyprprof prof info
-```
-
-info return example:
-
-``` bash
-profile name: my_profile
-profile version: 1.0.0
-```
-
 

@@ -7,8 +7,8 @@ int main() {
     try {
         std::string json_str;
         try {
-            json_str = infra::fs::file::get_content("hyprprof.json");
         } catch(const std::error_code& ec) {
+            json_str = infra::fs::file::get_content("hyprprof.json");
             std::cerr << "Filesystem error: " << ec.message() << "\n";
             return 1;
         }
