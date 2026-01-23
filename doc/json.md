@@ -6,7 +6,7 @@ HyprProf uses a JSON manifest to define, configure, and deploy a Hyprland profil
 
 ### `hyprprof` (object, required)
 
-* `authors`: string (optional)
+* `authors`: string array (optional)
 
   * Name(s) of the profile authors.
 * `name`: string (required)
