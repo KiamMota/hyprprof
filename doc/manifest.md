@@ -1,58 +1,99 @@
 # **hyprprof.json**
 
----
+HyprProf uses a JSON manifest to define, configure, and deploy a Hyprland profile. This file must be present in the profile directory for the engine to recognize and process the profile.
 
+## Manifest Objects
 
+### `hyprprof` (object, required)
 
-Before any validation, the HyprProf engine will first look for this file in the target directory or .hyprprof file that the user provides.
+* `authors`: string (optional)
 
-These are the objects that the manifesto allows:
+  * Name(s) of the profile authors.
+* `name`: string (required)
 
-`schema`: string (required).
+  * Profile name. Should not contain spaces, commas, accents, or special characters.
+* `version`: string (required)
 
-- This instructs the JSON interpreter on the schema it should follow.
+  * Profile version in `a.b.c` format.
+* `description`: string (optional)
 
-  Internally, hyprprof has a rule specified by a json file, which it interprets as a yacc to validate other manifests.
-  
-  NOTE: It follows the "hyperprof/a.b" pattern.
+  * Short description of the profile.
 
-`"hyprprof"`: object (required).
+### `version_constraints` (object, optional)
 
-- `name`: string (required).
+* `hyprland`: string (optional)
 
-  - your hyprprof profile name
-  - It should not contain spaces, special characters such as commas, accents, or exclamation marks
+  * Specifies the compatible Hyprland version using semver rules (`^0.15.0`).
+* `wayland`: string (optional)
 
-- `version` : string (required).
+  * Specifies the compatible Wayland version (`^1.18.0`).
 
-  - The version of your HyprProf profile.
-  - The field value follows an a.b.c. rule.
+### `build` (object, optional)
 
-- `scripts`: string array (optional).
+* `install_script`: string
 
-  - This allows HyprProf to run the scripts you provide.
+  * Script executed when the profile is installed.
+* `uninstall_script`: string
 
-    NOTE: The scripts are stored in a list and will be executed in the same sequence they were entered into the array.
-    These scripts will be searched for in the scripts/ folder.
+  * Script executed when the profile is removed.
+* `other_scripts`: string array
 
-    No need to specify any directory, just the names.
-  
+  * Additional scripts to run during installation or configuration.
 
----
+### `components` (object, optional)
 
-example:
+Specifies the core programs of the Hyprland environment:
 
-``` json
+* `terminal`: string
+* `launcher`: string
+* `notification`: string
+* `bar`: string
+
+### `providers` (object, optional)
+
+Specifies utility programs:
+
+* `wallpaper`: string
+* `screenshot`: string
+* `clipboard`: string
+* `screen_recorder`: string
+
+## Example
+
+```json
 {
-  "schema": "hyprprof/0.1",
- 
   "hyprprof": {
-    "name": "MySimpleProfile",
+    "authors": "Your Name",
+    "name": "my_profile",
     "version": "1.0.0",
-    "scripts": [
-      "script1.sh",
-      "script2.sh"
-    ]
+    "description": "Minimal functional profile for Hyprland"
+  },
+  "version_constraints": {
+    "hyprland": "^0.15.0",
+    "wayland": "^1.18.0"
+  },
+  "build": {
+    "install_script": "install.sh",
+    "uninstall_script": "uninstall.sh",
+    "other_scripts": []
+  },
+  "components": {
+    "terminal": "kitty",
+    "launcher": "rofi",
+    "notification": "mako",
+    "bar": "waybar"
+  },
+  "providers": {
+    "wallpaper": "hyprpaper",
+    "screenshot": "grim",
+    "clipboard": "wl-clipboard",
+    "screen_recorder": "obs"
   }
 }
 ```
+
+## Notes
+
+* All scripts referenced in `build` must exist in the profile folder or the designated scripts directory.
+* `components` and `providers` allow HyprProf to install and configure the full environment automatically.
+* `version_constraints` ensure compatibility and prevent installation on unsupported versions of Hyprland or Wayland.
