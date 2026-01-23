@@ -1,6 +1,8 @@
 # **hyprprof.json**
 
-HyprProf uses a JSON manifest to define, configure, and deploy a Hyprland profile. This file must be present in the profile directory for the engine to recognize and process the profile.
+The `hyprprof.json` file defines, configures, and allows HyprProf to install and manage a Hyprland profile. It must be present in the profile directory for HyprProf to recognize and process the profile.
+
+---
 
 ## Manifest Objects
 
@@ -8,10 +10,10 @@ HyprProf uses a JSON manifest to define, configure, and deploy a Hyprland profil
 
 * `authors`: string array (optional)
 
-  * Name(s) of the profile authors.
+  * List of profile authors.
 * `name`: string (required)
 
-  * Profile name. Should not contain spaces, commas, accents, or special characters.
+  * Profile name. Should be simple: no spaces, commas, accents, or special characters.
 * `version`: string (required)
 
   * Profile version in `a.b.c` format.
@@ -23,10 +25,10 @@ HyprProf uses a JSON manifest to define, configure, and deploy a Hyprland profil
 
 * `hyprland`: string (optional)
 
-  * Specifies the compatible Hyprland version using semver rules (`^0.15.0`).
+  * Compatible Hyprland version using semver rules (e.g., `^0.15.0`).
 * `wayland`: string (optional)
 
-  * Specifies the compatible Wayland version (`^1.18.0`).
+  * Compatible Wayland version (e.g., `^1.18.0`).
 
 ### `build` (object, optional)
 
@@ -42,21 +44,25 @@ HyprProf uses a JSON manifest to define, configure, and deploy a Hyprland profil
 
 ### `components` (object, optional)
 
-Specifies the core programs of the Hyprland environment:
+Specifies the core programs of the Hyprland environment. Possible values include:
 
-* `terminal`: string
-* `launcher`: string
-* `notification`: string
-* `bar`: string
+* `terminal`: string (e.g., `kitty`, `alacritty`, `gnome-terminal`, `foot`)
+* `launcher`: string (e.g., `rofi`, `dmenu`, `wofi`)
+* `notification`: string (e.g., `mako`, `dunst`)
+* `bar`: string (e.g., `waybar`, `polybar`)
+* `compositor`: string (optional, e.g., `hyprland`)
+* `browser`: string (optional, e.g., `firefox`, `chromium`, `brave`, `qutebrowser`, `vivaldi`)
 
 ### `providers` (object, optional)
 
-Specifies utility programs:
+Specifies utility programs. Possible values include:
 
-* `wallpaper`: string
-* `screenshot`: string
-* `clipboard`: string
-* `screen_recorder`: string
+* `wallpaper`: string (e.g., `hyprpaper`, `feh`, `nitrogen`)
+* `screenshot`: string (e.g., `grim`, `maim`, `scrot`)
+* `clipboard`: string (e.g., `wl-clipboard`, `xclip`, `xsel`)
+* `screen_recorder`: string (e.g., `obs`, `wf-recorder`, `peek`)
+
+---
 
 ## Example
 
@@ -81,7 +87,9 @@ Specifies utility programs:
     "terminal": "kitty",
     "launcher": "rofi",
     "notification": "mako",
-    "bar": "waybar"
+    "bar": "waybar",
+    "compositor": "hyprland",
+    "browser": "firefox"
   },
   "providers": {
     "wallpaper": "hyprpaper",
@@ -91,9 +99,3 @@ Specifies utility programs:
   }
 }
 ```
-
-## Notes
-
-* All scripts referenced in `build` must exist in the profile folder or the designated scripts directory.
-* `components` and `providers` allow HyprProf to install and configure the full environment automatically.
-* `version_constraints` ensure compatibility and prevent installation on unsupported versions of Hyprland or Wayland.
