@@ -170,15 +170,6 @@ CLI → App → Core
 * App: handles mapping between them
 * CLI: reports to user
 
----
-
-## Final Rule (Non-Negotiable)
-
-If a layer starts doing the job of another layer:
-
-* clarity dies
-* testing rots
-* scalability collapses
 
 Architecture is not about *power*.
 It is about **containment**.
