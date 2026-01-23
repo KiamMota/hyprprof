@@ -52,24 +52,35 @@ Export the current environment into a `.hyprprof` profile file. This scans folde
 hyprprof export my_profile
 ```
 
-### `info`
+### `show`
 
 Display information about the current profile, such as name, version, and source repository if installed via URL.
 
 **Example:**
 
 ```bash
-hyprprof info
+hyprprof show
 ```
 
-### `uninstall` / `delete`
+### `list`
 
-Delete the currently active profile from the system.
+Show all installed profiles.
+
+**Example:**
+
+```bash
+hyprprof list
+```
+
+### `remove <name|current>`
+
+Delete a profile from the system. You can remove a specific profile by name or the currently active profile using `current`.
 
 **Example:**
 
 ```bash
 hyprprof remove <profile>
+hyprprof remove current
 ```
 
 ## Examples
@@ -88,10 +99,16 @@ hyprprof install ./my_local_profile.hyprprof --no-run-scripts
 hyprprof export my_profile
 
 # Show current profile information
-hyprprof info
+hyprprof show
+
+# List all installed profiles
+hyprprof list
+
+# Delete a specific profile
+hyprprof remove my_profile
 
 # Delete the current profile
-hyprprof remove
+hyprprof remove current
 ```
 
 ## Notes
