@@ -2,7 +2,7 @@
 #define APP_SERVICE_HPP
 
 #include <string>
-#include "core/install/json_manifest_validator.hpp"
+#include "core/json_manifest.hpp"
 #include "core/environment.hpp"
 #include "core/profile_payload.hpp"
 
@@ -14,7 +14,7 @@ namespace app_service
 
       core::profile_payload _payload;
 
-      core::install::JsonManifestValidator _json_validator;
+      core::JsonManifest _json_validator;
       core::Environment _env;
      
       void _Message() const;

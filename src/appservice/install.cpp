@@ -12,7 +12,6 @@ std::string app_service::Install::_TraitPath(const std::string& path) const {
 }
 
 bool app_service::Install::_ValidateJson() {
-    _json_validator.Parse(_payload.manifest_path());
 
     return true; // <- garante que sempre retorna bool
 }
@@ -29,7 +28,7 @@ void app_service::Install::_Message() const {
     std::cout << "i run a command and my hyprland changed!" << std::endl;
 }
 
-app_service::Install::Install(const std::string& curr_path) : _payload(curr_path) {
+app_service::Install::Install(const std::string& curr_path) : _payload(curr_path), _json_validator("") {
 
     auto res = infra::sys::hyprctl::reload();
 
