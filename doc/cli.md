@@ -1,25 +1,100 @@
-# cli
+# HyprProf CLI Documentation
 
----
+## Overview
 
-The CLI is the official and primary client for accessing HyprProf. Primarily, hyprprof was developed to be a static library, so that multiple clients could connect to it via pipes from the proprietary CLI or by compiling and creating their own versions, opening the way for graphical interfaces in the future.
+HyprProf is the official CLI client for managing Hyprland profiles. It allows you to create, install, export, and inspect Hyprland environments using a command-line interface. HyprProf is primarily designed as a static library, enabling multiple clients to interact with it via pipes, which opens possibilities for future graphical interfaces.
 
-## `prof` commands 
+## Usage
 
-`prof install <file/url>`:
+```bash
+hyprprof [command] [options]
+```
 
-- Install the hyprprof environment on your machine, running the entire execution pipeline.
-  It is recommended to use sudo when using it. It can install dependencies if necessary.
+### General Options
 
-- `--no-run-scripts`:
-  - This causes the HyprProf engine to install the environment without running the scripts, which can lead to system inconsistencies.
+* `-h`, `--help`: Display help information.
+* `-v`, `--version`: Display the application version.
 
-`prof export <name>`:
+## Commands
 
-- Export your environment to a tangible profile for hyprprof as a .hyprprof file.
+### `make <name>`
 
-  That is: scan folders, find, copy files, and create a JSON.
+Create a new profile with the specified name.
 
-`prof info`
+**Example:**
 
-- Information about your profile, such as the name, version, and, if retrieved by URL, the repository.
+```bash
+hyprprof make default
+```
+
+### `install <path/url>`
+
+Install a profile from a local path or remote URL. This runs the full execution pipeline, installing dependencies and configuring the environment.
+
+**Options:**
+
+* `--no-run-scripts`: Install the profile without executing scripts. Use with caution, as it may cause inconsistencies.
+
+**Example:**
+
+```bash
+hyprprof install https://myprofile.com
+hyprprof install ./my_local_profile.hyprprof --no-run-scripts
+```
+
+### `export <name>`
+
+Export the current environment into a `.hyprprof` profile file. This scans folders, copies files, and generates a JSON representation.
+
+**Example:**
+
+```bash
+hyprprof export my_profile
+```
+
+### `info`
+
+Display information about the current profile, such as name, version, and source repository if installed via URL.
+
+**Example:**
+
+```bash
+hyprprof info
+```
+
+### `uninstall` / `delete`
+
+Delete the currently active profile from the system.
+
+**Example:**
+
+```bash
+hyprprof uninstall
+```
+
+## Examples
+
+```bash
+# Create a new profile named 'default'
+hyprprof make default
+
+# Install a profile from a remote URL
+hyprprof install https://myprofile.com
+
+# Install a local profile without running scripts
+hyprprof install ./my_local_profile.hyprprof --no-run-scripts
+
+# Export the current environment to a file
+hyprprof export my_profile
+
+# Show current profile information
+hyprprof info
+
+# Delete the current profile
+hyprprof uninstall
+```
+
+## Notes
+
+* It is recommended to use `sudo` when installing profiles to ensure all dependencies are installed correctly.
+* Always review profiles and scripts before installation to avoid potential system inconsistencies.
