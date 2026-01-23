@@ -1,4 +1,4 @@
-# Hyprprof
+# HyprProf
 
 Hyprprof is a profile manager for Hyprland, the Wayland compositor. It allows users to define, configure, and deploy a complete Hyprland environment through a structured JSON manifest, making setups modular, repeatable, and portable.
 
@@ -12,27 +12,27 @@ Hyprprof is a profile manager for Hyprland, the Wayland compositor. It allows us
 
 ## Getting Started
 
-1. **One-line installation**:
+### One-line installation
 
-   You can download and install Hyprprof in a single line using `curl`:
+You can download and install Hyprprof in a single line using `curl`:
 
-   ```bash
-   git clone https://github.com/KiamMota/hyprprof.git && cd hyprprof
-   chmod +x install.sh && ./install.sh
-   rm -rf ./*
-   ```
+```bash
+git clone https://github.com/KiamMota/hyprprof.git && cd hyprprof
+chmod +x install.sh && ./install.sh
+rm -rf ./*
+```
 
-   This command downloads the `install.sh` script from the official repository and executes it directly. After installation, the script cleans up temporary files automatically.
+This command downloads the `install.sh` script from the official repository and executes it directly. After installation, the script cleans up temporary files automatically.
 
-2. **Repository**:
+### Repository
 
-   If you want to clone the repository instead:
+If you want to clone the repository instead:
 
-   ```bash
-   git clone https://github.com/KiamMota/hyprprof.git
-   cd hyprprof
-   ./install.sh
-   ```
+```bash
+git clone https://github.com/KiamMota/hyprprof.git
+cd hyprprof
+./install.sh
+```
 
 ## JSON Manifest Example
 
@@ -68,3 +68,8 @@ Hyprprof is a profile manager for Hyprland, the Wayland compositor. It allows us
 }
 ```
 
+## Documentation
+
+For detailed CLI commands and usage, refer to the CLI documentation in [doc/cli](doc/cli.md).
+
+For detailed information about creating and structuring profiles, see the profile documentation in [doc/profile](doc/profile.md).
