@@ -1,28 +1,11 @@
 #include "infra/json.hpp"
 #include "infra/fs/dir.hpp"
-#include "infra/fs/file.hpp"
-#include "infra/log.hpp"
 #include "rapidjson/document.h"
 #include "rapidjson/schema.h"
 #include <fstream>
+#include <sstream>
 #include <stdexcept>
 
-std::string infra::json::read_json_file(const std::string &file_path) {
-    if(!infra::fs::dir::exists(file_path))
-        throw std::runtime_error("File '" + file_path + "' does not exist");
-
-    std::ifstream f(file_path);
-    if(!f) 
-        throw std::runtime_error("Failed to open '" + file_path + "'");
-
-    std::stringstream buffer;
-    buffer << f.rdbuf();
-    auto content = buffer.str();
-    if(content.empty())
-        throw std::runtime_error("'" + file_path + "' is empty");
-
-    return content;
-}
 
 
 void is_json_valid(const std::string& json) {
@@ -44,7 +27,7 @@ void is_json_valid(const std::string& json) {
                           ", column " + std::to_string(col) +
                           ". " + expected;
 
-        throw JsonParseException(msg, line, col);
+        throw infra::json::JsonParseException(msg, line, col);
     }
 }
 

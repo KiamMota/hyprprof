@@ -45,7 +45,6 @@ private:
     size_t column_; /**< Column in the JSON where the error occurred (1-based) */
 };
 
-std::string read_json_file(const std::string& json_file);
 /**
  * @brief Validates a JSON string against a JSON Schema.
  *
