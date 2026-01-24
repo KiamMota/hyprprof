@@ -1,6 +1,13 @@
 cmake_minimum_required(VERSION 3.16)
 project(hyprprof)
 
+if (NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    message(FATAL_ERROR
+        "Hyprprof is a Linux-exclusive application. "
+        "It is not supported on other operating systems."
+    )
+endif()
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 file(GLOB_RECURSE LIB_SRC
