@@ -29,13 +29,24 @@ class EmptyFieldException : public std::exception {
   }
 };
 
-class VersionFieldException : public std::exception {
-    std::string msg;
+class InvalidPatternException : public std::exception
+{
+  std::string field;
+  std::string message;
 
-  public:
-    VersionFieldException(const char* msg) : msg(msg) {}
-    const char* what() const noexcept { return msg.c_str(); }
+public:
+  InvalidPatternException(const char* fi)
+    : field(fi),
+      message("The regex did not match as expected for the '" + field + "' field.")
+  {}
+
+  const char* what() const noexcept override
+  {
+    return message.c_str();
+  }
 };
+
+
 } // namespace profile
 
 } // namespace core

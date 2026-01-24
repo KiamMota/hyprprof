@@ -29,6 +29,8 @@ app_service::Install::Install(const std::string& curr_path) {
   }
 
   core::profile::Profile prof{};
+
   prof = json_val.GetProfile();
+  
   infra::hypr_log::log("end pipeline");
 }

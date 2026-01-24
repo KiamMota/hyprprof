@@ -22,7 +22,8 @@ public:
   std::string version();
   std::string desciption();
   std::list<std::string> authors();
-
+  std::string hyprland_version();
+  std::string wayland_version();
 };
 
 } // namespace domain

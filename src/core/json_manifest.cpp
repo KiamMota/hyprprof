@@ -61,8 +61,22 @@ core::profile::Profile core::JsonManifest::GetProfile()
   prof.set_authors(authors());
   prof.set_description(desciption());
   prof.set_version(version());
+  prof.set_hyprland_version(hyprland_version());
+  prof.set_wayland_version(wayland_version());
   
   return prof;
+}
+
+std::string core::JsonManifest::hyprland_version()
+{
+  const rapidjson::Value& version_constraints_obj = doc["version_constraints"];
+  return version_constraints_obj["hyprland"].GetString();
+}
+
+std::string core::JsonManifest::wayland_version()
+{
+  const rapidjson::Value& version_constraits_obj = doc["version_constraints"];
+  return version_constraits_obj["wayland"].GetString();
 }
 
 std::string core::JsonManifest::desciption()
