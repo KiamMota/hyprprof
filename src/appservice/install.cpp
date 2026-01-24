@@ -1,4 +1,5 @@
 #include "appservice/install.hpp"
+#include "core/json_current_profile.hpp"
 #include "core/json_manifest.hpp"
 #include "core/profile/exceptions.hpp"
 #include "core/profile/profile.hpp"
@@ -55,4 +56,10 @@ app_service::Install::Install(const std::string& curr_path) {
     infra::fs::file::move(hyprprof_json_path, profile_path);
 
     infra::hypr_log::log("end pipeline");
+  
+    core::JsonCurrentProfile curr_prof_json{json_val.profile_name(), profile_path};
+    std::string curr_proj = curr_prof_json.get_json();
+  
+    infra::fs::dotconfig::create(".hyprprof_current"); 
+
 }
