@@ -57,7 +57,9 @@ app_service::Install::Install(const std::string& curr_path) {
     infra::fs::file::move(hyprprof_json_path, profile_path);
 
  
-    core::CurrentProfile current_profile{};  
+    core::CurrentProfile current_profile{};
+    current_profile.set_current_path(hyprprof_json_path);
+    current_profile.set_profile_name()
 
 
 
