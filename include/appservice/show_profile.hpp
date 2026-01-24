@@ -1,7 +1,7 @@
 #ifndef SHOW_HPP
 #define SHOW_HPP
 
-namespace appservice
+namespace app_service
 {
   class ShowProfile
   {

@@ -8,14 +8,19 @@
 #include "infra/fs/file.hpp"
 #include "infra/log.hpp"
 #include "infra/fs/dotconfig.hpp"
+#include <exception>
 #include <stdexcept>
 #include <string>
 #include <unistd.h>
 
 app_service::Install::Install(const std::string& curr_path) {
 
-    std::string hyprprof_json_path = curr_path + "/hyprprof.json";
-
+    std::string hyprprof_json_path = infra::fs::dir::get_absolute(curr_path) + "/hyprprof.json";
+    if(!infra::fs::dir::is_dir(hyprprof_json_path))
+    {
+      infra::hypr_log::err(hyprprof_json_path + " doesn't exist.");
+    return;
+    }
     if (!infra::fs::file::exists(hyprprof_json_path)) {
         infra::hypr_log::err("hyprprof.json not found");
         return;

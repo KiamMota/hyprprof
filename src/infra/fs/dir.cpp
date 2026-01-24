@@ -46,12 +46,7 @@ bool infra::fs::dir::make_bak(const std::string& file_src) {
 }
 
 bool infra::fs::dir::is_dir(const std::string& src) {
-    std::error_code ec;
-    if (std::filesystem::is_directory(src, ec))
-        return true;
-    if (ec)
-        throw std::runtime_error("failed to check directory '" + src + "': " + ec.message());
-    return false;
+    return std::filesystem::is_directory(src) ? true : false;
 }
 
 bool infra::fs::dir::create(const std::string &path_name)

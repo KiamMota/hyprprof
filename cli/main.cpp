@@ -1,30 +1,51 @@
-#include "infra/version.hpp"
 #include <iostream>
 #include <string>
+#include <vector>
+#include "cmd.hpp" // se você registrou os comandos aqui
+#include "message.hpp"
+#include "dispatcher.hpp"
 
-int main(int argc, char* argv[])
-{
+void register_commands() {
+    // registra o comando "install"
+    cli::register_command("install",
+                          [](const std::vector<std::string>& args) { cli::cmd::install(args); });
+    cli::register_command("use", [](const std::vector<std::string>& args) { cli::cmd::use(args);});
+}
+
+int main(int argc, char* argv[]) {
     if (argc < 2) {
-        std::cout << "No arguments provided. Use -h or --help for usage.\n";
+        // se não passou nada, mostra help
+        std::cout << HELP_MESSAGE << "\n";
         return 0;
     }
 
-    std::string arg = argv[1];
+    register_commands();
 
-    if (arg == "-h" || arg == "--help") {
-        std::cout << "Usage: mycli [options]\n";
-        std::cout << "  -h, --help      Show this help message\n";
-        std::cout << "  -v, --version   Show version info\n";
-    } 
-    else if (arg == "-v" || arg == "--version") {
-      std::cout << app::version::VERSION << std::endl;
-    } 
-    else {
-        std::cout << "Unknown option: " << arg << "\n";
-        std::cout << "Use -h or --help for usage.\n";
-        return 1;
+    std::string first_arg = argv[1];
+
+    // flags globais
+    if (first_arg == "-h" || first_arg == "--help") {
+        std::cout << "hyprprof help\n";
+        std::cout << "Available commands:\n";
+        for (auto& cmd : cli::list_commands()) {
+            std::cout << "  " << cmd << "\n";
+        }
+        return 0;
     }
+
+    if (first_arg == "-v" || first_arg == "--version") {
+        std::cout << "hyprprof version 0.1\n";
+        return 0;
+    }
+
+    // qualquer outro argumento é tratado como comando
+    std::string command = first_arg;
+    std::vector<std::string> args;
+    for (int i = 2; i < argc; ++i) {
+        args.push_back(argv[i]);
+    }
+
+    cli::execute_command(command, args);
 
     return 0;
 }
-
