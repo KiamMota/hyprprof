@@ -1,11 +1,13 @@
 #ifndef PROFILE_HPP
 #define PROFILE_HPP
 
-#include "core/json_manifest.hpp"
 #include <list>
 #include <string>
 namespace core
 {
+namespace profile
+{
+
   class Profile
   {
     private:
@@ -13,11 +15,15 @@ namespace core
       std::string _version;
       std::list<std::string> _authors;
       std::string _description;
-      std::list<std::string> _components;
-      std::list<std::string> _providers;
+
     public:
-      Profile(const std::string& json_str);
+      Profile();
+      void set_name(const std::string& name);
+      void set_version(const std::string& version);
+      void set_authors(const std::list<std::string>& authors);
+      void set_description(const std::string& description);
   };
 
+}
 }
 #endif // PROFILE_HPP

@@ -1,5 +1,6 @@
 #include "core/json_manifest.hpp"
 #include "core/json_schemas.hpp"
+#include "core/profile/profile.hpp"
 #include "infra/json.hpp"
 #include "infra/log.hpp"
 #include "rapidjson/document.h"
@@ -51,6 +52,17 @@ std::list<std::string> core::JsonManifest::authors()
     return result;
 }
 
+core::profile::Profile core::JsonManifest::GetProfile()
+{
+  profile::Profile prof{};
+
+  prof.set_name(profile_name());
+  prof.set_authors(authors());
+  prof.set_description(desciption());
+  prof.set_version(version());
+  
+  return prof;
+}
 
 std::string core::JsonManifest::desciption()
 {

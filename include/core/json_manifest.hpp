@@ -1,6 +1,7 @@
 #ifndef JSON_FILE_PARSER_HPP
 #define JSON_FILE_PARSER_HPP
 
+#include "core/profile/profile.hpp"
 #include "rapidjson/document.h"
 #include <list>
 #include <string>
@@ -16,6 +17,7 @@ private:
 public:
   JsonManifest(const std::string& json_str);
   void parse();
+  profile::Profile GetProfile();
   std::string profile_name();
   std::string version();
   std::string desciption();
