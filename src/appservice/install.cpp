@@ -55,11 +55,16 @@ app_service::Install::Install(const std::string& curr_path) {
     infra::fs::dir::create(profile_path);
     infra::fs::file::move(hyprprof_json_path, profile_path);
 
-    infra::hypr_log::log("end pipeline");
   
     core::JsonCurrentProfile curr_prof_json{json_val.profile_name(), profile_path};
     std::string curr_proj = curr_prof_json.get_json();
   
-    infra::fs::dotconfig::create(".hyprprof_current"); 
+    infra::fs::dotconfig::create(".hyprprof_current.json");
+    std::string json_hyprprof_current_path = infra::fs::dotconfig::app_path(".hyprprof_current.json");
 
+    infra::fs::file::overwrite(json_hyprprof_current_path, curr_prof_json.get_json());
+
+
+
+    infra::hypr_log::log("end pipeline");
 }
