@@ -9,7 +9,9 @@ class CurrentProfile {
     std::string _current_profile_path;
 
 public:
-  CurrentProfile(const std::string& profile_name, const std::string& profile_path);
+  CurrentProfile();
+  void set_profile_name(const std::string& name);
+  void set_current_path(const std::string& path);
 };
 
 } // namespace core

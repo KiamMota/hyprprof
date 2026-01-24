@@ -2,18 +2,23 @@
 #define JSON_CURRENT_PROFILE_HPP
 
 #include "core/current_profile.hpp"
+#include "rapidjson/document.h"
 #include <string>
 namespace core
 {
   class JsonCurrentProfile
   {
     private:
+      std::string _json_src;
       std::string _profile_name;
       std::string _current_path;
+      rapidjson::Document doc;
     public:
-      JsonCurrentProfile(const std::string& profile_name, const std::string& current_path);
+      JsonCurrentProfile(const std::string& json_src);
+      JsonCurrentProfile();
+      void parse();
       CurrentProfile get_current();
-      const std::string get_json();
+      const std::string make_json(const std::string& current_profile, const std::string& current_path);
       std::string current_profile();
       std::string current_path();
   };

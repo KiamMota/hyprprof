@@ -1,7 +1,14 @@
 #include "core/current_profile.hpp"
 
-core::CurrentProfile::CurrentProfile(const std::string& profile_name, const std::string& profile_path)
+core::CurrentProfile::CurrentProfile()
 {
-  _current_profile_name = profile_name;
-  _current_profile_path = profile_path;
+}
+
+void core::CurrentProfile::set_current_path(const std::string& path)
+{
+  _current_profile_path = path;
+}
+void core::CurrentProfile::set_profile_name(const std::string& name)
+{
+  _current_profile_name = name;
 }

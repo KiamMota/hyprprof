@@ -12,7 +12,6 @@ namespace appservice
       ShowProfile();
       void ShowCurrent();
       void ListAll();
-
   };
 
 }

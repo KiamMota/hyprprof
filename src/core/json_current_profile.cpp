@@ -4,20 +4,20 @@
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/prettywriter.h"
 
-core::JsonCurrentProfile::JsonCurrentProfile(const std::string& profile_name,
-                                             const std::string& prof_path) {
-    _profile_name = profile_name;
-    _current_path = prof_path;
+core::JsonCurrentProfile::JsonCurrentProfile(const std::string& json_src) {
+
 }
 
-const std::string core::JsonCurrentProfile::get_json() {
+core::JsonCurrentProfile::JsonCurrentProfile() {}
+
+const std::string core::JsonCurrentProfile::make_json(const std::string& profile, const std::string& path) {
     rapidjson::Document doc;
     doc.SetObject();
     auto& alloc = doc.GetAllocator();
 
-    doc.AddMember("current_profile", rapidjson::Value(_profile_name.c_str(), alloc), alloc);
+    doc.AddMember("current_profile", profile, alloc);
 
-    doc.AddMember("current_path", rapidjson::Value(_current_path.c_str(), alloc), alloc);
+    doc.AddMember("current_path", path, alloc);
 
     rapidjson::StringBuffer buffer;
     rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
@@ -33,6 +33,8 @@ std::string core::JsonCurrentProfile::current_profile() { return _profile_name; 
 
 core::CurrentProfile core::JsonCurrentProfile::get_current()
 {
-  CurrentProfile prof{_profile_name, _current_path};
+  CurrentProfile prof{};
+  prof.set_profile_name(_profile_name);
+  prof.set_current_path(_current_path);
   return prof; 
 }
