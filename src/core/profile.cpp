@@ -41,12 +41,12 @@ void core::profile::Profile::set_version(const std::string& version) {
 void core::profile::Profile::set_hyprland_version(const std::string& hyprland_version)
 {
   if(hyprland_version.empty())
-    throw profile::EmptyFieldException("hyprland_version");
+    throw profile::EmptyFieldException("hyprland");
 
   std::regex pat(R"(^\^?\d+\.\d+\.\d+$)");
   if(!std::regex_match(hyprland_version, pat))
   {
-    throw profile::InvalidPatternException("hyprland_version");
+    throw profile::InvalidPatternException("hyprland");
   }
 }
 
