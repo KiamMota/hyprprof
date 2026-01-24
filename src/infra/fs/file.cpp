@@ -1,5 +1,7 @@
 #include "infra/fs/file.hpp"  
+#include <exception>
 #include <fstream>
+#include <stdexcept>
 #include <string>
 #include <filesystem>
 #include <system_error>
@@ -21,4 +23,16 @@ bool infra::fs::file::is_file(const std::string &file_name)
   std::string all_path = std::filesystem::absolute(file_name);
   return std::filesystem::is_regular_file(all_path);
   
+}
+
+bool infra::fs::file::create(const std::string &file)
+{
+  std::ofstream outf(file);
+  if(!outf.is_open())
+  {
+    throw std::runtime_error("file is not open!");
+    return false;
+  }
+  outf.close();
+  return true;
 }
