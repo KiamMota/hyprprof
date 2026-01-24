@@ -6,18 +6,56 @@ The `hyprprof.json` file defines, configures, and allows HyprProf to install and
 
 ## Manifest Objects
 
-### `hyprprof` (object, required)
+## `hyprprof` (object, required)
 
-* `authors`: string array (optional)
+This object defines the main metadata of the profile.
 
-  * List of profile authors.
+* `authors`: array of strings (optional)
+
+  List of profile authors.
+  Each entry must be a simple name composed only of uppercase or lowercase letters (`A–Z`, `a–z`).
+  Spaces, accents, numbers, and special characters are not allowed.
+
 * `name`: string (required)
 
-  * Profile name. Should be simple: no spaces, commas, accents, or special characters.
+  Profile name.
+  This field is used as an internal identifier and must remain simple and predictable.
+  Accepted rules:
+
+  * Only uppercase or lowercase letters (`A–Z`, `a–z`) and underscores (`_`)
+  * Must start with a letter
+  * No spaces, commas, accents, or special characters
+
+  Valid examples:
+
+  * `default`
+  * `my_profile`
+
+  Invalid examples:
+
+  * `my profile` (contains spaces)
+  * `profile,test` (contains comma)
+  * `perfilção` (contains accents)
+
 * `version`: string (required)
 
-  * Profile version in `a.b.c` format.
+  Profile version following the semantic format `a.b.c`, where each segment is a non-negative integer.
+
+  Valid examples:
+
+  * `1.0.0`
+  * `0.1.123`
+
+  Invalid examples:
+
+  * `1.0`
+  * `v1.0.0`
+
 * `description`: string (optional)
+
+  Free-form textual description of the profile.
+  This field accepts any valid string and has no additional restrictions.
+
 
   * Short description of the profile.
 
