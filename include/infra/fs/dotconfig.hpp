@@ -10,8 +10,8 @@ bool exists(const std::string& app);
 void create(const std::string& app);
 std::string app_path(const std::string& app);
 }
-} // namespace fs
+} 
 
-} // namespace infra
+} 
 
 #endif // DOTCONFIG_HPP
