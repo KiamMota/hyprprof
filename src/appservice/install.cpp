@@ -1,38 +1,20 @@
 #include "appservice/install.hpp"
-#include "core/profile_payload.hpp"
-#include "infra/fs/dir.hpp"
+#include "core/json_manifest.hpp"
+#include "core/profile/profile.hpp"
+#include "infra/fs/file.hpp"
 #include "infra/log.hpp"
-#include "infra/sys/hyprctl.hpp"
 #include <string>
 #include <unistd.h>
 
-std::string app_service::Install::_TraitPath(const std::string& path) const {
-    std::string correct_path;
-    return correct_path;
-}
-
-bool app_service::Install::_ValidateJson() {
-
-    return true; // <- garante que sempre retorna bool
-}
-
-bool app_service::Install::_ValidatePayload() {
-
-    infra::hypr_log::log("validating payload...");
-
-    return true;
-}
-
-bool app_service::Install::_ValidateEnvironmentState() const {}
-void app_service::Install::_Message() const {
-    std::cout << "i run a command and my hyprland changed!" << std::endl;
-}
-
-app_service::Install::Install(const std::string& curr_path) : _payload(curr_path), _json_validator("") {
-
-    auto res = infra::sys::hyprctl::reload();
-
-    std::cout << "res: " << res.output << std::endl;
-
-    _Message();
+app_service::Install::Install(const std::string& curr_path) {
+  if(!infra::fs::file::exists(curr_path + "/hyprprof.json"))
+  {
+    infra::hypr_log::err("manifest doesn't exists");
+  }
+  std::string json_str= infra::fs::file::get_content(curr_path + "/hyprprof.json");
+  core::JsonManifest json_val{json_str};
+  json_val.parse();
+  core::profile::Profile prof{};
+  prof = json_val.GetProfile();
+  infra::hypr_log::log("end pipeline");
 }
