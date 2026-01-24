@@ -1,4 +1,5 @@
 #include "infra/fs/file.hpp"  
+#include "infra/fs/dir.hpp"
 #include <exception>
 #include <fstream>
 #include <stdexcept>
@@ -35,4 +36,12 @@ bool infra::fs::file::create(const std::string &file)
   }
   outf.close();
   return true;
+}
+
+bool infra::fs::file::move(const std::string &src, const std::string &new_scr)
+{
+  std::error_code ec;
+  std::filesystem::path abs_src = infra::fs::dir::get_absolute(src);
+  std::filesystem::rename(abs_src, new_scr, ec);
+  return !ec ? true : false;
 }

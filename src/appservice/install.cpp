@@ -40,11 +40,24 @@ app_service::Install::Install(const std::string& curr_path) {
     infra::hypr_log::err(ex.what(), " https://github.com/KiamMota/hyprprof/blob/main/doc/json.md for more details. (aborted).");
     return;
   }
+
   catch(const core::profile::InvalidPatternException& ex)
   {
     infra::hypr_log::err(ex.what(), " https://github.com/KiamMota/hyprprof/blob/main/doc/json.md for more details. (aborted).");
     return;
   }
+
+  if(!infra::fs::dir::exists("~/.config/hyprprof"))
+  {
+    infra::fs::dir::create("~/.config/hyprprof");
+    infra::hypr_log::log("created : ~/.config/hyprprof");
+  }
+
+    std::string profile_path = "~/.config/hyprprof/" + json_val.profile_name();
+
+    infra::fs::dir::create(profile_path);
+    infra::fs::file::move(hyprprof_json_path, profile_path);
+
 
 
   infra::hypr_log::log("end pipeline");
