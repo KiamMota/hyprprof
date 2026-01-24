@@ -29,7 +29,7 @@ hyprprof make default
 
 ### `install <path/url>`
 
-Install a profile from a local path or remote URL. This runs the full execution pipeline, installing dependencies and configuring the environment.
+Install a profile from a local path or remote URL. This runs the full execution pipeline, installing dependencies but it doesn't run the environment.
 
 **Options:**
 
@@ -42,6 +42,10 @@ hyprprof install https://myprofile.com
 hyprprof install ./my_local_profile.hyprprof --no-run-scripts
 ```
 
+### `use`
+
+It uses the current configuration you installed on the system, based on ~/.hyprprof_current.json
+
 ### `export <name>`
 
 Export the current environment into a `.hyprprof` profile file. This scans folders, copies files, and generates a JSON representation.
@@ -51,6 +55,8 @@ Export the current environment into a `.hyprprof` profile file. This scans folde
 ```bash
 hyprprof export my_profile
 ```
+
+
 
 ### `show`
 
