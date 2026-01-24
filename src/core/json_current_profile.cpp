@@ -11,7 +11,7 @@ core::JsonCurrentProfile::JsonCurrentProfile(const std::string& profile_name,
     _current_path = prof_path;
 }
 
-std::string core::JsonCurrentProfile::get_json() {
+const std::string core::JsonCurrentProfile::get_json() {
     rapidjson::Document doc;
     doc.SetObject();
     auto& alloc = doc.GetAllocator();

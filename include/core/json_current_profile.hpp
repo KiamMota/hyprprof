@@ -13,7 +13,7 @@ namespace core
     public:
       JsonCurrentProfile(const std::string& profile_name, const std::string& current_path);
       CurrentProfile get_current();
-      std::string get_json();
+      const std::string get_json();
       std::string current_profile();
       std::string current_path();
   };
