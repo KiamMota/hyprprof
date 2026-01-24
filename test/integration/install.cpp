@@ -1,12 +1,11 @@
 #include "appservice/install.hpp"
+#include "infra/fs/file.hpp"
 #include <filesystem>
 #include <iostream>
 
 namespace fs = std::filesystem;
 
-void make_profile() {
-
-  
+void make_profile() { 
     std::filesystem::path build_dir = fs::path("build");
     fs::path profile_dir = build_dir / "profile";
 
@@ -14,7 +13,7 @@ void make_profile() {
 
     std::error_code ec;
     fs::create_directories(profile_dir, ec);
-
+    infra::fs::file::create("hyprprof.json");
     if (ec)
         throw std::runtime_error("failed to create profile directory");
     
@@ -23,6 +22,6 @@ void make_profile() {
 }
 int main(int argc, char** argv) 
 { 
-  app_service::Install inst{"profile"}; 
-
+  make_profile();
+  app_service::Install inst{"profi"}; 
 }

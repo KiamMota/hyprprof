@@ -30,12 +30,6 @@ bool infra::json::is_json_valid(const std::string& json) {
 
 bool infra::json::validate_schema(const std::string &json, const std::string &json_schema)
 {
-    if (!infra::json::is_json_valid(json))
-        throw std::runtime_error("Invalid JSON content.");
-
-    if (!infra::json::is_json_valid(json_schema))
-        throw std::runtime_error("Invalid JSON Schema.");
-
     rapidjson::Document schema_doc;
     if (schema_doc.Parse(json_schema.c_str()).HasParseError())
         throw std::runtime_error(
@@ -54,7 +48,7 @@ bool infra::json::validate_schema(const std::string &json, const std::string &js
         );
 
     if (!doc.Accept(validator))
-        throw std::runtime_error("JSON does not match the schema.");
+        throw std::runtime_error("JSON does not match the schema. see https://github.com/KiamMota/hyprprof/blob/main/doc/json.md ");
 
     return true; 
 }

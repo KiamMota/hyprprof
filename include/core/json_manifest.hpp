@@ -16,7 +16,7 @@ private:
   rapidjson::Document doc;
 public:
   JsonManifest(const std::string& json_str);
-  void parse();
+  bool parse();
   profile::Profile GetProfile();
   std::string profile_name();
   std::string version();

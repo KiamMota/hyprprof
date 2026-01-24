@@ -21,7 +21,8 @@ void core::profile::Profile::set_name(const std::string& name)
 {
   if(name.empty())
     throw profile::EmptyFieldException("name");
-  std::regex pat("R(^[A-Za-z]+$)");
+  
+  std::regex pat(R"(^[A-Za-z_]+$)");
   if(!std::regex_match(name, pat))
   {
     throw profile::ProfileFieldException("The profile name has an invalid pattern.");

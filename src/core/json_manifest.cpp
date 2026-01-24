@@ -13,22 +13,17 @@
 core::JsonManifest::JsonManifest(const std::string& json_str) {
 
   _json_schema = HYPRPROF_JSON_SCHEMA;
-
-  if(json_str.empty())
-    throw std::runtime_error("empty JSON!");
   _json_str = json_str;
-  doc.Parse(_json_str.c_str());
 }
 
-void core::JsonManifest::parse()
+bool core::JsonManifest::parse()
 {
-  
-  if(infra::json::validate_schema(_json_str, _json_schema))
-  {
-    infra::hypr_log::log("validated json!");
-    return;
-  }
-  infra::hypr_log::err("invalid json!");
+  if(_json_str.empty()) 
+    throw std::runtime_error("empty JSON");
+
+  doc.Parse(_json_str.c_str());
+
+  return infra::json::validate_schema(_json_str, _json_schema);
 }
 
 std::string core::JsonManifest::version()
