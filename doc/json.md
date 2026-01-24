@@ -59,12 +59,51 @@ This object defines the main metadata of the profile.
 
 ### `version_constraints` (object, optional)
 
+This object defines compatibility constraints for external dependencies using semantic versioning rules.
+
 * `hyprland`: string (optional)
 
-  * Compatible Hyprland version using semver rules (e.g., `^0.15.0`).
+  Compatible Hyprland version.
+  The value must follow a semantic version format `a.b.c` and may optionally be prefixed with `^`, which indicates "greater than or equal to" the specified version.
+
+  Accepted rules:
+
+  * Optional `^` prefix to indicate a minimum compatible version
+  * Three numeric components separated by dots
+  * Each component must be a non-negative integer
+
+  Valid examples:
+
+  * `^0.15.0`
+  * `1.0.0`
+
+  Invalid examples:
+
+  * `>=0.15.0`
+  * `0.15`
+  * `v0.15.0`
+
 * `wayland`: string (optional)
 
-  * Compatible Wayland version (e.g., `^1.18.0`).
+  Compatible Wayland version.
+  Follows the same semantic version rules as `hyprland`.
+
+  Accepted rules:
+
+  * Optional `^` prefix to indicate a minimum compatible version
+  * Three numeric components separated by dots
+
+  Valid examples:
+
+  * `^1.18.0`
+  * `1.18.0`
+
+  Invalid examples:
+
+  * `^1.18`
+  * `1.18`
+  * `~1.18.0`
+
 
 ### `build` (object, optional)
 
