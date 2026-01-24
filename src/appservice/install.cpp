@@ -2,6 +2,7 @@
 #include "core/json_manifest.hpp"
 #include "core/profile/exceptions.hpp"
 #include "core/profile/profile.hpp"
+#include "infra/fs/dir.hpp"
 #include "infra/fs/file.hpp"
 #include "infra/log.hpp"
 #include <stdexcept>
@@ -44,6 +45,7 @@ app_service::Install::Install(const std::string& curr_path) {
     infra::hypr_log::err(ex.what(), " https://github.com/KiamMota/hyprprof/blob/main/doc/json.md for more details. (aborted).");
     return;
   }
-  
+
+
   infra::hypr_log::log("end pipeline");
 }

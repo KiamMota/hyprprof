@@ -53,3 +53,13 @@ bool infra::fs::dir::is_dir(const std::string& src) {
         throw std::runtime_error("failed to check directory '" + src + "': " + ec.message());
     return false;
 }
+
+bool infra::fs::dir::create(const std::string &path_name)
+{
+  std::error_code ec;
+  if(std::filesystem::create_directories(path_name, ec))
+    return true;
+  if(ec)
+    throw std::runtime_error("failed to create directory");
+  return {};
+}
