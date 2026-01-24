@@ -6,7 +6,7 @@ core::profile::Profile::Profile() {}
 
 void core::profile::Profile::set_authors(const std::list<std::string>& authors) {
     if (authors.empty())
-        throw profile::ProfileFieldException("The author field is empty!");
+        throw profile::EmptyFieldException("The author field is empty!");
     for (auto& author : authors) {
         _authors.push_back(author);
     }
@@ -20,7 +20,7 @@ void core::profile::Profile::set_name(const std::string& name) {
 
     std::regex pat(R"(^[A-Za-z_]+$)");
     if (!std::regex_match(name, pat)) {
-        throw profile::ProfileFieldException("The profile name has an invalid pattern.");
+        throw profile::InvalidPatternException("name");
         return;
     }
     _name = name;

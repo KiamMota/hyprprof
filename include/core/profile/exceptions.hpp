@@ -8,13 +8,6 @@
 namespace core {
 namespace profile {
 
-class ProfileFieldException : public std::exception {
-    std::string msg;
-
-  public:
-    ProfileFieldException(const char* msg) : msg(msg) {}
-    const char* what() const noexcept { return msg.c_str(); }
-};
 
 class EmptyFieldException : public std::exception {
     std::string field;

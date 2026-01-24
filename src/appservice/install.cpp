@@ -1,5 +1,6 @@
 #include "appservice/install.hpp"
 #include "core/json_manifest.hpp"
+#include "core/profile/exceptions.hpp"
 #include "core/profile/profile.hpp"
 #include "infra/fs/file.hpp"
 #include "infra/log.hpp"
@@ -29,8 +30,20 @@ app_service::Install::Install(const std::string& curr_path) {
   }
 
   core::profile::Profile prof{};
-
-  prof = json_val.GetProfile();
+  try
+  {
+    prof = json_val.GetProfile();
+  }
+  catch(const core::profile::EmptyFieldException& ex)
+  {
+    infra::hypr_log::err(ex.what(), " https://github.com/KiamMota/hyprprof/blob/main/doc/json.md for more details. (aborted).");
+    return;
+  }
+  catch(const core::profile::InvalidPatternException& ex)
+  {
+    infra::hypr_log::err(ex.what(), " https://github.com/KiamMota/hyprprof/blob/main/doc/json.md for more details. (aborted).");
+    return;
+  }
   
   infra::hypr_log::log("end pipeline");
 }
