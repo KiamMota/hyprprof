@@ -44,7 +44,41 @@ hyprprof install ./my_local_profile.hyprprof --no-run-scripts
 
 ### `use`
 
-It uses the current configuration you installed on the system, based on ~/.hyprprof_current.json
+The `use` command in Hyprprof allows you to select the Hyperland configuration you want to apply.
+
+It works in two ways:
+
+1. **Use the current configuration installed on the system:**
+
+   ```bash
+   hyprprof use
+   ```
+
+   This command reads the `~/.hyprprof_current.json` file and applies the configuration currently marked as active.
+
+2. **Use a specific configuration by name:**
+
+   ```bash
+   hyprprof use <name>
+   ```
+
+   Replace `<name>` with the name of the configuration you want to use. This configuration must be previously saved in `~/.config/hyprprof`.
+
+#### Usage example:
+
+* To continue using the current configuration:
+
+  ```bash
+  $ hyprprof use
+  Using current configuration: default_profile
+  ```
+
+* To switch to a specific profile named `gaming_profile`:
+
+  ```bash
+  $ hyprprof use gaming_profile
+  Using configuration: gaming_profile
+  ```
 
 ### `export <name>`
 
