@@ -11,7 +11,7 @@ file(GLOB_RECURSE LIB_SRC
 
 file(GLOB_RECURSE CLI_SRC 
   CONFIGURE_DEPENDS
-  "${CMAKE_CURRENT_SOURCE_DIR}/src/cli/*.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/cli/*.cpp"
 )
 
 add_library(hyprprof_lib ${LIB_SRC})

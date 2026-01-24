@@ -15,18 +15,28 @@ const std::string core::JsonCurrentProfile::make_json(const std::string& profile
     doc.SetObject();
     auto& alloc = doc.GetAllocator();
 
-    doc.AddMember("current_profile", profile, alloc);
+    doc.AddMember(
+        "current_profile",
+        rapidjson::Value(profile.c_str(), alloc), // <-- precisa do .c_str() + allocator
+        alloc
+    );
 
-    doc.AddMember("current_path", path, alloc);
+    doc.AddMember(
+        "current_path",
+        rapidjson::Value(path.c_str(), alloc), // <-- idem
+        alloc
+    );
 
     rapidjson::StringBuffer buffer;
     rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
     writer.SetIndent(' ', 2);
     doc.Accept(writer);
+
     std::string json_str = buffer.GetString();
     json_str += "\n";
     return json_str;
 }
+
 
 std::string core::JsonCurrentProfile::current_path() { return _current_path; }
 std::string core::JsonCurrentProfile::current_profile() { return _profile_name; }

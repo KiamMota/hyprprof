@@ -47,7 +47,6 @@ app_service::Install::Install(const std::string& curr_path) {
 
     if (!infra::fs::dotconfig::exists("hyprprof")) {
         infra::fs::dotconfig::create("hyprprof");
-        infra::hypr_log::log("created config directory for hyprprof");
     }
 
     std::string profile_path =
@@ -59,19 +58,17 @@ app_service::Install::Install(const std::string& curr_path) {
  
     core::CurrentProfile current_profile{};
     current_profile.set_current_path(hyprprof_json_path);
-    current_profile.set_profile_name()
-
-
+    current_profile.set_profile_name(profile_path);
 
     core::JsonCurrentProfile curr_prof_json{};
-    std::string curr_proj = curr_prof_json.make_json();
+    std::string curr_proj = curr_prof_json.make_json(hyprprof_json_path, profile_path);
   
     infra::fs::dotconfig::create(".hyprprof_current.json");
     std::string json_hyprprof_current_path = infra::fs::dotconfig::app_path(".hyprprof_current.json");
 
-    infra::fs::file::overwrite(json_hyprprof_current_path, curr_prof_json.get_json());
+    infra::fs::file::overwrite(json_hyprprof_current_path, curr_proj);
 
 
-
-    infra::hypr_log::log("end pipeline");
+    infra::hypr_log::ok("profile installed!");
+    infra::hypr_log::log("to use the profile: hyprprof use");
 }
