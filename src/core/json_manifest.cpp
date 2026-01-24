@@ -31,6 +31,12 @@ void core::JsonManifest::parse()
   infra::hypr_log::err("invalid json!");
 }
 
+std::string core::JsonManifest::version()
+{
+  const rapidjson::Value& hyprprof_obj = doc["hyprprof"]; 
+  return hyprprof_obj["version"].GetString();
+}
+
 std::string core::JsonManifest::profile_name()
 {
   const rapidjson::Value& hyprprof_obj = doc["hyprprof"]; 

@@ -20,6 +20,8 @@ target_include_directories(hyprprof_lib
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/third_party/
 )
 
+add_subdirectory(test)
+
 # creating the executable cli
 
 add_executable(hyprprof ${CLI_SRC})
