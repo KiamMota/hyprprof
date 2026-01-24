@@ -13,8 +13,6 @@ This object defines the main metadata of the profile.
 * `authors`: array of strings (optional)
 
   List of profile authors.
-  Each entry must be a simple name composed only of uppercase or lowercase letters (`A–Z`, `a–z`).
-  Spaces, accents, numbers, and special characters are not allowed.
 
 * `name`: string (required)
 
