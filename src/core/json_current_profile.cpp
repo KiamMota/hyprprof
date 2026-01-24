@@ -1,6 +1,5 @@
 #include "core/json_current_profile.hpp"
 #include "core/current_profile.hpp"
-#include "core/profile/profile.hpp"
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/prettywriter.h"
@@ -24,8 +23,9 @@ const std::string core::JsonCurrentProfile::get_json() {
     rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
     writer.SetIndent(' ', 2);
     doc.Accept(writer);
-
-    return buffer.GetString();
+    std::string json_str = buffer.GetString();
+    json_str += "\n";
+    return json_str;
 }
 
 std::string core::JsonCurrentProfile::current_path() { return _current_path; }
