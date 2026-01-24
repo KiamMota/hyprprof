@@ -57,7 +57,7 @@ This object defines the main metadata of the profile.
 
   * Short description of the profile.
 
-### `version_constraints` (object, optional)
+### `version_constraints` (object, required)
 
 This object defines compatibility constraints for external dependencies using semantic versioning rules.
 
