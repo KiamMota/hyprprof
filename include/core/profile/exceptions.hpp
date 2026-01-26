@@ -3,6 +3,7 @@
 
 #include <cstring>
 #include <exception>
+#include <locale>
 #include <stdexcept>
 namespace core {
 namespace profile {
@@ -53,8 +54,20 @@ public:
     }
 };
 
-
-} // namespace profile
+class LowerVersionException : public std::exception
+{
+  std::string msg;
+  public:
+    LowerVersionException(const char* field)
+    {
+      msg = "the version for the field '" + std::string(field) + "' It is less than requested.\n";  
+    }
+    const char* what() const noexcept override
+    {
+      return msg.c_str();
+    }
+}; // namespace profile
+}
 
 } // namespace core
 
