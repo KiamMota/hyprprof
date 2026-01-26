@@ -35,12 +35,13 @@ void infra::sys::execute_fork(const std::string& command) {
 }
 
 infra::sys::Result infra::sys::execute_pipe(const std::string& command) {
-    Result res;
+    infra::sys::Result res;
     std::array<char, 256> buffer;
 
     FILE* pipe = popen(command.c_str(), "r");
     if (!pipe) {
         res.error_code = -1; // failed to open pipe
+        res.output = "";
         return res;
     }
 
@@ -49,13 +50,22 @@ infra::sys::Result infra::sys::execute_pipe(const std::string& command) {
     }
 
     int status = pclose(pipe);
-    if (WIFEXITED(status)) {
+    if (status == -1) {
+        res.error_code = -1;
+    } else if (WIFEXITED(status)) {
         res.error_code = WEXITSTATUS(status);
     } else {
         res.error_code = -1;
     }
+
+    // trim newline final se houver
+    if (!res.output.empty() && res.output.back() == '\n') {
+        res.output.pop_back();
+    }
+
     return res;
 }
+
 
 infra::sys::Result infra::sys::execute_script(const std::string& script_path) {
     Result res;

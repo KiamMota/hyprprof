@@ -50,11 +50,8 @@ std::list<std::string> core::json::JSONManifestReader::authors() {
 
 core::profile::ProfileAssembler core::json::JSONManifestReader::GetProfile() {
     profile::ProfileAssembler prof{};
-    prof.set_profile_name(profile_name())
-        .set_hyprland_version_constraints(version())
-        .set_profile_description(desciption())
-        .set_hyprland_version_constraints(hyprland_version())
-        .set_wayland_version_constraints(wayland_version());
+
+    return prof;
 }
 
 std::string core::json::JSONManifestReader::hyprland_version() {

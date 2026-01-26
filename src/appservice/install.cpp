@@ -5,6 +5,7 @@
 #include "core/json/json_manifest_reader.hpp"
 #include "core/profile/exceptions.hpp"
 #include "core/profile/profile.hpp"
+#include "core/profile/profile_assembler.hpp"
 #include "infra/fs/dir.hpp"
 #include "infra/fs/file.hpp"
 #include "infra/log.hpp"
@@ -35,7 +36,7 @@ app_service::Install::Install(const std::string& curr_path) {
         return;
     }
 
-    core::profile::Profile prof{};
+    core::profile::ProfileAssembler prof{};
     try {
         prof = json_val.GetProfile();
     } catch (const core::profile::EmptyFieldException& ex) {
