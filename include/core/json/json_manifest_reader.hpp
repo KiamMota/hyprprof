@@ -1,7 +1,7 @@
 #ifndef JSON_FILE_PARSER_HPP
 #define JSON_FILE_PARSER_HPP
 
-#include "core/profile/profile.hpp"
+#include "core/profile/profile_assembler.hpp"
 #include "rapidjson/document.h"
 #include <list>
 #include <string>
@@ -18,7 +18,7 @@ class JSONManifestReader {
   public:
     JSONManifestReader(const std::string& json_str);
     bool parse();
-    profile::Profile GetProfile();
+    profile::ProfileAssembler GetProfile();
     std::string profile_name();
     std::string version();
     std::string desciption();

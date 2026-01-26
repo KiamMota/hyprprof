@@ -2,7 +2,6 @@
 #include "core/profile/exceptions.hpp"
 #include <regex>
 
-core::profile::Profile::Profile() {}
 
 void core::profile::Profile::set_authors(const std::list<std::string>& authors) {
     if (authors.empty())
@@ -38,28 +37,4 @@ void core::profile::Profile::set_version(const std::string& version) {
     _version = version;
 }
 
-void core::profile::Profile::set_hyprland_version(const std::string& hyprland_version)
-{
-  if(hyprland_version.empty())
-    throw profile::EmptyFieldException("hyprland");
 
-  std::regex pat(R"(^\^?\d+\.\d+\.\d+$)");
-  if(!std::regex_match(hyprland_version, pat))
-  {
-    throw profile::InvalidPatternException("hyprland");
-  }
-}
-
-void core::profile::Profile::set_wayland_version(const std::string& set_wayland_version)
-{
-
-  if(set_wayland_version.empty())
-    throw profile::EmptyFieldException("wayland");
-
-  std::regex pat(R"(^\^?\d+\.\d+\.\d+$)");
-  if(!std::regex_match(set_wayland_version, pat))
-  {
-    throw profile::InvalidPatternException("wayland");
-  }
-
-}

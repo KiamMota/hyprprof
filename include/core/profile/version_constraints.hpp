@@ -15,8 +15,8 @@ namespace profile
       VersionConstraints();
       void set_wayland_version(const std::string& ver);
       void set_hyprland_version(const std::string& ver);
-      std::string wayland_version() const noexcept;
-      std::string hyprland_version() const noexcept;
+      const std::string& wayland_version() const noexcept;
+      const std::string& hyprland_version() const noexcept;
   };
 
 }

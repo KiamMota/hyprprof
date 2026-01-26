@@ -28,10 +28,10 @@ void core::profile::VersionConstraints::set_hyprland_version(const std::string& 
     }
 }
 
-std::string core::profile::VersionConstraints::hyprland_version() const noexcept {
+const std::string& core::profile::VersionConstraints::hyprland_version() const noexcept {
     return _hyprland_version;
 }
 
-std::string core::profile::VersionConstraints::wayland_version() const noexcept {
+const std::string& core::profile::VersionConstraints::wayland_version() const noexcept {
     return _wayland_version;
 }
