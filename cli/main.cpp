@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "cmd.hpp" // se você registrou os comandos aqui
+#include "cmd.hpp" 
 #include "message.hpp"
 #include "dispatcher.hpp"
 

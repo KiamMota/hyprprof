@@ -1,14 +1,14 @@
 #include "appservice/install.hpp"
 #include "core/current_profile.hpp"
+#include "core/json/json_manifest_reader.hpp"
 #include "core/json_current_profile.hpp"
-#include "core/json_manifest.hpp"
+#include "core/json/json_manifest_reader.hpp"
 #include "core/profile/exceptions.hpp"
 #include "core/profile/profile.hpp"
 #include "infra/fs/dir.hpp"
 #include "infra/fs/file.hpp"
 #include "infra/log.hpp"
 #include "infra/fs/dotconfig.hpp"
-#include <exception>
 #include <stdexcept>
 #include <string>
 #include <unistd.h>
@@ -27,7 +27,7 @@ app_service::Install::Install(const std::string& curr_path) {
     }
     std::string json_str = infra::fs::file::get_content(hyprprof_json_path);
 
-    core::JsonManifest json_val{json_str};
+    core::json::JSONManifestReader json_val{json_str};
     try {
         json_val.parse();
     } catch (const std::runtime_error& e) {

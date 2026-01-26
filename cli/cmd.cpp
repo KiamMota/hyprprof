@@ -1,5 +1,4 @@
 #include "cmd.hpp"
-#include <iostream>
 #include <vector>
 #include "appservice/install.hpp"
 #include "appservice/show_profile.hpp"
@@ -25,6 +24,6 @@ void cli::cmd::use(const std::vector<std::string> &args)
     return;
   }
 
-  std::string profile = args[0];
   app_service::ShowProfile show{};
+  std::string profile = args[0];
 }
