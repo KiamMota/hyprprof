@@ -1,35 +1,40 @@
 #include "infra/sys/cmd.hpp"
+#include "infra/sys/exception.hpp"
+
+#include <string>
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <unistd.h>
 #include <array>
-#include "infra/log.hpp"
 
 void infra::sys::execute_fork(const std::string& command) {
     pid_t pid = fork();
+
+    if(command.empty())
+      throw infra::sys::ForkException("command is empty!"); 
     if (pid < 0) {
-    hypr_log::err("failed to create process.");
+        throw infra::sys::ForkException("failed to create process.");
         return;
     }
 
     if (pid == 0) {
         execl("/bin/sh", "sh", "-c", command.c_str(), nullptr);
-    hypr_log::err("failed to execute command.");
+        throw infra::sys::ForkException("failed to execute command.");
 
         _exit(127);
     } else {
         int status;
         if (waitpid(pid, &status, 0) == -1) {
-      hypr_log::err("failed to wait child process.");
+            throw infra::sys::ForkException("failed to wait child process.");
             return;
         }
 
         if (WIFEXITED(status)) {
             int code = WEXITSTATUS(status);
             if (code != 0)
-                hypr_log::err("task end with the code: ", code);
+                throw infra::sys::ForkException("task end with the code: " + code);
         } else {
-          hypr_log::err("The children's process ends abnormally.");
+            throw infra::sys::ForkException("The children's process ends abnormally.");
         }
     }
 }
@@ -40,9 +45,7 @@ infra::sys::Result infra::sys::execute_pipe(const std::string& command) {
 
     FILE* pipe = popen(command.c_str(), "r");
     if (!pipe) {
-        res.error_code = -1; // failed to open pipe
-        res.output = "";
-        return res;
+        throw infra::sys::PipeException("failed to open pipe for command: " + command);
     }
 
     while (fgets(buffer.data(), buffer.size(), pipe) != nullptr) {
@@ -51,11 +54,16 @@ infra::sys::Result infra::sys::execute_pipe(const std::string& command) {
 
     int status = pclose(pipe);
     if (status == -1) {
-        res.error_code = -1;
+        throw infra::sys::PipeException("failed to close pipe for command: " + command);
     } else if (WIFEXITED(status)) {
         res.error_code = WEXITSTATUS(status);
-    } else {
-        res.error_code = -1;
+        if (res.error_code != 0) {
+            throw infra::sys::PipeException(
+                "command exited with non-zero code: " + std::to_string(res.error_code));
+        }
+    } else if (WIFSIGNALED(status)) {
+        throw infra::sys::PipeException(
+            "command terminated by signal: " + std::to_string(WTERMSIG(status)));
     }
 
     // trim newline final se houver
@@ -90,5 +98,3 @@ infra::sys::Result infra::sys::execute_script(const std::string& script_path) {
     }
     return execute_pipe(script_path);
 }
-
-

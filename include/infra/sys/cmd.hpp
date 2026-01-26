@@ -1,9 +1,11 @@
 #ifndef CMD_HPP
 #define CMD_HPP
 
+#include <stdexcept>
 #include <string>
 namespace infra {
 namespace sys {
+
 
 typedef struct {
     std::string output;
@@ -48,8 +50,7 @@ void execute_fork(const std::string& command);
  */
 Result execute_script(const std::string& script_path);
 
-
-}
-}
+} // namespace sys
+} // namespace infra
 
 #endif // CMD_HPP

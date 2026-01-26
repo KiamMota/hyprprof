@@ -26,20 +26,25 @@ static std::vector<int> split_version(const std::string& ver) {
     return parts;
 }
 
+static void check_pipe_result(infra::sys::Result& res) {
+
+    if (res.error_code != 0) {
+        throw std::runtime_error("failed to open pipe to see version of hyprland: " +
+                                 std::to_string(res.error_code));
+    }
+    if (res.output.empty())
+        throw std::runtime_error("result is empty!");
+}
+
 bool core::profile::VersionConstraintsChecker::hyprland_is_equal_or_greater(
     const std::string& version) {
     auto res = infra::sys::execute_pipe(HYPRLAND_VERSION_COMMAND);
     std::string _version = version;
 
-    if (res.error_code != 0) {
-        throw std::runtime_error("failed to open pipe to see version of hyprland: " +
-                                 std::to_string(res.error_code));
-        return false;
-    }
-    if (res.output.empty())
-        throw std::runtime_error("result is empty!");
+    check_pipe_result(res);
 
-    if(version[0] == '^') _version.erase(0); 
+    if (version[0] == '^')
+        _version.erase(0);
     int ini_pos = strlen("Hyprland ");
     int end_pos = ini_pos + 7;
 
@@ -68,15 +73,10 @@ bool core::profile::VersionConstraintsChecker::wayland_is_equal_or_greater(
 
     std::string _version = version;
 
-    if (res.error_code != 0) {
-        throw std::runtime_error("failed to open pipe to see version of hyprland: " +
-                                 std::to_string(res.error_code));
-        return false;
-    }
-    if (res.output.empty())
-        throw std::runtime_error("result is empty!");
+    check_pipe_result(res);
 
-    if(version[0] == '^') _version.erase(0); 
+    if (version[0] == '^')
+        _version.erase(0);
     std::string version_output = res.output.substr(0);
     std::cout << version_output << std::endl;
 
@@ -94,5 +94,14 @@ bool core::profile::VersionConstraintsChecker::wayland_is_equal_or_greater(
             return false;
     }
 
-  return true;
+    return true;
+}
+
+bool core::profile::VersionConstraintsChecker::hyprland_is_equal(const std::string& version) 
+{
+  infra::sys::Result res = infra::sys::execute_pipe(HYPRLAND_VERSION_COMMAND);
+  check_pipe_result(res);
+  
+
+
 }
