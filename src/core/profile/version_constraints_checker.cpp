@@ -29,8 +29,7 @@ static std::vector<int> split_version(const std::string& ver) {
 bool core::profile::VersionConstraintsChecker::hyprland_is_equal_or_greater(
     const std::string& version) {
     auto res = infra::sys::execute_pipe(HYPRLAND_VERSION_COMMAND);
-
-
+    std::string _version = version;
 
     if (res.error_code != 0) {
         throw std::runtime_error("failed to open pipe to see version of hyprland: " +
@@ -40,6 +39,7 @@ bool core::profile::VersionConstraintsChecker::hyprland_is_equal_or_greater(
     if (res.output.empty())
         throw std::runtime_error("result is empty!");
 
+    if(version[0] == '^') _version.erase(0); 
     int ini_pos = strlen("Hyprland ");
     int end_pos = ini_pos + 7;
 
@@ -66,6 +66,8 @@ bool core::profile::VersionConstraintsChecker::wayland_is_equal_or_greater(
     const std::string& version) {
     auto res = infra::sys::execute_pipe(WAYLAND_VERSION_COMMAND);
 
+    std::string _version = version;
+
     if (res.error_code != 0) {
         throw std::runtime_error("failed to open pipe to see version of hyprland: " +
                                  std::to_string(res.error_code));
@@ -74,6 +76,7 @@ bool core::profile::VersionConstraintsChecker::wayland_is_equal_or_greater(
     if (res.output.empty())
         throw std::runtime_error("result is empty!");
 
+    if(version[0] == '^') _version.erase(0); 
     std::string version_output = res.output.substr(0);
     std::cout << version_output << std::endl;
 
