@@ -39,6 +39,21 @@ public:
 };
 
 
+class FieldSizeException : public std::exception {
+    std::string message;
+public:
+    FieldSizeException(const char* field_name, int min_size, int max_size) {
+        message = "Field '" + std::string(field_name) + 
+                  "' size must be between " + std::to_string(min_size) +
+                  " and " + std::to_string(max_size);
+    }
+
+    const char* what() const noexcept override {
+        return message.c_str();
+    }
+};
+
+
 } // namespace profile
 
 } // namespace core

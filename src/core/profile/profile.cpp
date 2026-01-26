@@ -12,7 +12,12 @@ void core::profile::Profile::set_authors(const std::list<std::string>& authors) 
     }
 }
 
-void core::profile::Profile::set_description(const std::string& desc) { _description = desc; }
+void core::profile::Profile::set_description(const std::string& desc) 
+{
+  if(_description.size() > 255)
+    throw core::profile::FieldSizeException("description", 0, 255);
+  _description = desc; 
+}
 
 void core::profile::Profile::set_name(const std::string& name) {
     if (name.empty())
