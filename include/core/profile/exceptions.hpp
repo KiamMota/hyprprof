@@ -1,7 +1,6 @@
 #ifndef EXCEPTIONS_HPP
 #define EXCEPTIONS_HPP
 
-#include <csignal>
 #include <cstring>
 #include <exception>
 #include <stdexcept>
