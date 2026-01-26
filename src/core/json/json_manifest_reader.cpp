@@ -1,5 +1,5 @@
 #include "core/json/json_manifest_reader.hpp"
-#include "core/json_schemas.hpp"
+#include "core/json/json_schema.hpp"
 #include "core/profile/profile.hpp"
 #include "infra/json.hpp"
 #include "rapidjson/document.h"
