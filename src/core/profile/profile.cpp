@@ -1,6 +1,7 @@
 #include "core/profile/profile.hpp"
 #include "core/profile/exceptions.hpp"
 #include <regex>
+#include <string>
 
 
 void core::profile::Profile::set_authors(const std::list<std::string>& authors) {
@@ -37,4 +38,7 @@ void core::profile::Profile::set_version(const std::string& version) {
     _version = version;
 }
 
-
+const std::string& core::profile::Profile::version() const noexcept { return _version; }
+const std::string& core::profile::Profile::name() const noexcept { return _name; }
+const std::list<std::string>& core::profile::Profile::authors() const noexcept { return _authors; }
+const std::string& core::profile::Profile::description() const noexcept { return _description; }
