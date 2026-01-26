@@ -1,10 +1,10 @@
 #include "core/profile/version_constraits_checker.hpp"
 #include "infra/sys/cmd.hpp"
+#include "infra/sys/exception.hpp"
 #include <cstring>
 #include <iostream>
 #include <ostream>
 #include <sstream>
-#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -26,14 +26,12 @@ static std::vector<int> split_version(const std::string& ver) {
     return parts;
 }
 
-static void check_pipe_result(infra::sys::Result& res) {
-
-    if (res.error_code != 0) {
-        throw std::runtime_error("failed to open pipe to see version of hyprland: " +
-                                 std::to_string(res.error_code));
-    }
+static void check_pipe_result(const infra::sys::Result& res) {
+    if (res.error_code != 0)
+        throw infra::sys::PipeException("command failed with code " +
+                                        std::to_string(res.error_code));
     if (res.output.empty())
-        throw std::runtime_error("result is empty!");
+        throw infra::sys::PipeException("command returned empty output");
 }
 
 bool core::profile::VersionConstraintsChecker::hyprland_is_equal_or_greater(
@@ -97,11 +95,24 @@ bool core::profile::VersionConstraintsChecker::wayland_is_equal_or_greater(
     return true;
 }
 
-bool core::profile::VersionConstraintsChecker::hyprland_is_equal(const std::string& version) 
-{
-  infra::sys::Result res = infra::sys::execute_pipe(HYPRLAND_VERSION_COMMAND);
-  check_pipe_result(res);
-  
+bool core::profile::VersionConstraintsChecker::hyprland_is_equal(const std::string& version) {
+    infra::sys::Result res = infra::sys::execute_pipe(HYPRLAND_VERSION_COMMAND);
+    check_pipe_result(res);
+    std::string _version = {};
+    if (version[0] == '^')
+        _version.erase(0);
+    int ini_pos = strlen("Hyprland ");
+    int end_pos = ini_pos + 7;
+    std::string version_output = res.output.substr(ini_pos, end_pos - ini_pos);
+    return (_version == version_output) ? true : false;
+}
 
-
+bool core::profile::VersionConstraintsChecker::wayland_is_equal(const std::string& version) {
+    infra::sys::Result res = infra::sys::execute_pipe(WAYLAND_VERSION_COMMAND);
+    check_pipe_result(res);
+    std::string _version = {};
+    if (version[0] == '^')
+        _version.erase(0);
+    std::string version_output = res.output.substr(0);
+    return (_version == version_output) ? true : false;
 }
