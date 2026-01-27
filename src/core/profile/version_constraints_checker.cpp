@@ -37,8 +37,8 @@ static void check_pipe_result(const infra::sys::Result& res) {
 bool core::profile::VersionConstraintsChecker::hyprland_is_equal_or_greater(
     const std::string& version) {
     auto res = infra::sys::execute_pipe(HYPRLAND_VERSION_COMMAND);
-    std::string _version = version;
 
+    std::string _version = version;
     check_pipe_result(res);
 
     if (version[0] == '^')
