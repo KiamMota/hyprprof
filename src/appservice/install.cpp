@@ -1,30 +1,50 @@
 #include "appservice/install.hpp"
 #include "core/current_profile.hpp"
 #include "core/json/json_manifest_reader.hpp"
-#include "core/json/json_current_profile_writer.hpp"
 #include "core/json/json_manifest_reader.hpp"
+#include "core/json/json_profile_list_writer.hpp"
 #include "core/profile/exceptions.hpp"
 #include "core/profile/profile_assembler.hpp"
 #include "infra/fs/dir.hpp"
 #include "infra/fs/file.hpp"
 #include "infra/log.hpp"
 #include "infra/fs/dotconfig.hpp"
+#include <fstream>
 #include <stdexcept>
 #include <string>
 #include <unistd.h>
 
 app_service::Install::Install(const std::string& curr_path) {
+    using namespace infra::fs;
 
-    std::string hyprprof_json_path = infra::fs::dir::get_absolute(curr_path) + "/hyprprof.json";
+    // -----------------------------
+    // Variables
+    // -----------------------------
+    const std::string hyprprof_dir = dotconfig::app_path("hyprprof");
+    const std::string hyprprof_json_path = dir::get_absolute(curr_path) + "/hyprprof.json";
+    const std::string profile_list_path = hyprprof_dir + "/profile_list.json";
+    std::string json_str;
+    std::string dest_profile_json;
+    std::string profile_dir;
+    core::json::JSONManifestReader json_val{""};
+    core::profile::ProfileAssembler prof{};
+    core::CurrentProfile current_profile{};
+    core::json::JSONProfileListWriter writer{};
+    std::string current_profile_json;
 
-    if (!infra::fs::file::exists(hyprprof_json_path)) {
+    // -----------------------------
+    // Check if the profile JSON exists
+    // -----------------------------
+    if (!file::exists(hyprprof_json_path)) {
         infra::hypr_log::err(hyprprof_json_path + " doesn't exist.");
         return;
     }
 
-    std::string json_str = infra::fs::file::get_content(hyprprof_json_path);
-
-    core::json::JSONManifestReader json_val{json_str};
+    // -----------------------------
+    // Read the JSON content
+    // -----------------------------
+    json_str = file::get_content(hyprprof_json_path);
+    json_val = core::json::JSONManifestReader{json_str};
     try {
         json_val.parse();
     } catch (const std::runtime_error& e) {
@@ -32,44 +52,63 @@ app_service::Install::Install(const std::string& curr_path) {
         return;
     }
 
-    core::profile::ProfileAssembler prof{};
+    // -----------------------------
+    // Build the profile
+    // -----------------------------
     try {
         prof = json_val.GetProfile();
     } catch (const core::profile::EmptyFieldException& ex) {
-        infra::hypr_log::err(ex.what(), " https://github.com/KiamMota/hyprprof/blob/main/doc/"
-                                        "json.md for more details. (aborted).");
+        infra::hypr_log::err(ex.what(), " https://github.com/KiamMota/hyprprof/blob/main/doc/json.md (aborted).");
+        return;
+    } catch (const core::profile::InvalidPatternException& ex) {
+        infra::hypr_log::err(ex.what(), " https://github.com/KiamMota/hyprprof/blob/main/doc/json.md (aborted).");
         return;
     }
 
-    catch (const core::profile::InvalidPatternException& ex) {
-        infra::hypr_log::err(ex.what(), " https://github.com/KiamMota/hyprprof/blob/main/doc/"
-                                        "json.md for more details. (aborted).");
-        return;
-    }
+    // -----------------------------
+    // Ensure the base directory exists
+    // -----------------------------
+    if (!dir::exists(hyprprof_dir))
+        dir::create(hyprprof_dir);
 
-    if (!infra::fs::dotconfig::exists("hyprprof")) {
-        infra::fs::dotconfig::create("hyprprof");
-    }
+    // -----------------------------
+    // Create profile directory
+    // -----------------------------
+    profile_dir = hyprprof_dir + "/" + json_val.profile_name();
+    dir::create(profile_dir);
 
-    std::string profile_path =
-        infra::fs::dotconfig::app_path("hyprprof") + "/" + json_val.profile_name();
+    // -----------------------------
+    // Move JSON into profile directory
+    // -----------------------------
+    dest_profile_json = profile_dir + "/hyprprof.json";
+    file::move(hyprprof_json_path, dest_profile_json);
 
-    infra::fs::dir::create(profile_path);
-    infra::fs::file::move(hyprprof_json_path, profile_path);
+    // -----------------------------
+    // Update CurrentProfile object
+    // -----------------------------
+    current_profile.set_current_path(dest_profile_json);
+    current_profile.set_profile_name(json_val.profile_name());
 
-    core::CurrentProfile current_profile{};
-    current_profile.set_current_path(hyprprof_json_path);
-    current_profile.set_profile_name(profile_path);
+    // -----------------------------
+    // Generate JSON for profile list
+    // -----------------------------
+    current_profile_json = writer.make_json(
+        current_profile.name(),
+        current_profile.path()
+    );
 
-    core::json::JSONCurrentProfileWriter curr_prof_json{};
-    std::string curr_proj = curr_prof_json.make_json(hyprprof_json_path, profile_path);
+    // -----------------------------
+    // Ensure profile list file exists and overwrite
+    // -----------------------------
+    if (!file::exists(profile_list_path))
+        std::ofstream(profile_list_path).close();
 
-    infra::fs::dotconfig::create(".hyprprof_current.json");
-    std::string json_hyprprof_current_path =
-        infra::fs::dotconfig::app_path(".hyprprof_current.json");
+    file::overwrite(profile_list_path, current_profile_json);
 
-    infra::fs::file::overwrite(json_hyprprof_current_path, curr_proj);
-
-    infra::hypr_log::ok("profile installed!");
-    infra::hypr_log::log("to use the profile: hyprprof use");
+    // -----------------------------
+    // Logs
+    // -----------------------------
+    infra::hypr_log::ok("Profile installed!");
+    infra::hypr_log::log("To use the profile: hyprprof use");
 }
+

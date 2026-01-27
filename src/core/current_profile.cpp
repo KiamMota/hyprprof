@@ -12,3 +12,13 @@ void core::CurrentProfile::set_profile_name(const std::string& name)
 {
   _current_profile_name = name;
 }
+
+const std::string& core::CurrentProfile::name() const noexcept
+{
+  return _current_profile_name;
+}
+
+const std::string& core::CurrentProfile::path() const noexcept
+{
+  return _current_profile_path;
+}

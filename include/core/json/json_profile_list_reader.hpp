@@ -7,13 +7,14 @@ namespace core
 {
 namespace json
 {
-  class JSONCurrentProfileReader
+  class JSONProfileListReader
   {
+  std::string _existing_json;
     rapidjson::Document doc;
     public:
-      JSONCurrentProfileReader(const std::string& json_src);
+      JSONProfileListReader(const std::string& json_src);
       const std::string current_profile_name() const noexcept;
-      const std::string current_profile_path() const noexcept;
+        const std::string current_profile_path() const noexcept;
   };
 
 }

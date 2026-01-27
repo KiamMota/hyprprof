@@ -12,6 +12,8 @@ public:
   CurrentProfile();
   void set_profile_name(const std::string& name);
   void set_current_path(const std::string& path);
+  const std::string& name() const noexcept;
+  const std::string& path() const noexcept;
 };
 
 } // namespace core
