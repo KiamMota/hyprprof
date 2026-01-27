@@ -22,6 +22,7 @@ class JSONProfileListWriter {
     CurrentProfile get_current();
     const std::string make_json(const std::string& current_profile,
                                 const std::string& current_path);
+    const std::string append_json();
     std::string current_profile();
     std::string current_path();
 };

@@ -1,17 +1,17 @@
 #include "core/current_profile.hpp"
 #include "rapidjson/document.h"
-#include "rapidjson/stringbuffer.h"
 #include "rapidjson/prettywriter.h"
+#include "rapidjson/stringbuffer.h"
 #include "core/json/json_profile_list_writer.hpp"
 
 core::json::JSONProfileListWriter::JSONProfileListWriter(const std::string& json_src) {
-  _existing_json = json_src;
+    _existing_json = json_src;
 }
 
 core::json::JSONProfileListWriter::JSONProfileListWriter() {}
 
 const std::string core::json::JSONProfileListWriter::make_json(
-    const std::string& profile, 
+    const std::string& profile,
     const std::string& path
 ) {
     rapidjson::Document doc;
@@ -65,27 +65,39 @@ const std::string core::json::JSONProfileListWriter::make_json(
     current_obj.Accept(current_writer);
     std::string current_str = std::string("\"current\": ") + current_buffer.GetString();
 
+    std::string final_json;
 
     // encontra primeiro { do original_json
     auto pos = original_json.find('{');
-    if (pos == std::string::npos) pos = 0;
+    if (pos == std::string::npos)
+        pos = 0;
 
     // monta novo json injetando current logo depois do primeiro {
-    std::string final_json = original_json.substr(0, pos + 1) + "\n  " + current_str;
-    // adiciona o resto (tirando o { inicial)
-    final_json += "," + original_json.substr(pos + 1);
-    final_json += "\n";
-    return final_json;
-}
+    final_json = original_json.substr(0, pos + 1) + "\n  " + current_str;
 
+    // adiciona vírgula e o resto do JSON (tirando o { inicial)
+    std::string rest = original_json.substr(pos + 1);
+    if (!rest.empty()) {
+        // remove possíveis espaços iniciais e novas linhas
+        size_t first_nonspace = rest.find_first_not_of(" \n");
+        if (first_nonspace != std::string::npos) {
+            rest = rest.substr(first_nonspace);
+            final_json += ", " + rest;
+        } else {
+            final_json += rest;
+        }
+    }
+    final_json += "\n";
+
+    return final_json; // <--- ESSENCIAL
+}
 
 std::string core::json::JSONProfileListWriter::current_path() { return _current_path; }
 std::string core::json::JSONProfileListWriter::current_profile() { return _profile_name; }
 
-core::CurrentProfile core::json::JSONProfileListWriter::get_current()
-{
-  CurrentProfile prof{};
-  prof.set_profile_name(_profile_name);
-  prof.set_current_path(_current_path);
-  return prof; 
+core::CurrentProfile core::json::JSONProfileListWriter::get_current() {
+    CurrentProfile prof{};
+    prof.set_profile_name(_profile_name);
+    prof.set_current_path(_current_path);
+    return prof;
 }
