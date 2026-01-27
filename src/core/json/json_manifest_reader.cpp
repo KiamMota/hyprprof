@@ -54,8 +54,7 @@ core::profile::ProfileAssembler core::json::JSONManifestReader::GetProfile() {
     // Exemplo: assumindo que você tem métodos para pegar os campos do JSON
     prof.set_profile_name(profile_name())
         .set_profile_version(version())
-        .set_profile_description(desciption().
-                                 set_profile_authors(authors())
+        .set_profile_description(desciption()).set_profile_authors(this->authors())
         .set_wayland_version_constraints(wayland_version())
         .set_hyprland_version_constraints(hyprland_version());
 

@@ -14,7 +14,7 @@ class ProfileAssembler
     Profile _profile;
     VersionConstraints _version_constraints;
   public:
-    ProfileAssembler();
+    ProfileAssembler() = default;
     ProfileAssembler& set_profile_name(const std::string& name);
     ProfileAssembler& set_profile_version(const std::string& version);
     ProfileAssembler& set_profile_description(const std::string& description);
