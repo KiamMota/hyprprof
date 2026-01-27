@@ -15,18 +15,15 @@ const std::string core::json::JSONCurrentProfileWriter::make_json(const std::str
     doc.SetObject();
     auto& alloc = doc.GetAllocator();
 
-    doc.AddMember(
-        "current_profile",
-        rapidjson::Value(profile.c_str(), alloc), // <-- precisa do .c_str() + allocator
-        alloc
-    );
+    // Cria o objeto "current"
+    rapidjson::Value current_obj(rapidjson::kObjectType);
+    current_obj.AddMember("name", rapidjson::Value(profile.c_str(), alloc), alloc);
+    current_obj.AddMember("path", rapidjson::Value(path.c_str(), alloc), alloc);
 
-    doc.AddMember(
-        "current_path",
-        rapidjson::Value(path.c_str(), alloc), // <-- idem
-        alloc
-    );
+    // Adiciona "current" ao documento
+    doc.AddMember("current", current_obj, alloc);
 
+    // Serializa
     rapidjson::StringBuffer buffer;
     rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
     writer.SetIndent(' ', 2);
@@ -36,6 +33,7 @@ const std::string core::json::JSONCurrentProfileWriter::make_json(const std::str
     json_str += "\n";
     return json_str;
 }
+
 
 
 std::string core::json::JSONCurrentProfileWriter::current_path() { return _current_path; }
