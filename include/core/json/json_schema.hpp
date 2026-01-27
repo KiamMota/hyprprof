@@ -43,7 +43,7 @@ R"(
     },
     "components": {
       "type": "object",
-      "required": ["compositor", "terminal", "launcher", "notification", "bar"],
+      "required": ["terminal", "launcher", "notification"],
       "properties": {
         "compositor": { "type": "string" },
         "terminal": { "type": "string" },

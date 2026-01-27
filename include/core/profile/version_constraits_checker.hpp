@@ -12,6 +12,8 @@ class VersionConstraintsChecker {
     static bool hyprland_is_equal_or_greater(const std::string& version);
     static bool hyprland_is_equal(const std::string& version);
     static bool wayland_is_equal(const std::string& version);
+    static std::string system_wayland_version();
+    static std::string system_hyprland_version();
 };
 } // namespace profile
 } // namespace core
