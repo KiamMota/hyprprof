@@ -26,10 +26,10 @@ app_service::Install::Install(const std::string& curr_path) {
     std::string json_str;
     std::string dest_profile_json;
     std::string profile_dir;
-    core::json::JSONManifestReader json_val{""};
+    core::json::JSONManifestReader json_val{infra::fs::file::get_content(profile_list_path)};
     core::profile::ProfileAssembler prof{};
     core::CurrentProfile current_profile{};
-    core::json::JSONProfileListWriter writer{};
+    core::json::JSONProfileListWriter writer{infra::fs::file::get_content(profile_list_path)};
     std::string current_profile_json;
 
     // -----------------------------

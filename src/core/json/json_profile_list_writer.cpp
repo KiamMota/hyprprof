@@ -25,16 +25,14 @@ const std::string core::json::JSONProfileListWriter::make_json(
     }
     auto& alloc = doc.GetAllocator();
 
-    // verifica se já existe um current
+    // guarda antigo current no histórico
     if (doc.HasMember("current")) {
         const auto& old_current = doc["current"];
         if (old_current.HasMember("name") && old_current.HasMember("path")) {
             std::string old_name = old_current["name"].GetString();
             std::string old_path = old_current["path"].GetString();
-
             if (old_name != profile) {
-                // adiciona histórico do perfil antigo
-                doc.RemoveMember(old_name.c_str()); // remove se já existia
+                doc.RemoveMember(old_name.c_str());
                 doc.AddMember(
                     rapidjson::Value(old_name.c_str(), alloc),
                     rapidjson::Value(old_path.c_str(), alloc),
@@ -44,25 +42,41 @@ const std::string core::json::JSONProfileListWriter::make_json(
         }
     }
 
-    // atualiza current
+    // cria current mas não adiciona ainda
+    rapidjson::Document current_doc;
+    current_doc.SetObject();
+    auto& current_alloc = current_doc.GetAllocator();
     rapidjson::Value current_obj(rapidjson::kObjectType);
-    current_obj.AddMember("name", rapidjson::Value(profile.c_str(), alloc), alloc);
-    current_obj.AddMember("path", rapidjson::Value(path.c_str(), alloc), alloc);
-    doc.RemoveMember("current");
-    doc.AddMember("current", current_obj, alloc);
+    current_obj.AddMember("name", rapidjson::Value(profile.c_str(), current_alloc), current_alloc);
+    current_obj.AddMember("path", rapidjson::Value(path.c_str(), current_alloc), current_alloc);
 
-    // serializa
+    // serializa o doc original (sem current)
+    doc.RemoveMember("current");
     rapidjson::StringBuffer buffer;
     rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
     writer.SetIndent(' ', 2);
     doc.Accept(writer);
+    std::string original_json = buffer.GetString();
 
-    std::string json_str = buffer.GetString();
-    json_str += "\n";
-    return json_str;
+    // serializa current sozinho
+    rapidjson::StringBuffer current_buffer;
+    rapidjson::PrettyWriter<rapidjson::StringBuffer> current_writer(current_buffer);
+    current_writer.SetIndent(' ', 2);
+    current_obj.Accept(current_writer);
+    std::string current_str = std::string("\"current\": ") + current_buffer.GetString();
+
+
+    // encontra primeiro { do original_json
+    auto pos = original_json.find('{');
+    if (pos == std::string::npos) pos = 0;
+
+    // monta novo json injetando current logo depois do primeiro {
+    std::string final_json = original_json.substr(0, pos + 1) + "\n  " + current_str;
+    // adiciona o resto (tirando o { inicial)
+    final_json += "," + original_json.substr(pos + 1);
+    final_json += "\n";
+    return final_json;
 }
-
-
 
 
 std::string core::json::JSONProfileListWriter::current_path() { return _current_path; }
