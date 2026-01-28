@@ -1,5 +1,5 @@
-#ifndef HYPRPROF_HPP
-#define HYPRPROF_HPP
+#ifndef HYPRPROF_PATH_HPP
+#define HYPRPROF_PATH_HPP
 
 #include <string>
 namespace core
@@ -13,7 +13,7 @@ namespace core
       Hyprprof();
       const std::string& hyprprof_path() const noexcept;
       const std::string& profile_list_path() const noexcept;
-      bool hyprprof_path_exists() const noexcept;
+      bool path_exists() const noexcept;
       bool profile_list_exists() const noexcept;
   };
 
