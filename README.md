@@ -17,11 +17,18 @@ Hyprprof is a profile manager for Hyprland, the Wayland compositor. It allows us
 You can download and install Hyprprof in a single line using `curl`:
 
 ```bash
-git clone https://github.com/KiamMota/hyprprof.git && cd hyprprof
-mkdir build && cd build
-cmake .. && sudo make install
+git clone https://github.com/KiamMota/hyprprof.git
+cd hyprprof
+
+mkdir build
+cd build
+cmake ..                 # configure
+make -j$(nproc)          # build
+sudo make install        # instala binário e config
+
 cd ..
-rm -rf ./*
+rm -rf ./* # clean
+
 ```
 
 This command downloads the `install.sh` script from the official repository and executes it directly. After installation, the script cleans up temporary files automatically.
