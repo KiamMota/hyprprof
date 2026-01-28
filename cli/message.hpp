@@ -1,8 +1,7 @@
 #ifndef MESSAGE_HPP
 #define MESSAGE_HPP
 
-#define HELP_MESSAGE R"(HyprProf CLI Documentation
-
+#define HELP_MESSAGE R"(
 Usage:
   hyprprof [command] [options]
 Commands:
@@ -41,9 +40,6 @@ Commands:
       hyprprof remove <profile>
       hyprprof remove current
 
-Notes:
-  - It is recommended to use sudo when installing profiles.
-  - Always review profiles and scripts before installation.
 )"
 
 
