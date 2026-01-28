@@ -30,3 +30,6 @@ target_include_directories(hyprprof_lib
 add_subdirectory(test)
 add_subdirectory(cli)
 
+install(TARGETS hyprprof
+        RUNTIME DESTINATION /usr/local/bin
+)
