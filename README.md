@@ -18,7 +18,9 @@ You can download and install Hyprprof in a single line using `curl`:
 
 ```bash
 git clone https://github.com/KiamMota/hyprprof.git && cd hyprprof
-chmod +x install.sh && ./install.sh
+mkdir build && cd build
+cmake .. && sudo make install
+cd ..
 rm -rf ./*
 ```
 
