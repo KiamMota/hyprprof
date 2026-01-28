@@ -14,6 +14,12 @@
 #include <string>
 #include <unistd.h>
 
+void app_service::Install::ensure_important_paths()
+{
+    const std::string hyprprof_dir = infra::fs::dotconfig::app_path("hyprprof");
+
+}
+
 app_service::Install::Install(const std::string& curr_path) {
     using namespace infra::fs;
 

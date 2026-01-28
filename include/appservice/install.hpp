@@ -7,6 +7,8 @@ namespace app_service
   class Install
   {
     private:
+      void ensure_important_paths();
+
 
     public:
       Install(const std::string& curr_path);
