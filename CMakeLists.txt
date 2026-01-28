@@ -20,11 +20,10 @@ file(GLOB_RECURSE CLI_SRC
   CONFIGURE_DEPENDS
   "${CMAKE_CURRENT_SOURCE_DIR}/cli/*.cpp"
 )
-
 add_library(hyprprof_lib ${LIB_SRC})
 target_include_directories(hyprprof_lib
     PUBLIC include
-    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/third_party/
+    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/third_party
 )
 
 add_subdirectory(test)

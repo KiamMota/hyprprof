@@ -20,3 +20,8 @@ bool core::Hyprprof::profile_list_exists() const noexcept
 {
   return infra::fs::file::exists(_profile_list_path);
 }
+
+bool core::Hyprprof::profile_path_exists(const std::string& prof) const noexcept
+{
+  return infra::fs::dir::exists(_hyprprof_path + "/" + prof);
+}

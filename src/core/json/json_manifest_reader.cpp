@@ -1,6 +1,5 @@
 #include "core/json/json_manifest_reader.hpp"
 #include "core/json/json_schema.hpp"
-#include "core/profile/profile.hpp"
 #include "core/profile/profile_assembler.hpp"
 #include "infra/json.hpp"
 #include "rapidjson/document.h"
@@ -10,10 +9,14 @@
 #include <string>
 #include <unistd.h>
 
-core::json::JSONManifestReader::JSONManifestReader(const std::string& json_str) {
+core::json::JSONManifestReader::JSONManifestReader() {
 
     _json_schema = HYPRPROF_JSON_SCHEMA;
-    _json_str = json_str;
+}
+
+void core::json::JSONManifestReader::set_json_str(const std::string& json_str)
+{
+  _json_str = json_str;
 }
 
 bool core::json::JSONManifestReader::parse() {
@@ -48,7 +51,7 @@ std::list<std::string> core::json::JSONManifestReader::authors() {
     return result;
 }
 
-core::profile::ProfileAssembler core::json::JSONManifestReader::GetProfile() {
+core::profile::ProfileAssembler core::json::JSONManifestReader::get_profile() {
     profile::ProfileAssembler prof{};
 
     // Exemplo: assumindo que você tem métodos para pegar os campos do JSON

@@ -16,9 +16,10 @@ class JSONManifestReader {
     rapidjson::Document doc;
 
   public:
-    JSONManifestReader(const std::string& json_str);
+    JSONManifestReader();
+    void set_json_str(const std::string& json_str);
     bool parse();
-    profile::ProfileAssembler GetProfile();
+    profile::ProfileAssembler get_profile();
     std::string profile_name();
     std::string version();
     std::string desciption();

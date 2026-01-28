@@ -15,6 +15,7 @@ namespace core
       const std::string& profile_list_path() const noexcept;
       bool path_exists() const noexcept;
       bool profile_list_exists() const noexcept;
+      bool profile_path_exists(const std::string& path_name) const noexcept;
   };
 
 }

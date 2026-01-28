@@ -1,4 +1,4 @@
-#include "core/profile_layout.hpp"
+#include "core/profile/profile_layout.hpp"
 #include "infra/fs/dir.hpp"
 #include "infra/fs/file.hpp"
 #include <stdexcept>
@@ -11,8 +11,6 @@ core::ProfileLayout::ProfileLayout(const std::string& source_dir)
 
   if(!infra::fs::file::exists(_manifest_path))
     throw std::runtime_error("'hyprprof.json' doesn't exist!");
-  if(!infra::fs::dir::exists(_payload_path))
-    throw std::runtime_error("'payload/' dir doesn't exist!");
 }
 
 const std::string& core::ProfileLayout::manifest_path() const noexcept

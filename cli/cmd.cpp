@@ -1,7 +1,7 @@
 #include "cmd.hpp"
 #include <vector>
-#include "appservice/install.hpp"
 #include "appservice/show_profile.hpp"
+#include "appservice/install.hpp"
 #include "cli_log.hpp"
 
 void cli::cmd::install(const std::vector<std::string>& args) {

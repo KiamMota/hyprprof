@@ -76,7 +76,6 @@ bool core::profile::VersionConstraintsChecker::wayland_is_equal_or_greater(
     if (version[0] == '^')
         _version.erase(0);
     std::string version_output = res.output.substr(0);
-    std::cout << version_output << std::endl;
 
     auto wayland_ver = split_version(version_output);
     auto min_ver = split_version(version);
