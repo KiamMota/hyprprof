@@ -1,7 +1,6 @@
 #include "cmd.hpp"
 #include <vector>
-#include "appservice/show_profile.hpp"
-#include "appservice/install.hpp"
+#include "use_cases/install.hpp"
 #include "cli_log.hpp"
 
 void cli::cmd::install(const std::vector<std::string>& args) {
@@ -13,7 +12,7 @@ void cli::cmd::install(const std::vector<std::string>& args) {
     std::string config_name = args[0];
 
     // Cria o objeto de instalação
-    app_service::Install inst{config_name};
+    use_cases::Install inst{config_name};
 }
 
 void cli::cmd::use(const std::vector<std::string> &args)
@@ -24,6 +23,5 @@ void cli::cmd::use(const std::vector<std::string> &args)
     return;
   }
 
-  app_service::ShowProfile show{};
   std::string profile = args[0];
 }

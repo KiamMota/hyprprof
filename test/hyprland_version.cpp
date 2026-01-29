@@ -1,8 +1,8 @@
-#include "core/profile/version_constraits_checker.hpp"
+#include "profile/version_constraits_validator.hpp"
 #include <iostream>
 
 int main()
 {
-  core::profile::VersionConstraintsChecker::hyprland_is_equal_or_greater("");
-  core::profile::VersionConstraintsChecker::wayland_is_equal_or_greater("");
+  profile::VersionConstraintsChecker::hyprland_is_equal_or_greater("");
+  profile::VersionConstraintsChecker::wayland_is_equal_or_greater("");
 }

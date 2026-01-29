@@ -1,6 +1,6 @@
-#include "appservice/install.hpp"
+#include "use_cases/install.hpp"
 
 int main(int argc, char** argv) 
 { 
-  app_service::Install inst{"profi"}; 
+  use_cases::Install inst{"profi"}; 
 }
