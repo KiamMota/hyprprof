@@ -2,9 +2,7 @@
 #include "infra/fs/dir.hpp"
 #include "infra/fs/file.hpp"
 #include "profile/profile_layout_exceptions.hpp"
-#include <iostream>
 #include <list>
-#include <ostream>
 #include <stdexcept>
 #include <string>
 
@@ -38,10 +36,9 @@ void profile::ProfileLayout::move_profile_to(const std::string& new_src) {
 void profile::ProfileLayout::set_paths() {
     _readme_path = _source_path + "/README.md";
     _manifest_path = _source_path + "/hyprprof.json";
-    _assets_path = _source_path + "/assets";
     _config_path = _source_path + "/config";
-    _extras_path = _config_path + "/extras";
-    _scripts_path = _source_path + "/scripts";
+    _dotfiles_path = _source_path + "/dotfiles";
+    _hypr_path = _config_path + "/hypr";
     _waybar_path = _config_path + "/waybar";
 }
 
@@ -53,20 +50,18 @@ void profile::ProfileLayout::check_paths() {
         throw ProfileLayoutDirException("config");
 }
 
-bool profile::ProfileLayout::has_assets_path() const noexcept {
-    return infra::fs::dir::exists(_assets_path);
-}
 
 bool profile::ProfileLayout::has_readme_path() const noexcept {
     return infra::fs::file::exists(_readme_path);
 }
 
-bool profile::ProfileLayout::has_extras_path() const noexcept {
-    return infra::fs::file::exists(_extras_path);
-}
-
 bool profile::ProfileLayout::has_waybar_path() const noexcept {
     return infra::fs::dir::exists(_waybar_path);
+}
+
+bool profile::ProfileLayout::has_dotfiles_path() const noexcept
+{
+  return infra::fs::dir::exists(_dotfiles_path);
 }
 
 const std::string& profile::ProfileLayout::source_path() const noexcept { return _source_path; }
@@ -77,17 +72,8 @@ const std::string& profile::ProfileLayout::config_path() const noexcept { return
 
 const std::string& profile::ProfileLayout::readme_path() const noexcept { return _readme_path; }
 
-const std::string& profile::ProfileLayout::extras_path() const noexcept { return _extras_path; }
-
-const std::string& profile::ProfileLayout::assets_path() const noexcept { return _assets_path; }
-
-const std::string& profile::ProfileLayout::scripts_path() const noexcept { return _scripts_path; }
 
 const std::string& profile::ProfileLayout::waybar_path() const noexcept { return _waybar_path; }
-
-const std::list<std::string> profile::ProfileLayout::scripts_files() const noexcept {
-    return infra::fs::dir::list_files(_scripts_path);
-}
 
 const std::list<std::string> profile::ProfileLayout::config_files() const noexcept {
 
@@ -96,4 +82,56 @@ const std::list<std::string> profile::ProfileLayout::config_files() const noexce
 
 const std::list<std::string> profile::ProfileLayout::waybar_files() const noexcept {
     return infra::fs::dir::list_files(_waybar_path);
+}
+
+bool profile::ProfileLayout::has_hypr_path() const noexcept {
+    return infra::fs::dir::exists(_hypr_path);
+}
+
+bool profile::ProfileLayout::has_assets_path() const noexcept {
+    return infra::fs::dir::exists(_assets_path);
+}
+
+bool profile::ProfileLayout::has_assets_bg_path() const noexcept {
+    return infra::fs::dir::exists(_assets_bg_path);
+}
+
+bool profile::ProfileLayout::has_assets_fonts_path() const noexcept {
+    return infra::fs::dir::exists(_assets_fonts_path);
+}
+
+const std::string& profile::ProfileLayout::hypr_path() const noexcept {
+    return _hypr_path;
+}
+
+const std::string& profile::ProfileLayout::dotfiles_path() const noexcept {
+    return _dotfiles_path;
+}
+
+const std::string& profile::ProfileLayout::assets_path() const noexcept {
+    return _assets_path;
+}
+
+const std::string& profile::ProfileLayout::assets_bg_path() const noexcept {
+    return _assets_bg_path;
+}
+
+const std::string& profile::ProfileLayout::assets_fonts_path() const noexcept {
+    return _assets_fonts_path;
+}
+
+const std::list<std::string> profile::ProfileLayout::scripts_files() const noexcept {
+    std::list<std::string> all_scripts;
+    if (!has_dotfiles_path()) return all_scripts;
+
+    // percorre todas as pastas dentro de dotfiles
+    auto dotpacks = infra::fs::dir::list_files(_dotfiles_path);
+    for (const auto& pack : dotpacks) {
+        std::string scripts_dir = _dotfiles_path + "/" + pack + "/scripts";
+        if (infra::fs::dir::exists(scripts_dir)) {
+            auto scripts = infra::fs::dir::list_files(scripts_dir);
+            all_scripts.insert(all_scripts.end(), scripts.begin(), scripts.end());
+        }
+    }
+    return all_scripts;
 }
