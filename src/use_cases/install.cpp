@@ -4,23 +4,20 @@
 #include "infra/log.hpp"
 #include "profile/profile_layout.hpp"
 #include "profile/profile_layout_exceptions.hpp"
+#include <bits/types/cookie_io_functions_t.h>
+#include <stdexcept>
 #include <string>
+#include <sys/types.h>
 #include <unistd.h>
 
-void use_cases::Install::ensure_profile_layout(const std::string& path)
-{
-  try 
-  {
-  _profile_lay.set_path(path); 
-  }
-  catch(profile::ProfileLayoutDirException const&  ex)
-  {
-    infra::hypr_log::err(ex.what());
-  }
-  catch(profile::ProfileLayoutFileException const& ex)
-  {
-    infra::hypr_log::err(ex.what());
-  }
+void use_cases::Install::ensure_profile_layout(const std::string& path) {
+    try {
+        _profile_lay.set_path(path);
+    } catch (profile::ProfileLayoutDirException const& ex) {
+        infra::hypr_log::err(ex.what());
+    } catch (profile::ProfileLayoutFileException const& ex) {
+        infra::hypr_log::err(ex.what());
+    }
 }
 
 void use_cases::Install::ensure_important_paths() {
@@ -30,14 +27,49 @@ void use_cases::Install::ensure_important_paths() {
         infra::fs::file::create(_hyprprof_path_obj.profile_list_path());
 }
 
-void use_cases::Install::ensure_manifest(const std::string& string)
-{
-  _json_reader.set_json_str(string);
+void use_cases::Install::ensure_manifest(const std::string& string) {
+    _json_reader.set_json_str(string);
+    _json_reader.parse();
+}
+
+void use_cases::Install::create_path() {
+    try {
+        _hyprprof_path_obj.create_path(_profile.name());
+    } catch (std::runtime_error const& r) {
+        infra::hypr_log::err(r.what()); 
+    throw;
+    }
+}
+
+void use_cases::Install::move_profile_to_path() {
+    using namespace infra::fs;
+
+    dir::create(current_profile_path);
+    file::move(_profile_lay.manifest_path(), current_profile_path);
+    dir::move(_profile_lay.config_path(), current_profile_path + "/config");
+
+    if (_profile_lay.has_assets_path()) {
+        dir::create(current_profile_path + "/assets");
+        dir::move(_profile_lay.assets_path(), current_profile_path + "/assets");
+    }
+
+    if (_profile_lay.has_extras_path()) {
+        dir::create(current_profile_path + "/config/extras");
+        dir::move(_profile_lay.extras_path(), current_profile_path + "/config/extras");
+    }
+
+    if (_profile_lay.has_readme_path()) {
+        file::move(_profile_lay.readme_path(), current_profile_path + "/README.md");
+    }
 }
 
 use_cases::Install::Install(const std::string& curr_path) // inicializa ProfileLayout
 {
-  ensure_profile_layout(curr_path);
-  ensure_important_paths();
-  ensure_manifest(_profile_lay.manifest_path());
+    ensure_profile_layout(curr_path);
+    ensure_manifest(infra::fs::file::get_content(_profile_lay.manifest_path()));
+    _profile = _json_reader.get_profile();
+    ensure_important_paths();
+    current_profile_path = _hyprprof_path_obj.profile_path(_profile.name());
+    create_path();
+    move_profile_to_path();
 }

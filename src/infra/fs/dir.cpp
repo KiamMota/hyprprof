@@ -2,6 +2,7 @@
 #include "infra/log.hpp"
 #include <exception>
 #include <filesystem>
+#include <list>
 #include <stdexcept>
 #include <string>
 #include <system_error>
@@ -42,19 +43,31 @@ bool infra::fs::dir::make_bak(const std::string& file_src) {
 
     if (ec)
         throw std::filesystem::filesystem_error("backup failed", src_path, dest_path, ec);
-  return true;
+    return true;
 }
 
 bool infra::fs::dir::is_dir(const std::string& src) {
     return std::filesystem::is_directory(src) ? true : false;
 }
 
-bool infra::fs::dir::create(const std::string &path_name)
-{
-  std::error_code ec;
-  if(std::filesystem::create_directories(path_name, ec))
-    return true;
-  if(ec)
-    throw std::runtime_error("failed to create directory");
-  return {};
+bool infra::fs::dir::create(const std::string& path_name) {
+    std::error_code ec;
+    if (std::filesystem::create_directories(path_name, ec))
+        return true;
+    if (ec)
+        throw std::runtime_error("failed to create directory");
+    return {};
 }
+
+const std::list<std::string> infra::fs::dir::list_files(const std::string& path) {
+    static std::list<std::string> empty;
+    if (!infra::fs::dir::exists(path))
+        return empty;
+    std::list<std::string> files;
+    for (auto& entry : std::filesystem::directory_iterator(path)) {
+        if (entry.is_regular_file())
+            files.push_back(entry.path().filename().string());
+    }
+    return files;
+}
+

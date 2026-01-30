@@ -24,8 +24,19 @@ bool json::JSONManifestReader::parse() {
 
     doc.Parse(_json_str.c_str());
 
+    if (doc.HasParseError()) {
+        // Converte o código do parse em string legível
+        const char* error_str = rapidjson::GetParseError_En(doc.GetParseError());
+        throw std::runtime_error(
+            std::string("JSON parse error: ") + error_str +
+            " (offset " + std::to_string(doc.GetErrorOffset()) + ")"
+        );
+    }
+
     return infra::json::validate_schema(_json_str, _json_schema);
 }
+
+
 
 std::string json::JSONManifestReader::version() {
     const rapidjson::Value& hyprprof_obj = doc["hyprprof"];
