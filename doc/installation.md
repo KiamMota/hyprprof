@@ -1,30 +1,43 @@
-# installation
+# Hyprprof Installation Pipeline
 
-Installing a Hyprland profile on your system follows certain pipeline rules that must be adhered to.
+This document explains the step-by-step process of the Hyprprof profile installation pipeline, detailing how a profile is validated, parsed, and installed.
 
-## Validation 
+## Installation Pipeline Steps
 
-### 1 - Manifest validation
-  - In this part, the Hyperproof engine will pass your JSON to a JSON validation and parsing core, using the schema you specified.
-    
-### 2 - Folder structure validation
-  - In this part, the engine will validate the entire directory structure, checking for folders, whether they are empty, and performing other validations.
+1. **Profile Layout Analysis**
 
-### 3 - Script validation
-  - In this third part, the profile scripts undergo validation and security testing with malicious script patterns, only then moving on to the next stage.
+   * The path provided by the user is analyzed.
+   * Hyprprof generates an internal representation of the profile's folder structure.
+   * The pipeline checks if all mandatory and optional folders/files are present, following the Hyprprof profile layout.
 
-## Shoot
+2. **Manifest Parsing**
 
-### 1 - Backup 
-  - The installer will transfer all the configuration present in the directories that will be changed to a subdirectory within the folders called prof_backup/
-    and insert the new profile using .bak files.
+   * Once the folder structure is validated, Hyprprof reads and parses the `hyprprof.json` manifest.
+   * This manifest is used to generate the profile domain, which includes metadata such as name, authors, version, version constraints, and dotfile mappings.
 
-### 2 - Copy of the manifest
-  - Copy the hyprprof.json manifest file to `.config/hypr/profile.json`
+3. **Destination Path Generation**
 
-### 3 - Run the scripts
-  - In this step, the environment scripts are executed sequentially.
-  - You can run the configuration without running the scripts, more info [here](https://github.com/KiamMota/hyprprof/blob/main/doc/cli.md).
+   * Hyprprof constructs the destination path for the profile in the user's system.
+   * The path follows the format: `~/.config/hyprprof/<profile_name>`.
 
-### 4 - Go!
-  - In this final stage, the engine analyzes inconsistencies, does not leave partial states, and executes "hyprctl reload" via the pipe.
+4. **Path Ensuring**
+
+   * The pipeline ensures that critical paths exist:
+
+     * `~/.config/hyprprof/` directory
+     * `profile_list.json` file (to maintain the list of installed profiles)
+
+5. **Profile Directory Creation and Moving**
+
+   * A new directory is created for the profile using its name.
+   * The profile content is moved into this directory.
+
+6. **Updating Profile List**
+
+   * The `profile_list.json` is updated to include the newly installed profile.
+   * The new profile is marked as `current` in the list.
+
+7. **Cleanup and Finalization**
+
+   * Any temporary directories used during the installation are removed.
+   * If all steps complete without errors, the profile is successfully installed and ready to be used via the `hyprprof use` command.
