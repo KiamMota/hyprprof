@@ -15,17 +15,13 @@ class ProfileLayout {
     std::string _assets_path;
     std::string _scripts_path;
     std::string _waybar_path;
-    std::list<std::string> _waybar_files;
-    std::list<std::string> _config_files;
-    std::list<std::string> _script_files;
-
     void set_paths();
     void check_paths();
 
   public:
     ProfileLayout();
     void set_path(const std::string& source);
-
+    void move_profile_to(const std::string& new_source);
     bool has_assets_path() const noexcept;
     bool has_scripts_path() const noexcept;
     bool has_readme_path() const noexcept;

@@ -2,8 +2,8 @@
 #include "infra/fs/dir.hpp"
 #include "infra/fs/file.hpp"
 #include "profile/profile_layout_exceptions.hpp"
-#include <filesystem>
 #include <list>
+#include <stdexcept>
 #include <string>
 
 profile::ProfileLayout::ProfileLayout() {}
@@ -14,6 +14,18 @@ void profile::ProfileLayout::set_path(const std::string& source_dir) {
     _source_path = infra::fs::dir::get_absolute(source_dir);
     set_paths();
     check_paths();
+}
+
+void profile::ProfileLayout::move_profile_to(const std::string& new_src)
+{
+  std::string new_src_abs = infra::fs::dir::get_absolute(new_src);
+
+  if(!infra::fs::dir::is_emp(new_src))
+    throw std::runtime_error(new_src + " is not empty!");
+  infra::fs::dir::move(_source_path, new_src);
+  _source_path = infra::fs::dir::get_absolute(new_src);
+  set_paths();
+  check_paths();
 }
 
 void profile::ProfileLayout::set_paths() {

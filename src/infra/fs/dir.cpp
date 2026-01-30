@@ -21,6 +21,37 @@ bool infra::fs::dir::move(const std::string& src, const std::string& new_path) {
     return ec ? true : false;
 }
 
+bool infra::fs::dir::copy(const std::string& src, const std::string& new_path) {
+    try {
+        std::filesystem::path source(src);
+        std::filesystem::path dest(new_path);
+
+        if (!std::filesystem::exists(source) || !std::filesystem::is_directory(source))
+            return false;
+
+        if (!std::filesystem::exists(dest))
+            std::filesystem::create_directories(dest);
+
+        for (auto& entry : std::filesystem::recursive_directory_iterator(source)) {
+            const auto& path = entry.path();
+            auto relative_path = std::filesystem::relative(path, source);
+            auto dest_path = dest / relative_path;
+
+            if (entry.is_directory()) {
+                std::filesystem::create_directories(dest_path);
+            } else if (entry.is_regular_file()) {
+                std::filesystem::copy_file(path, dest_path,
+                                           std::filesystem::copy_options::overwrite_existing);
+            }
+        }
+
+        return true;
+    } catch (const std::exception& e) {
+        infra::hypr_log::err(std::string("Failed to copy directory: ") + e.what());
+        return false;
+    }
+}
+
 std::string infra::fs::dir::get_absolute(const std::string& src) {
     return std::filesystem::absolute(src).string();
 }
@@ -70,4 +101,3 @@ const std::list<std::string> infra::fs::dir::list_files(const std::string& path)
     }
     return files;
 }
-
