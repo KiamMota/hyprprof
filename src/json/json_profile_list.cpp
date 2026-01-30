@@ -2,15 +2,20 @@
 #include "rapidjson/document.h"
 #include "rapidjson/prettywriter.h"
 #include "rapidjson/stringbuffer.h"
-#include "json/json_profile_list_writer.hpp"
+#include "json/json_profile_list.hpp"
 
-json::JSONProfileListWriter::JSONProfileListWriter(const std::string& json_src) {
+json::JSONProfileList::JSONProfileList(const std::string& json_src) {
     _existing_json = json_src;
 }
 
-json::JSONProfileListWriter::JSONProfileListWriter() {}
+json::JSONProfileList::JSONProfileList() {}
 
-const std::string json::JSONProfileListWriter::make_json(
+void json::JSONProfileList::set_existing_json(const std::string& json)
+{
+  _existing_json = json;
+}
+
+const std::string json::JSONProfileList::json_append(
     const std::string& profile,
     const std::string& path
 ) {
@@ -18,7 +23,7 @@ const std::string json::JSONProfileListWriter::make_json(
     if (!_existing_json.empty()) {
         doc.Parse(_existing_json.c_str());
         if (doc.HasParseError() || !doc.IsObject()) {
-            doc.SetObject(); // fallback
+            doc.SetObject(); 
         }
     } else {
         doc.SetObject();
@@ -92,10 +97,10 @@ const std::string json::JSONProfileListWriter::make_json(
     return final_json; // <--- ESSENCIAL
 }
 
-std::string json::JSONProfileListWriter::current_path() { return _current_path; }
-std::string json::JSONProfileListWriter::current_profile() { return _profile_name; }
+std::string json::JSONProfileList::current_path() { return _current_path; }
+std::string json::JSONProfileList::current_profile() { return _profile_name; }
 
-core::CurrentProfile json::JSONProfileListWriter::get_current() {
+core::CurrentProfile json::JSONProfileList::get_current() {
 
   core::CurrentProfile prof{};
     prof.set_profile_name(_profile_name);

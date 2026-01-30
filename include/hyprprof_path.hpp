@@ -14,9 +14,10 @@ namespace core
       const std::string& hyprprof_path() const noexcept;
       const std::string& profile_list_path() const noexcept;
       bool path_exists() const noexcept;
-      bool profile_list_exists() const noexcept;
+      bool has_profile_list() const noexcept;
       bool profile_path_exists(const std::string& path_name) const noexcept;
       void create_path(const std::string& name);
+      void create_profile_list();
       const std::string profile_path(const std::string& path) const; 
   };
 

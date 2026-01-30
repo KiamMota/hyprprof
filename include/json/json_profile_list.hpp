@@ -5,21 +5,21 @@
 #include "rapidjson/document.h"
 #include <string>
 namespace json {
-class JSONProfileListWriter {
+class JSONProfileList {
   private:
     std::string _existing_json;
     std::string _profile_name;
     std::string _current_path;
     rapidjson::Document doc;
+    void parse();
 
   public:
-    JSONProfileListWriter(const std::string& json_src);
-    JSONProfileListWriter();
-    void parse();
+    JSONProfileList(const std::string& json_src);
+    JSONProfileList();
+    void set_existing_json(const std::string& json);
     core::CurrentProfile get_current();
-    const std::string make_json(const std::string& current_profile,
+    const std::string json_append(const std::string& current_profile,
                                 const std::string& current_path);
-    const std::string append_json();
     std::string current_profile();
     std::string current_path();
 };

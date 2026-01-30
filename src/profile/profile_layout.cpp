@@ -2,7 +2,9 @@
 #include "infra/fs/dir.hpp"
 #include "infra/fs/file.hpp"
 #include "profile/profile_layout_exceptions.hpp"
+#include <iostream>
 #include <list>
+#include <ostream>
 #include <stdexcept>
 #include <string>
 
@@ -10,7 +12,7 @@ profile::ProfileLayout::ProfileLayout() {}
 
 void profile::ProfileLayout::set_path(const std::string& source_dir) {
     if (source_dir.empty())
-        throw ProfileLayoutDirException("");
+        throw ProfileLayoutDirException("dir is empty");
     _source_path = infra::fs::dir::get_absolute(source_dir);
     set_paths();
     check_paths();
@@ -40,7 +42,7 @@ void profile::ProfileLayout::set_paths() {
     _config_path = _source_path + "/config";
     _extras_path = _config_path + "/extras";
     _scripts_path = _source_path + "/scripts";
-    _waybar_path = _config_path = "/waybar";
+    _waybar_path = _config_path + "/waybar";
 }
 
 void profile::ProfileLayout::check_paths() {

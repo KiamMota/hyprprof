@@ -5,14 +5,16 @@
 #include "json/json_manifest_reader.hpp"
 #include "profile/profile.hpp"
 #include "profile/profile_layout.hpp"
+#include "json/json_profile_list.hpp"
 #include <string>
 namespace use_cases
 {
   class Install
   {
     private:
-      core::HyprprofPath _hyprprof_path_obj;
+      core::HyprprofPath _hyprprof_path;
       json::JSONManifestReader _json_reader;
+      json::JSONProfileList _profile_list_json;
       profile::Profile _profile;
       profile::ProfileLayout _profile_lay;
 
@@ -21,7 +23,8 @@ namespace use_cases
       void ensure_manifest(const std::string& string_file);
       void create_path();
       void move_profile_to_path();
-      std::string current_profile_path;  
+      void rewrite_profile_list(); 
+      std::string _current_profile_path;  
 public:
       Install(const std::string& curr_path);
       

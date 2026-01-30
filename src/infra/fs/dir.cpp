@@ -104,5 +104,5 @@ const std::list<std::string> infra::fs::dir::list_files(const std::string& path)
 
 bool infra::fs::dir::remove(const std::string &path)
 {
-  return std::filesystem::remove(path);
+  return std::filesystem::remove_all(path);
 }

@@ -17,7 +17,7 @@ bool core::HyprprofPath::path_exists() const noexcept
   return infra::fs::dir::exists(_hyprprof_path);
 }
 
-bool core::HyprprofPath::profile_list_exists() const noexcept
+bool core::HyprprofPath::has_profile_list() const noexcept
 {
   return infra::fs::file::exists(_profile_list_path);
 }
@@ -36,7 +36,10 @@ void core::HyprprofPath::create_path(const std::string& name)
 
 const std::string core::HyprprofPath::profile_path(const std::string& path) const 
 {
-  if(infra::fs::dir::exists(_hyprprof_path + "/" + path))
     return _hyprprof_path + "/" + path;
-  throw std::runtime_error("dir doesn't exists!");
+}
+
+void core::HyprprofPath::create_profile_list()
+{
+  infra::fs::file::create(_hyprprof_path + "/profile_list.json");
 }
