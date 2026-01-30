@@ -6,7 +6,7 @@
 namespace profile {
 class ProfileLayout {
   private:
-  std::string _source_path;
+    std::string _source_path;
     std::string _manifest_path;
     std::string _readme_path;
     std::string _config_path;
@@ -16,9 +16,17 @@ class ProfileLayout {
 
     void set_paths();
     void check_paths();
+
   public:
     ProfileLayout();
     void set_path(const std::string& source);
+
+    bool has_assets_path() const noexcept;
+    bool has_scripts_path() const noexcept;
+    bool has_readme_path() const noexcept;
+    bool has_extras_path() const noexcept;
+    
+
     const std::string& source_path() const noexcept;
     const std::string& manifest_path() const noexcept;
     const std::string& config_path() const noexcept;

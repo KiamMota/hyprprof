@@ -1,12 +1,26 @@
 #include "use_cases/install.hpp"
 #include "infra/fs/dir.hpp"
 #include "infra/fs/file.hpp"
+#include "infra/log.hpp"
+#include "profile/profile_layout.hpp"
+#include "profile/profile_layout_exceptions.hpp"
 #include <string>
 #include <unistd.h>
 
 void use_cases::Install::ensure_profile_layout(const std::string& path)
 {
-  _profile_lay.set_path(path);
+  try 
+  {
+  _profile_lay.set_path(path); 
+  }
+  catch(profile::ProfileLayoutDirException const&  ex)
+  {
+    infra::hypr_log::err(ex.what());
+  }
+  catch(profile::ProfileLayoutFileException const& ex)
+  {
+    infra::hypr_log::err(ex.what());
+  }
 }
 
 void use_cases::Install::ensure_important_paths() {
@@ -18,6 +32,6 @@ void use_cases::Install::ensure_important_paths() {
 
 use_cases::Install::Install(const std::string& curr_path) // inicializa ProfileLayout
 {
-  ensure_profile_layout(curr_path); 
+  ensure_profile_layout(curr_path);
   ensure_important_paths();
 }

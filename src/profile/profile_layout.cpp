@@ -13,6 +13,7 @@ void profile::ProfileLayout::set_path(const std::string& source_dir) {
     throw ProfileLayoutDirException("");
         _source_path = infra::fs::dir::get_absolute(source_dir);
     set_paths();
+    check_paths();
 }
 
 void profile::ProfileLayout::set_paths() {
@@ -31,6 +32,21 @@ void profile::ProfileLayout::check_paths()
     throw ProfileLayoutFileException("hyprprof.json");
   if(!dir::exists(_config_path))
     throw ProfileLayoutDirException("config");
+}
+
+bool profile::ProfileLayout::has_assets_path() const noexcept
+{
+  return infra::fs::dir::exists(_assets_path);
+}
+
+bool profile::ProfileLayout::has_readme_path() const noexcept
+{
+  return infra::fs::file::exists(_readme_path);
+}
+
+bool profile::ProfileLayout::has_extras_path() const noexcept
+{
+  return infra::fs::file::exists(_extras_path);
 }
 
 const std::string& profile::ProfileLayout::source_path() const noexcept {
