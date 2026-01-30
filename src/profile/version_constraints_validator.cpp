@@ -32,22 +32,13 @@ static void check_pipe_result(const infra::os::Result& res) {
         throw infra::os::PipeException("command returned empty output");
 }
 
-bool profile::VersionConstraintsChecker::hyprland_is_equal_or_greater(
-    const std::string& version) {
-    auto res = infra::os::execute_pipe(HYPRLAND_VERSION_COMMAND);
-
+bool profile::VersionConstraintsChecker::hyprland_is_equal_or_greater(const std::string& version) {
     std::string _version = version;
-    check_pipe_result(res);
+    if (!version.empty() && version[0] == '^')
+        _version.erase(0, 1);
 
-    if (version[0] == '^')
-        _version.erase(0);
-    int ini_pos = strlen("Hyprland ");
-    int end_pos = ini_pos + 7;
-
-    std::string version_output = res.output.substr(ini_pos, end_pos - ini_pos);
-
-    auto hyprland_ver = split_version(version_output);
-    auto min_ver = split_version(version);
+    auto hyprland_ver = split_version(system_hyprland_version());
+    auto min_ver = split_version(_version);
 
     size_t n = std::max(hyprland_ver.size(), min_ver.size());
     hyprland_ver.resize(n, 0);
@@ -63,20 +54,13 @@ bool profile::VersionConstraintsChecker::hyprland_is_equal_or_greater(
     return true;
 }
 
-bool profile::VersionConstraintsChecker::wayland_is_equal_or_greater(
-    const std::string& version) {
-    auto res = infra::os::execute_pipe(WAYLAND_VERSION_COMMAND);
-
+bool profile::VersionConstraintsChecker::wayland_is_equal_or_greater(const std::string& version) {
     std::string _version = version;
+    if (!version.empty() && version[0] == '^')
+        _version.erase(0, 1);
 
-    check_pipe_result(res);
-
-    if (version[0] == '^')
-        _version.erase(0);
-    std::string version_output = res.output.substr(0);
-
-    auto wayland_ver = split_version(version_output);
-    auto min_ver = split_version(version);
+    auto wayland_ver = split_version(system_wayland_version());
+    auto min_ver = split_version(_version);
 
     size_t n = std::max(wayland_ver.size(), min_ver.size());
     wayland_ver.resize(n, 0);
@@ -93,23 +77,39 @@ bool profile::VersionConstraintsChecker::wayland_is_equal_or_greater(
 }
 
 bool profile::VersionConstraintsChecker::hyprland_is_equal(const std::string& version) {
-    infra::os::Result res = infra::os::execute_pipe(HYPRLAND_VERSION_COMMAND);
-    check_pipe_result(res);
-    std::string _version = {};
-    if (version[0] == '^')
-        _version.erase(0);
-    int ini_pos = strlen("Hyprland ");
-    int end_pos = ini_pos + 7;
-    std::string version_output = res.output.substr(ini_pos, end_pos - ini_pos);
-    return (_version == version_output) ? true : false;
+    std::string _version = version;
+    if (!version.empty() && version[0] == '^')
+        _version.erase(0, 1);
+
+    return _version == system_hyprland_version();
 }
 
 bool profile::VersionConstraintsChecker::wayland_is_equal(const std::string& version) {
-    infra::os::Result res = infra::os::execute_pipe(WAYLAND_VERSION_COMMAND);
+    std::string _version = version;
+    if (!version.empty() && version[0] == '^')
+        _version.erase(0, 1);
+
+    return _version == system_wayland_version();
+}
+
+
+std::string profile::VersionConstraintsChecker::system_hyprland_version() {
+    auto res = infra::os::execute_pipe(HYPRLAND_VERSION_COMMAND);
     check_pipe_result(res);
-    std::string _version = {};
-    if (version[0] == '^')
-        _version.erase(0);
-    std::string version_output = res.output.substr(0);
-    return (_version == version_output) ? true : false;
+
+    std::string version_output = res.output;
+    int ini_pos = strlen("Hyprland ");
+    int end_pos = ini_pos + 7;  // captura apenas X.Y.Z
+    if (version_output.size() < end_pos)
+        throw std::runtime_error("Failed to parse Hyprland version from output");
+
+    return version_output.substr(ini_pos, end_pos - ini_pos);
+}
+
+std::string profile::VersionConstraintsChecker::system_wayland_version() {
+    auto res = infra::os::execute_pipe(WAYLAND_VERSION_COMMAND);
+    check_pipe_result(res);
+
+    std::string version_output = res.output;
+    return version_output.substr(0, version_output.find_first_of("\n"));  // pega a primeira linha
 }

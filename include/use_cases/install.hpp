@@ -16,8 +16,8 @@ namespace use_cases
       profile::Profile _profile;
       profile::ProfileLayout _profile_lay;
       void ensure_important_paths();
-
       void ensure_profile_layout(const std::string& curr_path);
+      void ensure_manifest(const std::string& string_file);
     public:
       Install(const std::string& curr_path);
       

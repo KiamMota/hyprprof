@@ -30,8 +30,14 @@ void use_cases::Install::ensure_important_paths() {
         infra::fs::file::create(_hyprprof_path_obj.profile_list_path());
 }
 
+void use_cases::Install::ensure_manifest(const std::string& string)
+{
+  _json_reader.set_json_str(string);
+}
+
 use_cases::Install::Install(const std::string& curr_path) // inicializa ProfileLayout
 {
   ensure_profile_layout(curr_path);
   ensure_important_paths();
+  ensure_manifest(_profile_lay.manifest_path());
 }
