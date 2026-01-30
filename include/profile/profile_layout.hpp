@@ -3,21 +3,30 @@
 
 #include <string>
 
-namespace profile
-{
-class ProfileLayout
-  {
-    private:
-      std::string _manifest_path;
-      std::string _payload_path;
-      std::string _source_path;
+namespace profile {
+class ProfileLayout {
+  private:
+  std::string _source_path;
+    std::string _manifest_path;
+    std::string _readme_path;
+    std::string _config_path;
+    std::string _extras_path;
+    std::string _assets_path;
+    std::string _scripts_path;
 
-    public:
-      ProfileLayout(const std::string& source_path);
-      const std::string& manifest_path() const noexcept;
-      const std::string& payload_path() const noexcept;
-      const std::string& source_path() const noexcept;
-  };
+    void set_paths();
+    void check_paths();
+  public:
+    ProfileLayout();
+    void set_path(const std::string& source);
+    const std::string& source_path() const noexcept;
+    const std::string& manifest_path() const noexcept;
+    const std::string& config_path() const noexcept;
+    const std::string& readme_path() const noexcept;
+    const std::string& extras_path() const noexcept;
+    const std::string& assets_path() const noexcept;
+    const std::string& scripts_path() const noexcept;
+};
 
-}
+} // namespace profile
 #endif // PROFILE_STRUCT_HPP

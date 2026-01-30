@@ -50,7 +50,8 @@ profile::Profile& profile::Profile::set_hyprland_version(const std::string& vers
     std::regex pat(R"(^\^?\d+\.\d+\.\d+$)");
     if (!std::regex_match(version, pat)) {
         throw profile::InvalidPatternException("wayland");
-    }
+    } 
+
     return *this;
 }
 
