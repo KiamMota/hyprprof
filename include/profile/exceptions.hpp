@@ -3,7 +3,6 @@
 
 #include <cstring>
 #include <exception>
-#include <locale>
 #include <stdexcept>
 namespace profile {
 

@@ -85,7 +85,7 @@ bool infra::fs::dir::create(const std::string& path_name) {
     std::error_code ec;
     if (std::filesystem::create_directories(path_name, ec))
         return true;
-    if (ec)
+      if (ec)
         throw std::runtime_error("failed to create directory");
     return {};
 }
@@ -100,4 +100,9 @@ const std::list<std::string> infra::fs::dir::list_files(const std::string& path)
             files.push_back(entry.path().filename().string());
     }
     return files;
+}
+
+bool infra::fs::dir::remove(const std::string &path)
+{
+  return std::filesystem::remove(path);
 }

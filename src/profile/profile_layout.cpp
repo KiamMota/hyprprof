@@ -16,17 +16,22 @@ void profile::ProfileLayout::set_path(const std::string& source_dir) {
     check_paths();
 }
 
-void profile::ProfileLayout::move_profile_to(const std::string& new_src)
-{
-  std::string new_src_abs = infra::fs::dir::get_absolute(new_src);
+void profile::ProfileLayout::move_profile_to(const std::string& new_src) {
+    std::string new_src_abs = infra::fs::dir::get_absolute(new_src);
 
-  if(!infra::fs::dir::is_emp(new_src))
-    throw std::runtime_error(new_src + " is not empty!");
-  infra::fs::dir::move(_source_path, new_src);
-  _source_path = infra::fs::dir::get_absolute(new_src);
-  set_paths();
-  check_paths();
+    if (!infra::fs::dir::is_emp(new_src_abs))
+        throw std::runtime_error(new_src + " is not empty!");
+
+    if (!infra::fs::dir::copy(_source_path, new_src_abs))
+        throw std::runtime_error("cannot copy profile to " + new_src_abs);
+
+    infra::fs::dir::remove(_source_path);
+
+    _source_path = new_src_abs;
+    set_paths();
+    check_paths();
 }
+
 
 void profile::ProfileLayout::set_paths() {
     _readme_path = _source_path + "/README.md";
