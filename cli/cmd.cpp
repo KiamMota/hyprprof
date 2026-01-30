@@ -2,6 +2,7 @@
 #include <vector>
 #include "use_cases/install.hpp"
 #include "cli_log.hpp"
+#include "use_cases/update.hpp"
 
 void cli::cmd::install(const std::vector<std::string>& args) {
     if (args.empty()) {
@@ -24,4 +25,9 @@ void cli::cmd::use(const std::vector<std::string> &args)
   }
 
   std::string profile = args[0];
+}
+
+void cli::cmd::update(const std::vector<std::string>& args)
+{
+  use_cases::Update{};
 }

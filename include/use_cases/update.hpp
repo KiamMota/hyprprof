@@ -1,7 +1,7 @@
 #ifndef UPDATE_HPP
 #define UPDATE_HPP
 
-namespace app_service
+namespace use_cases 
 {
   class Update
   {

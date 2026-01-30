@@ -8,6 +8,7 @@ namespace cli {
 namespace cmd {
 void install(const std::vector<std::string>& args);
 void use(const std::vector<std::string>& args);
+void update(const std::vector<std::string>& args);
 } // namespace cmd
 } // namespace cli
 
