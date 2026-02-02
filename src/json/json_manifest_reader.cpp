@@ -1,90 +1,27 @@
 #include "json/json_manifest_reader.hpp"
+#include "json/json_base.hpp"
 #include "json/json_schema.hpp"
-#include "infra/json.hpp"
-#include "rapidjson/document.h"
-#include <list>
-#include <rapidjson/error/en.h>
-#include <stdexcept>
 #include <string>
 #include <unistd.h>
 
-json::JSONManifestReader::JSONManifestReader() {
+json::JSONManifestReader::JSONManifestReader() : JSONBase() {
 
     _json_schema = HYPRPROF_JSON_SCHEMA;
 }
 
-void json::JSONManifestReader::set_json_str(const std::string& json_str)
+void json::JSONManifestReader::set_json_string(const std::string& json_str)
 {
-  _json_str = json_str;
-}
-
-bool json::JSONManifestReader::parse() {
-    if (_json_str.empty())
-        throw std::runtime_error("empty JSON");
-
-    doc.Parse(_json_str.c_str());
-
-    if (doc.HasParseError()) {
-        // Converte o código do parse em string legível
-        const char* error_str = rapidjson::GetParseError_En(doc.GetParseError());
-        throw std::runtime_error(
-            std::string("JSON parse error: ") + error_str +
-            " (offset " + std::to_string(doc.GetErrorOffset()) + ")"
-        );
-    }
-
-    return infra::json::validate_schema(_json_str, _json_schema);
-}
-
-
-
-std::string json::JSONManifestReader::version() {
-    const rapidjson::Value& hyprprof_obj = doc["hyprprof"];
-    return hyprprof_obj["version"].GetString();
-}
-
-std::string json::JSONManifestReader::profile_name() {
-    const rapidjson::Value& hyprprof_obj = doc["hyprprof"];
-    return hyprprof_obj["name"].GetString();
-}
-
-std::list<std::string> json::JSONManifestReader::authors() {
-    std::list<std::string> result;
-
-    const auto& hyprprof = doc["hyprprof"];
-    const auto& authors = hyprprof["authors"];
-
-    for (const auto& a : authors.GetArray()) {
-        result.emplace_back(a.GetString());
-    }
-
-    return result;
+  set_base_json_string(_json_schema);
 }
 
 profile::Profile json::JSONManifestReader::get_profile() {
     profile::Profile prof{};
 
-    // Exemplo: assumindo que você tem métodos para pegar os campos do JSON
-    prof.set_name(profile_name())
-        .set_version(version())
-        .set_description(desciption()).set_authors(authors())
-        .set_wayland_version(wayland_version())
-        .set_hyprland_version(hyprland_version());
-
+    prof.set_name(get_in("hyprprof").get_string("profile_name"))
+        .set_version(get_in("hyprprof").get_string("version"))
+        .set_description(get_in("hyprprof").get_string("description"))
+        .set_wayland_version(get_in("version_constraints").get_string("wayland"))
+        .set_hyprland_version(get_in("version_constraints").get_string("hyprland"));
     return prof;
 }
 
-std::string json::JSONManifestReader::hyprland_version() {
-    const rapidjson::Value& version_constraints_obj = doc["version_constraints"];
-    return version_constraints_obj["hyprland"].GetString();
-}
-
-std::string json::JSONManifestReader::wayland_version() {
-    const rapidjson::Value& version_constraits_obj = doc["version_constraints"];
-    return version_constraits_obj["wayland"].GetString();
-}
-
-std::string json::JSONManifestReader::desciption() {
-    const rapidjson::Value& hyprprof_obj = doc["hyprprof"];
-    return hyprprof_obj["description"].GetString();
-}

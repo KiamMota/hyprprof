@@ -7,15 +7,20 @@
 #include <string>
 
 namespace json {
-class JsonBase {
+class JSONBase {
   private:
     std::string _json_str;
     rapidjson::Document _document;
+    const rapidjson::Value* _node = nullptr;
+    JSONBase(const rapidjson::Value* node); 
   protected:
-    JsonBase(const std::string& json_str);
+    JSONBase(const std::string& json_str);
+    JSONBase();
+    void set_base_json_string(const std::string& json_string);
     void parse();
     const std::string& json_str() const noexcept;
   public:
+    JSONBase get_in(const std::string& n) const;
     const std::string get_string(const std::string& n) const;
     const int get_int(const std::string& n) const;
     const bool get_bool(const std::string& n) const;

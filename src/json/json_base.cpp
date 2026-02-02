@@ -25,9 +25,12 @@ static const std::string get_string_type(const rapidjson::Value& value) {
     }
 }
 
-json::JsonBase::JsonBase(const std::string& json) { _json_str = json; }
+json::JSONBase::JSONBase(const rapidjson::Value* node) : _node(node){
+}
 
-void json::JsonBase::parse() {
+json::JSONBase::JSONBase(const std::string& json) { _json_str = json; }
+
+void json::JSONBase::parse() {
     rapidjson::ParseResult result = _document.Parse(_json_str.c_str());
     if (!result) {
         size_t error_offset = result.Offset();
@@ -51,40 +54,56 @@ void json::JsonBase::parse() {
     }
 }
 
-const std::string& json::JsonBase::json_str() const noexcept { return _json_str; }
+json::JSONBase json::JSONBase::get_in(const std::string& f) const
+{
+  if(!_node->HasMember(f.c_str()))
+    throw JsonSearchTypeException(f.c_str(), "none", "object");
+  const rapidjson::Value& val = (*_node)[f.c_str()];
+    if(!val.IsObject())
+      throw JsonSearchTypeException(f.c_str(), get_string_type(val).c_str(), "object");
+  return JSONBase(&val);
+}
 
-const std::string json::JsonBase::get_string(const std::string& n) const {
+void json::JSONBase::set_base_json_string(const std::string& json)
+{
+  _json_str = json;
+}
+
+const std::string& json::JSONBase::json_str() const noexcept { return _json_str; }
+
+const std::string json::JSONBase::get_string(const std::string& n) const {
     if (!_document.HasMember(n.c_str())) {
-        return {};
+        throw JsonSearchFieldNotFoundException(n.c_str());
     }
 
     const rapidjson::Value& value = _document[n.c_str()];
     if (!value.IsString()) {
-        throw JsonTypeException(n.c_str(), get_string_type(value).c_str(), "string");
+        throw JsonSearchTypeException(n.c_str(), get_string_type(value).c_str(), "string");
     }
     return value.GetString();
 }
 
-const bool json::JsonBase::get_bool(const std::string& f) const
+const bool json::JSONBase::get_bool(const std::string& f) const
 {
-  if(!_document.HasMember(f.c_str())) { return {}; }
+  if(!_document.HasMember(f.c_str()))
+    throw JsonSearchFieldNotFoundException(f.c_str());
   const rapidjson::Value& value = _document[f.c_str()];
   if(!value.IsBool())
-      throw JsonTypeException(f.c_str(), get_string_type(value).c_str(), "bool");
+      throw JsonSearchTypeException(f.c_str(), get_string_type(value).c_str(), "bool");
   return value.GetBool();
 }
 
-const int json::JsonBase::get_int(const std::string& f) const
+const int json::JSONBase::get_int(const std::string& f) const
 {
   if(!_document.HasMember(f.c_str()))
-    return {};
+    throw JsonSearchFieldNotFoundException(f.c_str());
   const rapidjson::Value& val = _document[f.c_str()];
   if(!val.IsInt() && !val.IsInt64())
-    throw JsonTypeException(f.c_str(), get_string_type(val).c_str(), "int");
+    throw JsonSearchTypeException(f.c_str(), get_string_type(val).c_str(), "int");
   return val.GetInt();
 }
 
-const std::list<std::string> json::JsonBase::get_string_array(const std::string& f) const
+const std::list<std::string> json::JSONBase::get_string_array(const std::string& f) const
 {
     std::list<std::string> result;
 
@@ -94,11 +113,11 @@ const std::list<std::string> json::JsonBase::get_string_array(const std::string&
     const rapidjson::Value& val = _document[f.c_str()];
 
     if (!val.IsArray())
-        throw JsonTypeException(f.c_str(), get_string_type(val).c_str(), "array");
+        throw JsonSearchTypeException(f.c_str(), get_string_type(val).c_str(), "array");
 
     for (const auto& item : val.GetArray()) {
         if (!item.IsString())
-            throw JsonTypeException(f.c_str(), get_string_type(item).c_str(), "string in array");
+            throw JsonSearchTypeException(f.c_str(), get_string_type(item).c_str(), "string in array");
         result.push_back(item.GetString());
     }
 

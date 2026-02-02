@@ -2,10 +2,10 @@
 #include "json/json_base.hpp"
 #include <iostream>
 
-class A : public json::JsonBase
+class A : public json::JSONBase
 {
   public:
-    A(const std::string& json_str) : json::JsonBase(json_str) {}
+    A(const std::string& json_str) : json::JSONBase(json_str) {}
 
 
 };
