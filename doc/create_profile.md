@@ -10,7 +10,7 @@ profile_name/
 ├── config/                  # Mandatory folder containing profile-specific configurations
 │   ├── waybar/              # Optional folder for Waybar configurations
 │   ├── hypr/                # Optional folder for Hyprland configurations
-│   └── dotconfigs/          # Optional folder for system dotfiles (kitty, nvim, zsh, etc.)
+│   └── dotfiles/
 ├── assets/                  # Optional folder for additional resources (backgrounds, fonts, icons, etc.)
 └── README.md                # Optional file for documentation or profile description
 ```
