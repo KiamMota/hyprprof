@@ -46,9 +46,6 @@ public:
     const std::string& assets_bg_path() const noexcept;
     const std::string& assets_fonts_path() const noexcept;
 
-    const std::list<std::string> waybar_files() const noexcept;
-    const std::list<std::string> scripts_files() const noexcept;
-    const std::list<std::string> config_files() const noexcept;
 };
 
 
