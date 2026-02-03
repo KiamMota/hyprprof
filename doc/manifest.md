@@ -89,7 +89,47 @@ An optional object mapping configuration for applications or utilities.
   * `name`: only letters and underscores.
   * `version`: three-part numeric version, optionally with extra digits.
   * `hyprland` and `wayland` versions: numeric versions with optional caret (`^`) prefix.
+ 
 
----
+# Hyprprof Manifest Example
 
-This documentation ensures that any manifest JSON created is valid and compatible with the `Hyprprof` system, enabling automatic validation and preventing runtime errors.
+This is an example of a valid `Hyprprof` manifest, including explanations about `$DOTCONFIG` expansion and dotfile sources.
+
+```json
+{
+  "hyprprof": {
+    "authors": ["Alice", "Bob"],
+    "name": "MyProfile_One",
+    "version": "1.2.0",
+    "description": "This is my Hyprprof profile for testing."
+  },
+  "version_constraints": {
+    "hyprland": "^0.23.5",
+    "wayland": "^1.20.5"
+  },
+  "dotfiles": {
+    "kitty": {
+      "pack": "kitty",
+      "target": "$DOTCONFIG/kitty",
+      "source": "kitty"
+    },
+    "nvim": {
+      "pack": "neovim",
+      "target": "$DOTCONFIG/nvim",
+      "source": "nvim"
+    }
+  }
+}
+```
+
+## Notes
+
+* `$DOTCONFIG` in the manifest will be expanded by the Hyprprof interpreter to the user's `~/.config` directory. For example, `"target": "$DOTCONFIG/kitty"` becomes `~/.config/kitty`.
+* The `source` field in each dotfile object points to a **subdirectory inside `config/dotfiles`** from which the files will be copied. For example, `"source": "kitty"` means files are taken from `config/dotfiles/kitty`.
+* Dotfile objects are optional; if present, they must contain `pack`, `target`, and `source`. No additional fields are allowed.
+* All other fields follow validation rules:
+
+  * `name`: letters and underscores only.
+  * `version`: numeric format `X.Y.Z`.
+  * Hyprland and Wayland versions: optional `^` prefix allowed.
+
