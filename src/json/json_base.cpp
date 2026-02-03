@@ -5,26 +5,6 @@
 #include "json/json_exceptions.hpp"
 #include <cstdlib>
 
-static const std::string get_string_type(const rapidjson::Value& value) {
-    switch (value.GetType()) {
-    case rapidjson::kNullType:
-        return "null";
-    case rapidjson::kFalseType:
-    case rapidjson::kTrueType:
-        return "bool";
-    case rapidjson::kObjectType:
-        return "object";
-    case rapidjson::kArrayType:
-        return "array";
-    case rapidjson::kStringType:
-        return "string";
-    case rapidjson::kNumberType:
-        return "number";
-    default:
-        return "unknown";
-    }
-}
-
 const rapidjson::Document& json::JSONBase::document() const
 {
  return _document;
