@@ -64,7 +64,7 @@ json::JSONBase json::JSONBase::get_in(const std::string& f) const
   return JSONBase(&val);
 }
 
-void json::JSONBase::set_base_json_string(const std::string& json)
+void json::JSONBase::set_json_string(const std::string& json)
 {
   _json_str = json;
 }

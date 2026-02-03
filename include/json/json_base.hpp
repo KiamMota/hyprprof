@@ -15,11 +15,11 @@ class JSONBase {
     JSONBase(const rapidjson::Value* node); 
   protected:
     JSONBase(const std::string& json_str);
-    JSONBase();
-    void set_base_json_string(const std::string& json_string);
+    JSONBase() = default;
     void parse();
     const std::string& json_str() const noexcept;
   public:
+    void set_json_string(const std::string& json_string);
     JSONBase get_in(const std::string& n) const;
     const std::string get_string(const std::string& n) const;
     const int get_int(const std::string& n) const;

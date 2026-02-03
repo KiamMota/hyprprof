@@ -13,7 +13,7 @@ json::JSONManifestReader::JSONManifestReader() : JSONBase() {
 
 void json::JSONManifestReader::set_json_string(const std::string& json_str)
 {
-  set_base_json_string(_json_schema);
+  set_json_string(_json_schema);
 }
 
 profile::Profile json::JSONManifestReader::get_profile() {

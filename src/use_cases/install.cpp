@@ -31,8 +31,7 @@ void use_cases::Install::ensure_important_paths() {
 }
 
 void use_cases::Install::ensure_manifest(const std::string& string) {
-    _json_reader.set_json_str(string);
-    _json_reader.parse();
+    _json_reader.set_json_string(string);
 }
 
 void use_cases::Install::rewrite_profile_list()
