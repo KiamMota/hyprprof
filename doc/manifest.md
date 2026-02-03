@@ -1,223 +1,95 @@
-# **hyprprof.json**
+# Hyprprof Manifest Documentation
 
-The `hyprprof.json` file defines, configures, and allows HyprProf to install and manage a Hyprland profile. It must be present in the profile directory for HyprProf to recognize and process the profile.
-
-The JSON manifest follows this schema:
-
-``` json
-{
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "type": "object",
-  "required": ["hyprprof", "version_constraints"],
-  "properties": {
-    "hyprprof": {
-      "type": "object",
-      "required": ["authors", "name", "version", "description"],
-      "properties": {
-        "authors": {
-          "type": "array",
-          "items": { "type": "string" }
-        },
-        "name": { "type": "string" },
-        "version": { "type": "string" },
-        "description": { "type": "string" }
-      }
-    },
-    "version_constraints": {
-      "type": "object",
-      "required": ["hyprland", "wayland"],
-      "properties": {
-        "hyprland": { "type": "string" },
-        "wayland": { "type": "string" }
-      }
-    },
-    "dotfiles": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "object",
-        "required": ["pack", "target", "source"],
-        "properties": {
-          "pack": { "type": "string" },
-          "target": { "type": "string" },
-          "source": { "type": "string" }
-        },
-        "additionalProperties": false
-      }
-    }
-  },
-  "additionalProperties": false
-}
-```
+This document explains each field in the `Hyprprof` manifest, based on the JSON Schema and validation rules. It serves as a reference for developers and profile creators.
 
 ---
 
-## Manifest Objects
+## Main Fields
 
-## `hyprprof` (object, required)
+### `hyprprof`
 
-This object defines the main metadata of the profile.
+A required object containing general profile information.
 
-* `authors`: array of strings (optional)
+* **`authors`**: array of strings.
 
-  List of profile authors.
+  * Contains the names of the profile authors.
+  * **Rules**:
 
-* `name`: string (required)
+    * Must have at least one author.
+    * Each author cannot be empty.
 
-  Profile name.
-  This field is used as an internal identifier and must remain simple and predictable.
-  Accepted rules:
+* **`name`**: string.
 
-  * Only uppercase or lowercase letters (`A–Z`, `a–z`) and underscores (`_`)
-  * Must start with a letter
-  * No spaces, commas, accents, or special characters
+  * Profile name.
+  * **Rules**:
 
-  Valid examples:
+    * Cannot be empty.
+    * Can only contain uppercase and lowercase letters and underscores.
 
-  * `default`
-  * `my_profile`
+* **`version`**: string.
 
-  Invalid examples:
+  * Profile version.
+  * **Rules**:
 
-  * `my profile` (contains spaces)
-  * `profile,test` (contains comma)
-  * `perfilção` (contains accents)
+    * Cannot be empty.
+    * Must be a numeric version with three parts separated by dots, optionally followed by additional digits (like `1.0.0` or `1.0.0.1`).
 
-* `version`: string (required)
+* **`description`**: string.
 
-  Profile version following the semantic format `a.b.c`, where each segment is a non-negative integer.
+  * Profile description.
+  * **Rules**:
 
-  Valid examples:
+    * Can be empty.
+    * Cannot exceed 255 characters.
 
-  * `1.0.0`
-  * `0.1.123`
+### `version_constraints`
 
-  Invalid examples:
+A required object defining minimum versions of dependencies.
 
-  * `1.0`
-  * `v1.0.0`
+* **`hyprland`**: string.
 
-* `description`: string (optional)
+  * Minimum compatible Hyprland version.
+  * **Rules**:
 
-  Free-form textual description of the profile.
-  This field accepts any valid string and has no additional restrictions.
+    * Cannot be empty.
+    * Must be in the format `X.Y.Z` or `^X.Y.Z`.
+    * The system version must be equal or higher than the specified version.
 
+* **`wayland`**: string.
 
-  * Short description of the profile.
+  * Minimum compatible Wayland version.
+  * **Rules**:
 
-### `version_constraints` (object, required)
+    * Cannot be empty.
+    * Must be in the format `X.Y.Z` or `^X.Y.Z`.
+    * The system version must be equal or higher than the specified version.
 
-This object defines compatibility constraints for external dependencies using semantic versioning rules.
+### `dotfiles`
 
-* `hyprland`: string (optional)
+An optional object mapping configuration for applications or utilities.
 
-  Compatible Hyprland version.
-  The value must follow a semantic version format `a.b.c` and may optionally be prefixed with `^`, which indicates "greater than or equal to" the specified version.
+* Each key inside `dotfiles` can be any name (`kitty`, `nvim`, `zsh`, etc.).
+* **Structure of each object**:
 
-  Accepted rules:
+  * **`pack`**: string. Name of the package or tool.
+  * **`target`**: string. Destination path on the user's system.
+  * **`source`**: string. Source path of the dotfile.
+* **Rules**:
 
-  * Optional `^` prefix to indicate a minimum compatible version
-  * Three numeric components separated by dots
-  * Each component must be a non-negative integer
+  * Objects are optional; their absence is allowed.
+  * If present, all three fields (`pack`, `target`, `source`) are required.
+  * No additional fields are allowed inside each dotfile.
 
-  Valid examples:
+### General Constraints
 
-  * `^0.15.0`
-  * `1.0.0`
+* No extra fields are allowed outside `hyprprof`, `version_constraints`, and `dotfiles`.
+* All internal objects must respect the defined types and required fields.
+* Name and version fields follow specific patterns:
 
-  Invalid examples:
-
-  * `>=0.15.0`
-  * `0.15`
-  * `v0.15.0`
-
-* `wayland`: string (optional)
-
-  Compatible Wayland version.
-  Follows the same semantic version rules as `hyprland`.
-
-  Accepted rules:
-
-  * Optional `^` prefix to indicate a minimum compatible version
-  * Three numeric components separated by dots
-
-  Valid examples:
-
-  * `^1.18.0`
-  * `1.18.0`
-
-  Invalid examples:
-
-  * `^1.18`
-  * `1.18`
-  * `~1.18.0`
-
-
-### `build` (object, optional)
-
-* `install_script`: string
-
-  * Script executed when the profile is installed.
-* `uninstall_script`: string
-
-  * Script executed when the profile is removed.
-* `other_scripts`: string array
-
-  * Additional scripts to run during installation or configuration.
-
-### `components` (object, optional)
-
-Specifies the core programs of the Hyprland environment. Possible values include:
-
-* `terminal`: string (e.g., `kitty`, `alacritty`, `gnome-terminal`, `foot`)
-* `launcher`: string (e.g., `rofi`, `dmenu`, `wofi`)
-* `notification`: string (e.g., `mako`, `dunst`)
-* `bar`: string (e.g., `waybar`, `polybar`)
-* `compositor`: string (optional, e.g., `hyprland`)
-* `browser`: string (optional, e.g., `firefox`, `chromium`, `brave`, `qutebrowser`, `vivaldi`)
-
-### `providers` (object, optional)
-
-Specifies utility programs. Possible values include:
-
-* `wallpaper`: string (e.g., `hyprpaper`, `feh`, `nitrogen`)
-* `screenshot`: string (e.g., `grim`, `maim`, `scrot`)
-* `clipboard`: string (e.g., `wl-clipboard`, `xclip`, `xsel`)
-* `screen_recorder`: string (e.g., `obs`, `wf-recorder`, `peek`)
+  * `name`: only letters and underscores.
+  * `version`: three-part numeric version, optionally with extra digits.
+  * `hyprland` and `wayland` versions: numeric versions with optional caret (`^`) prefix.
 
 ---
 
-## Example
-
-```json
-{
-  "hyprprof": {
-    "authors": ["Me", "Linus Torvalds"],
-    "name": "my_profile",
-    "version": "1.0.0",
-    "description": "Minimal functional profile for Hyprland"
-  },
-  "version_constraints": {
-    "hyprland": "^0.15.0",
-    "wayland": "^1.18.0"
-  },
-  "build": {
-    "install_script": "install.sh",
-    "uninstall_script": "uninstall.sh",
-    "other_scripts": []
-  },
-  "components": {
-    "terminal": "kitty",
-    "launcher": "rofi",
-    "notification": "mako",
-    "bar": "waybar",
-    "compositor": "hyprland",
-    "browser": "firefox"
-  },
-  "providers": {
-    "wallpaper": "hyprpaper",
-    "screenshot": "grim",
-    "clipboard": "wl-clipboard",
-    "screen_recorder": "obs"
-  }
-}
-```
+This documentation ensures that any manifest JSON created is valid and compatible with the `Hyprprof` system, enabling automatic validation and preventing runtime errors.
