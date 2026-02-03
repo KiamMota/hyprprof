@@ -6,14 +6,13 @@
 #include <unistd.h>
 
 json::JSONManifestReader::JSONManifestReader() : JSONBase() {
-
     _json_schema = HYPRPROF_JSON_SCHEMA;
-    JSONSchemaValidator::validate_schema(json_str(), _json_schema);
 }
 
-void json::JSONManifestReader::set_json_string(const std::string& json_str)
+void json::JSONManifestReader::run()
 {
-  set_json_string(_json_schema);
+
+    JSONSchemaValidator::JSONSchemaValidator::validate_schema(json_str(), _json_schema);
 }
 
 profile::Profile json::JSONManifestReader::get_profile() {

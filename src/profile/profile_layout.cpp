@@ -25,7 +25,6 @@ void profile::ProfileLayout::move_profile_to(const std::string& new_src) {
     if (!infra::fs::dir::copy(_source_path, new_src_abs))
         throw std::runtime_error("cannot copy profile to " + new_src_abs);
 
-    infra::fs::dir::remove(_source_path);
 
     _source_path = new_src_abs;
     set_paths();

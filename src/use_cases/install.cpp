@@ -4,6 +4,8 @@
 #include "infra/log.hpp"
 #include "profile/profile_layout.hpp"
 #include "profile/profile_layout_exceptions.hpp"
+#include "json/json_exceptions.hpp"
+#include "json/json_manifest_reader.hpp"
 #include <bits/types/cookie_io_functions_t.h>
 #include <cstdlib>
 #include <stdexcept>
@@ -31,7 +33,17 @@ void use_cases::Install::ensure_important_paths() {
 }
 
 void use_cases::Install::ensure_manifest(const std::string& string) {
+    try
+  {
     _json_reader.set_json_string(string);
+    _json_reader.run();
+  }
+  catch(json::JsonEmptyException const& ex)
+  {
+    infra::hypr_log::err("hyprprof.json is empty!");
+    std::exit(0);
+  }
+  
 }
 
 void use_cases::Install::rewrite_profile_list()

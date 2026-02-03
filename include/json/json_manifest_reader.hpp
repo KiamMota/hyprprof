@@ -12,7 +12,7 @@ class JSONManifestReader : public JSONBase {
     std::string _json_schema;
   public:
     JSONManifestReader();
-    void set_json_string(const std::string& json_str);
+    void run();
     profile::Profile get_profile();
 };
 } // namespace json

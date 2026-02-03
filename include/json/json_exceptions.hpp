@@ -5,6 +5,13 @@
 #include <string>
 namespace json {
 
+class JsonEmptyException : public std::runtime_error
+{
+  public:
+    JsonEmptyException() : std::runtime_error("JSON Document is empty.") {}
+
+};
+
 class JsonParseException : public std::runtime_error {
 public:
     JsonParseException(const std::string& msg, size_t line, size_t column)
