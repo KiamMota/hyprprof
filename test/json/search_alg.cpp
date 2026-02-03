@@ -19,6 +19,4 @@ int main()
 {
   std::cout<< "SEACH ALG" << std::endl;
   A a{json_string_test()};
-  std::string r = a.get_value("a.b");
-  std::cout << "r: " << r << std::endl;
 }
