@@ -9,7 +9,7 @@ json::JSONManifestReader::JSONManifestReader() : JSONBase() {
     _json_schema = HYPRPROF_JSON_SCHEMA;
 }
 
-void json::JSONManifestReader::run()
+void json::JSONManifestReader::run() const
 {
 
     JSONSchemaValidator::JSONSchemaValidator::validate_schema(json_str(), _json_schema);
@@ -18,11 +18,20 @@ void json::JSONManifestReader::run()
 profile::Profile json::JSONManifestReader::get_profile() {
     profile::Profile prof{};
 
-    prof.set_name(get_in("hyprprof").get_string("profile_name"))
-        .set_version(get_in("hyprprof").get_string("version"))
-        .set_description(get_in("hyprprof").get_string("description"))
-        .set_wayland_version(get_in("version_constraints").get_string("wayland"))
-        .set_hyprland_version(get_in("version_constraints").get_string("hyprland"));
+    const auto& doc = document();
+
+    // validações estruturais mínimas (implícitas pelo uso correto)
+    const auto& hyprprof = doc["hyprprof"];
+    const auto& versions = doc["version_constraints"];
+
+    prof
+        .set_name(hyprprof["name"].GetString())
+        .set_version(hyprprof["version"].GetString())
+        .set_description(hyprprof["description"].GetString())
+        .set_wayland_version(versions["wayland"].GetString())
+        .set_hyprland_version(versions["hyprland"].GetString());
+
     return prof;
 }
+
 

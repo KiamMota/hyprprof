@@ -42,8 +42,7 @@ void use_cases::Install::ensure_manifest(const std::string& string) {
   {
     infra::hypr_log::err("hyprprof.json is empty!");
     std::exit(0);
-  }
-  
+  } 
 }
 
 void use_cases::Install::rewrite_profile_list()

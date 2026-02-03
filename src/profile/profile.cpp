@@ -72,8 +72,8 @@ profile::Profile& profile::Profile::set_wayland_version(const std::string& versi
     std::regex pat(R"(^\^?\d+\.\d+\.\d+$)");
     if (!std::regex_match(version, pat)) {
         throw profile::InvalidPatternException("Wayland version must be in format ^X.Y.Z or X.Y.Z");
-    }
 
+    }
     std::string min_version = VersionConstraintsChecker::system_wayland_version();
     if (!VersionConstraintsChecker::wayland_is_equal_or_greater(version)) {
         throw std::runtime_error(

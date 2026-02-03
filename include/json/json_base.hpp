@@ -3,7 +3,6 @@
 
 #include "rapidjson/document.h"
 
-#include <list>
 #include <string>
 
 namespace json {
@@ -12,19 +11,14 @@ class JSONBase {
     std::string _json_str;
     rapidjson::Document _document;
     const rapidjson::Value* _node = nullptr;
-    JSONBase(const rapidjson::Value* node); 
   protected:
     JSONBase(const std::string& json_str);
     JSONBase() = default;
     void parse();
     const std::string& json_str() const noexcept;
+    const rapidjson::Document& document() const;
   public:
     void set_json_string(const std::string& json_string);
-    JSONBase get_in(const std::string& n) const;
-    const std::string get_string(const std::string& n) const;
-    const int get_int(const std::string& n) const;
-    const bool get_bool(const std::string& n) const;
-    const std::list<std::string> get_string_array(const std::string& n) const;
 };
 
 } // namespace json
