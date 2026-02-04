@@ -26,10 +26,12 @@ bool core::HyprprofPath::has_config_file() noexcept
     return fs::file::exists(fs::dotconfig::get_config_path() + "/hyprprof/config.json");
 }
 
-void core::HyprprofPath::create_path(const std::string& name)
+void core::HyprprofPath::create_path(const std::string& name, bool overwrite)
 {
-  if(fs::dir::exists(fs::dotconfig::get_config_path() + "/hyprprof/" + name))
+  if(fs::dir::exists(fs::dotconfig::get_config_path() + "/hyprprof/" + name) && overwrite == false)
     throw std::runtime_error("path named '" + name + "' already exists in ~/.config/hyprprof.");
+
+  fs::dir::remove(fs::dotconfig::get_config_path() + "/hyprprof/" + name);
   fs::dir::create(fs::dotconfig::get_config_path() + "/hyprprof/" + name);
 }
 

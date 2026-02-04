@@ -17,13 +17,13 @@ namespace use_cases
       void ensure_required_paths();
       void ensure_profile_layout(const std::string& profile_root);
       void ensure_manifest_content(const std::string& string_file);
-      void create_profile_path();
+      void create_profile_path(bool overwrite);
       void finalize_profile_path();
       void rewrite_config_file(); 
       const std::string load_from_file(const std::string& file);
       std::string _current_profile_path;  
 public:
-      Install(const std::string& curr_path);
+      Install(const std::string& curr_path, bool overwrite);
       
   
   };

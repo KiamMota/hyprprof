@@ -63,11 +63,12 @@ void use_cases::Install::rewrite_config_file()
     );
 }
 
-void use_cases::Install::create_profile_path() {
+void use_cases::Install::create_profile_path(bool overwrite) {
     try {
-        core::HyprprofPath::create_path(_ProfileModel.name());
+        core::HyprprofPath::create_path(_ProfileModel.name(), overwrite);
     } catch (std::runtime_error const& r) {
         hypr_log::err(r.what());
+        hypr_log::log("to overwrite profile, use -o/--overwrite");
         std::exit(0);
     }
 }
@@ -76,14 +77,14 @@ void use_cases::Install::finalize_profile_path() {
   fs::dir::copy(_current_path, core::HyprprofPath::hyprprof_path());
 }
 
-use_cases::Install::Install(const std::string& curr_path) : _current_path(curr_path)
+use_cases::Install::Install(const std::string& curr_path, bool overwrite) : _current_path(curr_path)
 {
     ensure_required_paths();
     ensure_profile_layout(curr_path);
     ensure_manifest_content(fs::file::get_content(profile::ProfileLayout::manifest_path(_current_path)));
     _ProfileModel = _ManifestReader.get_profile();
     _current_profile_path = core::HyprprofPath::get_path(_ProfileModel.name());
-    create_profile_path();
+    create_profile_path(overwrite);
     finalize_profile_path();
     rewrite_config_file();
     hypr_log::ok("installed.");

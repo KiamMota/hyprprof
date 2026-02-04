@@ -10,10 +10,12 @@ void cli::cmd::install(const std::vector<std::string>& args) {
     }
 
     std::string config_name = args[0];
+    bool overwrite_flag = args.size() > 1 && args[1] == "--overwrite";
 
     // Cria o objeto de instalação
-    use_cases::Install inst{config_name};
+    use_cases::Install inst{config_name, overwrite_flag};
 }
+
 
 void cli::cmd::use(const std::vector<std::string> &args)
 {
