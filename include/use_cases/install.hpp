@@ -5,7 +5,6 @@
 #include "json/global_config.hpp"
 #include "json/json_manifest_reader.hpp"
 #include "profile/profile.hpp"
-#include "profile/profile_layout.hpp"
 #include <string>
 namespace use_cases
 {
@@ -16,8 +15,7 @@ namespace use_cases
       json::JSONManifestReader _ManifestReader;
       json::GlobalConfig _GlobalConfig;
       profile::Profile _ProfileModel;
-      profile::ProfileLayout _ProfileLayout;
-
+      std::string _current_path;
       void ensure_required_paths();
       void ensure_profile_layout(const std::string& profile_root);
       void ensure_manifest_content(const std::string& string_file);
