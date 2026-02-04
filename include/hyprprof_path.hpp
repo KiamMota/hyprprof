@@ -4,21 +4,17 @@
 #include <string>
 namespace core
 {
-  class HyprprofPath
+  /*STATIC*/ class HyprprofPath
   {
     private:
-      std::string _hyprprof_path;
-      std::string _config_path;
-    public:
       HyprprofPath();
-      const std::string& hyprprof_path() const noexcept;
-      const std::string& config_path() const noexcept;
-      bool path_exists() const noexcept;
-      bool has_config_file() const noexcept;
-      bool profile_path_exists(const std::string& path_name) const noexcept;
-      void create_path(const std::string& name);
-      void create_config_file();
-      const std::string profile_path(const std::string& path) const; 
+    public:
+      static const std::string hyprprof_path() noexcept;
+      static const std::string config_path() noexcept;
+      static bool path_exists_in_hyprprof_path(const std::string& path) noexcept;
+      static const std::string get_path(const std::string& path) noexcept;
+      static bool has_config_file() noexcept;
+      static void create_path(const std::string& name);
   };
 
 }

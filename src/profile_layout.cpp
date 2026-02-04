@@ -1,7 +1,7 @@
 #include "fs/dir.hpp"
 #include "fs/file.hpp"
 #include "profile/profile_layout_exceptions.hpp"
-#include "profile/profile_layout_validator.hpp"
+#include "profile_layout.hpp"
 
 
 namespace profile {

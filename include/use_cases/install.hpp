@@ -1,7 +1,6 @@
 #ifndef APP_SERVICE_HPP
 #define APP_SERVICE_HPP
 
-#include "hyprprof_path.hpp"
 #include "json/global_config.hpp"
 #include "json/json_manifest_reader.hpp"
 #include "profile/profile.hpp"
@@ -11,7 +10,6 @@ namespace use_cases
   class Install
   {
     private:
-      core::HyprprofPath _Paths;
       json::JSONManifestReader _ManifestReader;
       json::GlobalConfig _GlobalConfig;
       profile::Profile _ProfileModel;

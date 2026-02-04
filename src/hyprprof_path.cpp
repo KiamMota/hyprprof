@@ -5,42 +5,35 @@
 #include <stdexcept>
 
 core::HyprprofPath::HyprprofPath() {
-    _hyprprof_path = fs::dotconfig::get_config_path() + "/hyprprof";
-    _config_path = fs::dotconfig::get_config_path() + "/config.json";
 }
 
-const std::string& core::HyprprofPath::hyprprof_path() const noexcept { return _hyprprof_path; }
-const std::string& core::HyprprofPath::config_path() const noexcept { return _config_path; }
-
-bool core::HyprprofPath::path_exists() const noexcept
+const std::string core::HyprprofPath::hyprprof_path() noexcept 
 {
-  return fs::dir::exists(_hyprprof_path);
+  return fs::dotconfig::get_config_path() + "/hyprprof";
+}
+const std::string core::HyprprofPath::config_path() noexcept 
+{ 
+  return fs::dotconfig::get_config_path() + "/hyprprof/config.json"; 
 }
 
-bool core::HyprprofPath::has_config_file() const noexcept
+bool core::HyprprofPath::path_exists_in_hyprprof_path(const std::string& path) noexcept
 {
-    return fs::file::exists(_config_path);
+  return fs::dir::exists(fs::dotconfig::get_config_path() + "/hyprprof/" + path);
 }
 
-bool core::HyprprofPath::profile_path_exists(const std::string& prof) const noexcept
+bool core::HyprprofPath::has_config_file() noexcept
 {
-  return fs::dir::exists(_hyprprof_path + "/" + prof);
+    return fs::file::exists(fs::dotconfig::get_config_path() + "/hyprprof/config.json");
 }
 
 void core::HyprprofPath::create_path(const std::string& name)
 {
-  if(fs::dir::exists(_hyprprof_path + "/" + name))
+  if(fs::dir::exists(fs::dotconfig::get_config_path() + "/hyprprof/" + name))
     throw std::runtime_error("path named '" + name + "' already exists in ~/.config/hyprprof.");
-  fs::dir::create(_hyprprof_path + "/" + name);
+  fs::dir::create(fs::dotconfig::get_config_path() + "/hyprprof/" + name);
 }
 
-const std::string core::HyprprofPath::profile_path(const std::string& path) const 
+const std::string core::HyprprofPath::get_path(const std::string &path) noexcept
 {
-    return _hyprprof_path + "/" + path;
-}
-
-
-void core::HyprprofPath::create_config_file()
-{
-  fs::file::create(_hyprprof_path + "/config.json");
+  return fs::dotconfig::get_config_path() + "/hyprprof/" + path;
 }
