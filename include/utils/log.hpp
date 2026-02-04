@@ -4,7 +4,6 @@
 #include <iostream>
 #include <string>
 #include <filesystem>
-namespace infra {
 
 namespace hypr_log {
 template <typename... Args>
@@ -47,6 +46,5 @@ inline void ok(const std::string& s, Args&&... args) {
 
 } // namespace hypr_log
 
-} // namespace infra
 
 #endif

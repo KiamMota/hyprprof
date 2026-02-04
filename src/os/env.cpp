@@ -1,14 +1,14 @@
-#include "infra/os/env.hpp"
+#include "os/env.hpp"
 #include "enum/package_manager_enum.hpp"
 #include "enum/xdg_session_type_enum.hpp"
-#include "infra/fs/file.hpp"
-#include "infra/log.hpp"
+#include "fs/file.hpp"
+#include "utils/log.hpp"
 #include <cstdlib>
 #include <pwd.h>
 #include <string>
 #include <algorithm>
 
-std::string infra::os::detect_distro_str()
+std::string os::detect_distro_str()
 {
   std::string os_rel = fs::file::get_content("/etc/os-release");
 
@@ -29,7 +29,7 @@ std::string infra::os::detect_distro_str()
 
 }
 
-std::string infra::os::detect_package_manager_str()
+std::string os::detect_package_manager_str()
 {
     std::string distro = detect_distro_str();
     std::transform(distro.begin(), distro.end(), distro.begin(), ::tolower);
@@ -53,7 +53,7 @@ std::string infra::os::detect_package_manager_str()
     std::abort();
 }
 
-core::PackageManagerEnum infra::os::detect_package_manager()
+core::PackageManagerEnum os::detect_package_manager()
 {
     std::string pm = detect_package_manager_str();
 
@@ -68,7 +68,7 @@ core::PackageManagerEnum infra::os::detect_package_manager()
     return core::PackageManagerEnum::UNKNOWN; // fallback seguro
 }
 
-std::string infra::os::detect_xdg_session_str()
+std::string os::detect_xdg_session_str()
 {
     const char* xdg = std::getenv("XDG_SESSION_TYPE");
     if (!xdg) {
@@ -81,7 +81,7 @@ std::string infra::os::detect_xdg_session_str()
     return session;
 }
 
-core::XdgSessionTypeEnum infra::os::detect_xdg_session()
+core::XdgSessionTypeEnum os::detect_xdg_session()
 {
   std::string xdg = detect_xdg_session_str();
   if(xdg == "wayland")
@@ -95,7 +95,7 @@ core::XdgSessionTypeEnum infra::os::detect_xdg_session()
   return core::XdgSessionTypeEnum::UNKNOWN;
 }
 
-std::string infra::os::detect_user_name()
+std::string os::detect_user_name()
 {
   return getenv("USER");
 }

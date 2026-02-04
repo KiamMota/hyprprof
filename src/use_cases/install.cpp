@@ -1,7 +1,7 @@
 #include "use_cases/install.hpp"
-#include "infra/fs/dir.hpp"
-#include "infra/fs/file.hpp"
-#include "infra/log.hpp"
+#include "fs/dir.hpp"
+#include "fs/file.hpp"
+#include "utils/log.hpp"
 #include "profile/profile_layout.hpp"
 #include "profile/profile_layout_exceptions.hpp"
 #include "json/json_exceptions.hpp"
@@ -17,31 +17,31 @@ void use_cases::Install::ensure_profile_layout(const std::string& path) {
     try {
         _ProfileLayout.set_path(path);
     } catch (profile::ProfileLayoutDirException const& ex) {
-        infra::hypr_log::err(ex.what());
+        hypr_log::err(ex.what());
         std::exit(0);
     } catch (profile::ProfileLayoutFileException const& ex) {
-        infra::hypr_log::err(ex.what());
+        hypr_log::err(ex.what());
         std::exit(0);
     }
 }
 
 void use_cases::Install::ensure_required_paths() {
     if (!_Paths.path_exists())
-        infra::fs::dir::create(_Paths.hyprprof_path());
+        fs::dir::create(_Paths.hyprprof_path());
     if (!_Paths.has_config_file())
-        infra::fs::file::create(_Paths.config_path());
+        fs::file::create(_Paths.config_path());
 }
 
 void use_cases::Install::ensure_manifest_content(const std::string& string) {
     try {
         _ManifestReader.run(string);
     } catch (json::JsonEmptyException const& ex) {
-        infra::hypr_log::err("hyprprof.json is empty!");
+        hypr_log::err("hyprprof.json is empty!");
         std::exit(0);
     }
     catch(json::JsonParseException const& ex)
   {
-    infra::hypr_log::err(ex.what());
+    hypr_log::err(ex.what());
     std::exit(0);
   }
 }
@@ -49,14 +49,14 @@ void use_cases::Install::ensure_manifest_content(const std::string& string) {
 void use_cases::Install::rewrite_config_file()
 {
     if (_Paths.has_config_file()) {
-    std::string json = infra::fs::file::get_content(_Paths.config_path());
+    std::string json = fs::file::get_content(_Paths.config_path());
         _GlobalConfig.set_json_context(json);
     }
 
     _GlobalConfig.set_current_profile(_ProfileLayout.source_path())
         .set_username(_ProfileModel.name());
 
-    infra::fs::file::overwrite(
+    fs::file::overwrite(
         _Paths.config_path(),
         _GlobalConfig.to_string()
     );
@@ -66,7 +66,7 @@ void use_cases::Install::create_profile_path() {
     try {
         _Paths.create_path(_ProfileModel.name());
     } catch (std::runtime_error const& r) {
-        infra::hypr_log::err(r.what());
+        hypr_log::err(r.what());
         std::exit(0);
     }
 }
@@ -79,11 +79,11 @@ use_cases::Install::Install(const std::string& curr_path)
 {
     ensure_required_paths();
     ensure_profile_layout(curr_path);
-    ensure_manifest_content(infra::fs::file::get_content(_ProfileLayout.manifest_path()));
+    ensure_manifest_content(fs::file::get_content(_ProfileLayout.manifest_path()));
     _ProfileModel = _ManifestReader.get_profile();
     _current_profile_path = _Paths.profile_path(_ProfileModel.name());
     create_profile_path();
     finalize_profile_path();
     rewrite_config_file();
-    infra::hypr_log::ok("installed.");
+    hypr_log::ok("installed.");
 }

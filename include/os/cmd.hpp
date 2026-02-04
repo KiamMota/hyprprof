@@ -3,7 +3,6 @@
 
 #include <stdexcept>
 #include <string>
-namespace infra {
 namespace os {
 
 
@@ -51,6 +50,5 @@ void execute_fork(const std::string& command);
 Result execute_script(const std::string& script_path);
 
 } // namespace sys
-} // namespace infra
 
 #endif // CMD_HPP

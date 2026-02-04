@@ -1,9 +1,5 @@
 #ifndef PACK
 #define PACK
-#include "infra/os/cmd.hpp"
-#include <list>
-#include <string>
-namespace infra {
 namespace sys {
 namespace pack {
 
@@ -14,5 +10,4 @@ namespace pack {
 } // namespace pack
 } // namespace cmd
 
-} // namespace infra
 #endif

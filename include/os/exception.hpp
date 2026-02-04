@@ -2,8 +2,6 @@
 #define EXCEPTION_HPP
 
 #include <stdexcept>
-namespace infra
-{
 namespace os 
 {
 
@@ -16,6 +14,5 @@ class ForkException : public std::runtime_error {
 public:
     ForkException(const std::string& msg) : std::runtime_error(msg) {}
 };
-}
 }
 #endif // EXCEPTION_HPP

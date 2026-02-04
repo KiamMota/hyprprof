@@ -2,7 +2,6 @@
 #define FS_FILE_HPP
 
 #include <string>
-namespace infra {
 namespace fs {
 namespace file {
 std::string get_content(const std::string& file_name);
@@ -15,5 +14,4 @@ void overwrite(const std::string& file_src, const std::string& content);
 } // namespace file
 
 } // namespace fs
-} // namespace infra
 #endif

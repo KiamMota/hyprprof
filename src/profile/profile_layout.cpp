@@ -1,6 +1,6 @@
 #include "profile/profile_layout.hpp"
-#include "infra/fs/dir.hpp"
-#include "infra/fs/file.hpp"
+#include "fs/dir.hpp"
+#include "fs/file.hpp"
 #include "profile/profile_layout_exceptions.hpp"
 #include <list>
 #include <stdexcept>
@@ -11,18 +11,18 @@ profile::ProfileLayout::ProfileLayout() {}
 void profile::ProfileLayout::set_path(const std::string& source_dir) {
     if (source_dir.empty())
         throw ProfileLayoutDirException("dir is empty");
-    _source_path = infra::fs::dir::get_absolute(source_dir);
+    _source_path = fs::dir::get_absolute(source_dir);
     set_paths();
     check_paths();
 }
 
 void profile::ProfileLayout::move_profile_to(const std::string& new_src) {
-    std::string new_src_abs = infra::fs::dir::get_absolute(new_src);
+    std::string new_src_abs = fs::dir::get_absolute(new_src);
 
-    if (!infra::fs::dir::is_emp(new_src_abs))
+    if (!fs::dir::is_emp(new_src_abs))
         throw std::runtime_error(new_src + " is not empty!");
 
-    if (!infra::fs::dir::copy(_source_path, new_src_abs))
+    if (!fs::dir::copy(_source_path, new_src_abs))
         throw std::runtime_error("cannot copy profile to " + new_src_abs);
 
 
@@ -42,7 +42,7 @@ void profile::ProfileLayout::set_paths() {
 }
 
 void profile::ProfileLayout::check_paths() {
-    using namespace infra::fs;
+    using namespace fs;
     if (!file::exists(_manifest_path))
         throw ProfileLayoutFileException("hyprprof.json");
     if (!dir::exists(_config_path))
@@ -51,16 +51,16 @@ void profile::ProfileLayout::check_paths() {
 
 
 bool profile::ProfileLayout::has_readme_path() const noexcept {
-    return infra::fs::file::exists(_readme_path);
+    return fs::file::exists(_readme_path);
 }
 
 bool profile::ProfileLayout::has_waybar_path() const noexcept {
-    return infra::fs::dir::exists(_waybar_path);
+    return fs::dir::exists(_waybar_path);
 }
 
 bool profile::ProfileLayout::has_dotfiles_path() const noexcept
 {
-  return infra::fs::dir::exists(_dotfiles_path);
+  return fs::dir::exists(_dotfiles_path);
 }
 
 const std::string& profile::ProfileLayout::source_path() const noexcept { return _source_path; }
@@ -76,19 +76,19 @@ const std::string& profile::ProfileLayout::waybar_path() const noexcept { return
 
 
 bool profile::ProfileLayout::has_hypr_path() const noexcept {
-    return infra::fs::dir::exists(_hypr_path);
+    return fs::dir::exists(_hypr_path);
 }
 
 bool profile::ProfileLayout::has_assets_path() const noexcept {
-    return infra::fs::dir::exists(_assets_path);
+    return fs::dir::exists(_assets_path);
 }
 
 bool profile::ProfileLayout::has_assets_bg_path() const noexcept {
-    return infra::fs::dir::exists(_assets_bg_path);
+    return fs::dir::exists(_assets_bg_path);
 }
 
 bool profile::ProfileLayout::has_assets_fonts_path() const noexcept {
-    return infra::fs::dir::exists(_assets_fonts_path);
+    return fs::dir::exists(_assets_fonts_path);
 }
 
 const std::string& profile::ProfileLayout::hypr_path() const noexcept {

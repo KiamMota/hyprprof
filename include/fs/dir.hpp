@@ -6,7 +6,6 @@
 
 #define CONFIG_PATH "~/.config"
 
-namespace infra {
 namespace fs {
 namespace dir {
 bool create(const std::string& path_name);
@@ -23,5 +22,4 @@ std::list<std::string> list_all_files(const std::string& path);
 } // namespace dir
 
 } // namespace fs
-} // namespace infra
 #endif

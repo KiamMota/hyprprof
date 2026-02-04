@@ -1,8 +1,7 @@
 #ifndef HYPRCTL_HPP
 #define HYPRCTL_HPP
 
-#include "infra/os/cmd.hpp"
-namespace infra {
+#include "os/cmd.hpp"
 namespace os {
 namespace hyprctl {
 
@@ -11,6 +10,5 @@ Result reload();
 
 }
 } // namespace sys
-} // namespace infra
 
 #endif

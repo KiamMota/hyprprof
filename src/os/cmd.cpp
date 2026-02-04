@@ -1,5 +1,5 @@
-#include "infra/os/cmd.hpp"
-#include "infra/os/exception.hpp"
+#include "os/cmd.hpp"
+#include "os/exception.hpp"
 
 #include <string>
 #include <sys/stat.h>
@@ -7,45 +7,45 @@
 #include <unistd.h>
 #include <array>
 
-void infra::os::execute_fork(const std::string& command) {
+void ::os::execute_fork(const std::string& command) {
     pid_t pid = fork();
 
     if(command.empty())
-      throw infra::os::ForkException("command is empty!"); 
+      throw ::os::ForkException("command is empty!"); 
     if (pid < 0) {
-        throw infra::os::ForkException("failed to create process.");
+        throw ::os::ForkException("failed to create process.");
         return;
     }
 
     if (pid == 0) {
         execl("/bin/sh", "sh", "-c", command.c_str(), nullptr);
-        throw infra::os::ForkException("failed to execute command.");
+        throw ::os::ForkException("failed to execute command.");
 
         _exit(127);
     } else {
         int status;
         if (waitpid(pid, &status, 0) == -1) {
-            throw infra::os::ForkException("failed to wait child process.");
+            throw ::os::ForkException("failed to wait child process.");
             return;
         }
 
         if (WIFEXITED(status)) {
             int code = WEXITSTATUS(status);
             if (code != 0)
-                throw infra::os::ForkException("task end with the code: " + code);
+                throw ::os::ForkException("task end with the code: " + code);
         } else {
-            throw infra::os::ForkException("The children's process ends abnormally.");
+            throw ::os::ForkException("The children's process ends abnormally.");
         }
     }
 }
 
-infra::os::Result infra::os::execute_pipe(const std::string& command) {
-    infra::os::Result res;
+os::Result os::execute_pipe(const std::string& command) {
+    os::Result res;
     std::array<char, 256> buffer;
 
     FILE* pipe = popen(command.c_str(), "r");
     if (!pipe) {
-        throw infra::os::PipeException("failed to open pipe for command: " + command);
+        throw ::os::PipeException("failed to open pipe for command: " + command);
     }
 
     while (fgets(buffer.data(), buffer.size(), pipe) != nullptr) {
@@ -54,15 +54,15 @@ infra::os::Result infra::os::execute_pipe(const std::string& command) {
 
     int status = pclose(pipe);
     if (status == -1) {
-        throw infra::os::PipeException("failed to close pipe for command: " + command);
+        throw ::os::PipeException("failed to close pipe for command: " + command);
     } else if (WIFEXITED(status)) {
         res.error_code = WEXITSTATUS(status);
         if (res.error_code != 0) {
-            throw infra::os::PipeException(
+            throw ::os::PipeException(
                 "command exited with non-zero code: " + std::to_string(res.error_code));
         }
     } else if (WIFSIGNALED(status)) {
-        throw infra::os::PipeException(
+        throw ::os::PipeException(
             "command terminated by signal: " + std::to_string(WTERMSIG(status)));
     }
 
@@ -75,7 +75,7 @@ infra::os::Result infra::os::execute_pipe(const std::string& command) {
 }
 
 
-infra::os::Result infra::os::execute_script(const std::string& script_path) {
+os::Result os::execute_script(const std::string& script_path) {
     Result res;
 
     if (script_path.empty()) {

@@ -1,6 +1,6 @@
 #include "profile/version_constraits_validator.hpp"
-#include "infra/os/cmd.hpp"
-#include "infra/os/exception.hpp"
+#include "os/cmd.hpp"
+#include "os/exception.hpp"
 #include <cstring>
 #include <sstream>
 #include <string>
@@ -24,12 +24,12 @@ static std::vector<int> split_version(const std::string& ver) {
     return parts;
 }
 
-static void check_pipe_result(const infra::os::Result& res) {
+static void check_pipe_result(const os::Result& res) {
     if (res.error_code != 0)
-        throw infra::os::PipeException("command failed with code " +
+        throw os::PipeException("command failed with code " +
                                         std::to_string(res.error_code));
     if (res.output.empty())
-        throw infra::os::PipeException("command returned empty output");
+        throw os::PipeException("command returned empty output");
 }
 
 bool profile::VersionConstraintsChecker::hyprland_is_equal_or_greater(const std::string& version) {
@@ -94,7 +94,7 @@ bool profile::VersionConstraintsChecker::wayland_is_equal(const std::string& ver
 
 
 std::string profile::VersionConstraintsChecker::system_hyprland_version() {
-    auto res = infra::os::execute_pipe(HYPRLAND_VERSION_COMMAND);
+    auto res = os::execute_pipe(HYPRLAND_VERSION_COMMAND);
     check_pipe_result(res);
 
     std::string version_output = res.output;
@@ -107,7 +107,7 @@ std::string profile::VersionConstraintsChecker::system_hyprland_version() {
 }
 
 std::string profile::VersionConstraintsChecker::system_wayland_version() {
-    auto res = infra::os::execute_pipe(WAYLAND_VERSION_COMMAND);
+    auto res = os::execute_pipe(WAYLAND_VERSION_COMMAND);
     check_pipe_result(res);
 
     std::string version_output = res.output;
