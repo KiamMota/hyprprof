@@ -15,73 +15,75 @@
 
 void use_cases::Install::ensure_profile_layout(const std::string& path) {
     try {
-        _profile_lay.set_path(path);
+        _ProfileLayout.set_path(path);
     } catch (profile::ProfileLayoutDirException const& ex) {
         infra::hypr_log::err(ex.what());
-      std::exit(0);
+        std::exit(0);
     } catch (profile::ProfileLayoutFileException const& ex) {
         infra::hypr_log::err(ex.what());
-      std::exit(0);
+        std::exit(0);
     }
 }
 
-void use_cases::Install::ensure_important_paths() {
-    if (!_hyprprof_path.path_exists())
-        infra::fs::dir::create(_hyprprof_path.hyprprof_path());
-    if (!_hyprprof_path.has_profile_list())
-        infra::fs::file::create(_hyprprof_path.profile_list_path());
+void use_cases::Install::ensure_required_paths() {
+    if (!_Paths.path_exists())
+        infra::fs::dir::create(_Paths.hyprprof_path());
+    if (!_Paths.has_config_file())
+        infra::fs::file::create(_Paths.config_path());
 }
 
-void use_cases::Install::ensure_manifest(const std::string& string) {
-    try
-  {
-    _json_reader.set_json_string(string);
-    _json_reader.run();
-  }
-  catch(json::JsonEmptyException const& ex)
-  {
-    infra::hypr_log::err("hyprprof.json is empty!");
-    std::exit(0);
-  } 
-}
-
-void use_cases::Install::rewrite_profile_list()
-{
-  if(!_hyprprof_path.has_profile_list())
-  {
-    _hyprprof_path.create_profile_list();
-    std::string json = _profile_list_json.json_append(_profile.name(), _current_profile_path);
-    infra::fs::file::overwrite(_hyprprof_path.profile_list_path(), json);
-    return;
-  }
-
-  _profile_list_json.set_existing_json(infra::fs::file::get_content(_hyprprof_path.profile_list_path()));
-  _profile_list_json.json_append(_profile.name(), _hyprprof_path.profile_path(_profile.name()));
-}
-
-void use_cases::Install::create_path() {
+void use_cases::Install::ensure_manifest_content(const std::string& string) {
     try {
-        _hyprprof_path.create_path(_profile.name());
+        _ManifestReader.run(string);
+    } catch (json::JsonEmptyException const& ex) {
+        infra::hypr_log::err("hyprprof.json is empty!");
+        std::exit(0);
+    }
+    catch(json::JsonParseException const& ex)
+  {
+    infra::hypr_log::err(ex.what());
+    std::exit(0);
+  }
+}
+
+void use_cases::Install::rewrite_config_file()
+{
+    if (_Paths.has_config_file()) {
+    std::string json = infra::fs::file::get_content(_Paths.config_path());
+        _GlobalConfig.set_json_context(json);
+    }
+
+    _GlobalConfig.set_current_profile(_ProfileLayout.source_path())
+        .set_username(_ProfileModel.name());
+
+    infra::fs::file::overwrite(
+        _Paths.config_path(),
+        _GlobalConfig.to_string()
+    );
+}
+
+void use_cases::Install::create_profile_path() {
+    try {
+        _Paths.create_path(_ProfileModel.name());
     } catch (std::runtime_error const& r) {
         infra::hypr_log::err(r.what());
-      std::exit(0);
+        std::exit(0);
     }
 }
 
-void use_cases::Install::move_profile_to_path() {
-  _profile_lay.move_profile_to(_current_profile_path);
+void use_cases::Install::finalize_profile_path() {
+    _ProfileLayout.move_profile_to(_current_profile_path);
 }
 
-use_cases::Install::Install(const std::string& curr_path) // inicializa ProfileLayout
+use_cases::Install::Install(const std::string& curr_path) 
 {
+    ensure_required_paths();
     ensure_profile_layout(curr_path);
-    ensure_manifest(infra::fs::file::get_content(_profile_lay.manifest_path()));
-    _profile = _json_reader.get_profile();
-    _current_profile_path = _hyprprof_path.profile_path(_profile.name());
-    ensure_important_paths();
-    create_path();
-    move_profile_to_path();
-    rewrite_profile_list();
-    infra::fs::dir::remove(curr_path);
-    infra::hypr_log::ok("profile installed!");
+    ensure_manifest_content(infra::fs::file::get_content(_ProfileLayout.manifest_path()));
+    _ProfileModel = _ManifestReader.get_profile();
+    _current_profile_path = _Paths.profile_path(_ProfileModel.name());
+    create_profile_path();
+    finalize_profile_path();
+    rewrite_config_file();
+    infra::hypr_log::ok("installed.");
 }

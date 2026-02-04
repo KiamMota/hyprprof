@@ -1,0 +1,87 @@
+#include "use_cases/install.hpp"
+#include "infra/fs/dir.hpp"
+#include "infra/fs/file.hpp"
+#include "infra/log.hpp"
+#include "profile/profile_layout.hpp"
+#include "profile/profile_layout_exceptions.hpp"
+#include "json/config_file/config_file_writer.hpp"
+#include "json/json_exceptions.hpp"
+#include "json/json_manifest_reader.hpp"
+#include <bits/types/cookie_io_functions_t.h>
+#include <cstdlib>
+#include <stdexcept>
+#include <string>
+#include <sys/types.h>
+#include <unistd.h>
+
+void use_cases::Install::ensure_profile_layout(const std::string& path) {
+    try {
+        _profile_lay.set_path(path);
+    } catch (profile::ProfileLayoutDirException const& ex) {
+        infra::hypr_log::err(ex.what());
+      std::exit(0);
+    } catch (profile::ProfileLayoutFileException const& ex) {
+        infra::hypr_log::err(ex.what());
+      std::exit(0);
+    }
+}
+
+void use_cases::Install::ensure_important_paths() {
+    if (!_hyprprof_path.path_exists())
+        infra::fs::dir::create(_hyprprof_path.hyprprof_path());
+    if (!_hyprprof_path.has_config_file())
+        infra::fs::file::create(_hyprprof_path.config_path());
+}
+
+void use_cases::Install::ensure_manifest(const std::string& string) {
+    try
+  {
+    _json_reader.set_json_string(string);
+    _json_reader.run();
+  }
+  catch(json::JsonEmptyException const& ex)
+  {
+    infra::hypr_log::err("hyprprof.json is empty!");
+    std::exit(0);
+  } 
+}
+
+void use_cases::Install::rewrite_config_file()
+{
+  _config_file.set_current_profile(_profile_lay.source_path());
+  _config_file.set_username(_profile.name());
+  if(!_hyprprof_path.has_config_file())
+  {
+    _hyprprof_path.create_config_file();
+    _
+  }
+
+  infra::fs::file::overwrite(_hyprprof_path.config_path(), );
+}
+
+void use_cases::Install::create_path() {
+    try {
+        _hyprprof_path.create_path(_profile.name());
+    } catch (std::runtime_error const& r) {
+        infra::hypr_log::err(r.what());
+      std::exit(0);
+    }
+}
+
+void use_cases::Install::move_profile_to_path() {
+  _profile_lay.move_profile_to(_current_profile_path);
+}
+
+use_cases::Install::Install(const std::string& curr_path) // inicializa ProfileLayout
+{
+    ensure_profile_layout(curr_path);
+    ensure_manifest(infra::fs::file::get_content(_profile_lay.manifest_path()));
+    _profile = _json_reader.get_profile();
+    _current_profile_path = _hyprprof_path.profile_path(_profile.name());
+    ensure_important_paths();
+    create_path();
+    move_profile_to_path();
+    rewrite_config_file();
+    infra::fs::dir::remove(curr_path);
+    infra::hypr_log::ok("profile installed!");
+}
