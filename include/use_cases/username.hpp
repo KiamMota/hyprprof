@@ -9,7 +9,7 @@ namespace use_cases
     private:
 
     public:
-      Username(const std::string& username);
+      Username();
 };
 
 
