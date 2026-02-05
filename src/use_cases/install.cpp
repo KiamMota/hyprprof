@@ -69,7 +69,7 @@ void use_cases::Install::create_profile_path(bool overwrite) {
 }
 
 void use_cases::Install::finalize_profile_path() {
-    fs::dir::copy(_current_path, _current_profile_path); // _current_profile_path = ~/.config/hyprprof/omniarch
+    fs::dir::copy(_current_path, _profile_path_in_hyprprof_path); 
 }
 
 
@@ -84,7 +84,7 @@ use_cases::Install::Install(const std::string& curr_path, bool overwrite)
     ensure_manifest_content(
         fs::file::get_content(profile::ProfileLayout::manifest_path(_current_path)));
     _ProfileModel = _ManifestReader.get_profile();
-    _current_profile_path = core::HyprprofPath::get_path(_ProfileModel.name());
+    _profile_path_in_hyprprof_path = core::HyprprofPath::get_path(_ProfileModel.name());
     create_profile_path(overwrite);
     finalize_profile_path();
     rewrite_config_file();
