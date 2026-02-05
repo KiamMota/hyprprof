@@ -6,6 +6,7 @@
 #include <filesystem>
 
 namespace hypr_log {
+
 template <typename... Args>
 void log(const std::string& s, Args&&... args) {
     std::cout << "\033[47;30m" << "hyprprof:" << "\033[0m" << " "; 
