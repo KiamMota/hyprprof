@@ -38,7 +38,7 @@ inline void file_not_exists(const std::string& file_path)
 }
 template <typename... Args>
 inline void ok(const std::string& s, Args&&... args) {
-    std::cout << "\033[42;30m" << "hyprprof ok:" << "\033[0m" << " "; // fundo verde, texto preto
+    std::cout << "\033[42;30m" << "hyprprof:" << "\033[0m" << " "; // fundo verde, texto preto
     std::cout << s;
     (std::cout << ... << args);
     std::cout << "\n";
