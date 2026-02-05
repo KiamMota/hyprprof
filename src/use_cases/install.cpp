@@ -69,7 +69,6 @@ void use_cases::Install::finalize_profile_path() {
 use_cases::Install::Install(const std::string& curr_path, bool overwrite)
     : _current_path(fs::dir::get_absolute(curr_path)) {
 
-    std::cout << _current_path << std::endl;
     TimeStamp tm{};
     tm.start();
     ensure_required_paths();
