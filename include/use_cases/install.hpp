@@ -3,7 +3,7 @@
 
 #include "json/global_config.hpp"
 #include "json/json_manifest_reader.hpp"
-#include "profile/profile.hpp"
+#include "profile/profile_model.hpp"
 #include <string>
 namespace use_cases
 {

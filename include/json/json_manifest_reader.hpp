@@ -1,7 +1,7 @@
 #ifndef JSON_FILE_PARSER_HPP
 #define JSON_FILE_PARSER_HPP
 
-#include "profile/profile.hpp"
+#include "profile/profile_model.hpp"
 #include "rapidjson/document.h"
 #include <string>
 

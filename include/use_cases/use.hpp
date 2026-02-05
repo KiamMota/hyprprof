@@ -2,7 +2,7 @@
 #define USE_HPP
 
 #include "hyprprof_path.hpp"
-#include "profile/profile_layout.hpp"
+#include "profile_layout.hpp"
 #include "json/global_config.hpp"
 #include <string>
 namespace use_cases {
