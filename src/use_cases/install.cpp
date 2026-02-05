@@ -6,6 +6,7 @@
 #include "timestamp.hpp"
 #include "utils/log.hpp"
 #include "profile/profile_layout_exceptions.hpp"
+#include "json/global_config.hpp"
 #include "json/json_exceptions.hpp"
 #include "json/json_manifest_reader.hpp"
 #include <bits/types/cookie_io_functions_t.h>
@@ -50,7 +51,7 @@ void use_cases::Install::ensure_manifest_content(const std::string& string) {
 void use_cases::Install::rewrite_config_file() {
     if (core::HyprprofPath::has_config_file()) {
         std::string json = fs::file::get_content(core::HyprprofPath::config_path());
-        _GlobalConfig.set_json_context(json);
+        core::GlobalConfig::(json);
     }
 
     _GlobalConfig.set_current_profile(_current_path).set_username(_ProfileModel.name());

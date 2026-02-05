@@ -1,7 +1,7 @@
 #ifndef APP_SERVICE_HPP
 #define APP_SERVICE_HPP
 
-#include "json/global_config.hpp"
+#include "global_config.hpp"
 #include "json/json_manifest_reader.hpp"
 #include "profile/profile_model.hpp"
 #include <string>
@@ -11,7 +11,6 @@ namespace use_cases
   {
     private:
       json::JSONManifestReader _ManifestReader;
-      json::GlobalConfig _GlobalConfig;
       profile::Profile _ProfileModel;
       std::string _current_path;
       void ensure_required_paths();
