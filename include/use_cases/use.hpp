@@ -1,20 +1,18 @@
 #ifndef USE_HPP
 #define USE_HPP
 
-#include "hyprprof_path.hpp"
-#include "profile_layout.hpp"
 #include <string>
 namespace use_cases {
 class Use 
 {
   private:
-   profile::ProfileLayout _profile;
-  core::HyprprofPath _Paths;
-  bool ensure_current_profile_is_not_empty();
-  void ensure_bak_path();
-  void ensure_bak_manifest();
+    std::string _profile;
+    void check_first_time_using_hyprprof();
+    void ensure_profile_exists_in_hyprprof_path();  
+
   public:
-    Use(const std::string profile_name);
+
+    Use(const std::string& profile_name);
 
 
 
