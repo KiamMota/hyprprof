@@ -1,4 +1,4 @@
-#include "profile/profile.hpp"
+#include "profile/profile_model.hpp"
 #include "profile/exceptions.hpp"
 #include "profile/version_constraits_validator.hpp"
 #include <regex>

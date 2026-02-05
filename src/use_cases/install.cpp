@@ -89,4 +89,5 @@ use_cases::Install::Install(const std::string& curr_path, bool overwrite)
     hypr_log::ok("installed.");
     std::cout << "completed in: " << tm.to_string() << std::endl;
     std::cout << "profile created in: " << core::HyprprofPath::get_path(_ProfileModel.name()) << std::endl;
+    std::cout << "to use: hyprprof use " << _ProfileModel.name() << std::endl;
 }
