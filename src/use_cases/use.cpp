@@ -25,7 +25,7 @@ void Use::check_first_time_using_hyprprof() {
     }
     hypr_log::warn("no profile setted.");
     hypr_log::warn("all current system settings will be queued in ",
-                   core::HyprprofPath::path() + "/_bak");
+                   core::HyprprofPath::backup_path());
 
   }
 
