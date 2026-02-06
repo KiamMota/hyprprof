@@ -51,9 +51,13 @@ std::list<std::string> core::HyprprofPath::profile_paths() noexcept {
 }
 
 void core::HyprprofPath::create_required_paths() {
+
     std::string config_path = path() + "/.config.json";
     std::string _bak_path = path() + "/.backup/";
     std::string backup_meta_json = path() + "/.backup/.meta.json";
+
+    if(!hprof_fs::dir::exists(HyprprofPath::path()))
+      hprof_fs::dir::create(HyprprofPath::path());
 
     if (!hprof_fs::file::exists(config_path))
         hprof_fs::file::create(config_path);
