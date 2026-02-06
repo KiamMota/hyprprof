@@ -1,11 +1,11 @@
 #include "json/json_manifest_reader.hpp"
-#include "dotconfig.hpp"
+#include "dotfile.hpp"
+#include "fs/dotconfig.hpp"
 #include "profile/profile_model.hpp"
 #include "json/json_schema.hpp"
 #include "json/json_schema_validator.hpp"
 #include <list>
 #include <string>
-#include <unistd.h>
 
 json::JSONManifestReader::JSONManifestReader() { _json_schema = HYPRPROF_JSON_SCHEMA; }
 
@@ -39,12 +39,12 @@ const profile::Profile json::JSONManifestReader::get_profile() {
     return prof;
 }
 
-const std::list<core::Dotconfig> json::JSONManifestReader::get_dotconfigs()
+const std::list<core::DotFile> json::JSONManifestReader::get_dotconfigs()
 {
-    std::list<core::Dotconfig> dotconfigs;
+    std::list<core::DotFile> dotconfigs;
 
     if (!_document.HasMember("dotfiles") || !_document["dotfiles"].IsObject())
-        return dotconfigs; // lista vazia se não existir
+        return dotconfigs;
 
     const auto& dotfiles = _document["dotfiles"].GetObject();
 
@@ -53,14 +53,29 @@ const std::list<core::Dotconfig> json::JSONManifestReader::get_dotconfigs()
         const char* name = it->name.GetString();
         const auto& value = it->value;
 
-        core::Dotconfig dot;
+        core::DotFile dot;
         dot.set_name(name);
 
         if (value.HasMember("pack") && value["pack"].IsString())
             dot.set_pack(value["pack"].GetString());
 
         if (value.HasMember("target") && value["target"].IsString())
-            dot.set_target_path(value["target"].GetString());
+        {
+            std::string target = value["target"].GetString();
+
+            const std::string dotconfig_path = hprof_fs::dotconfig::get_config_path(); 
+
+            if (target.rfind("$DOTCONFIG", 0) == 0)
+            {
+                target.replace(0, std::string("$DOTCONFIG").size(), dotconfig_path);
+            }
+            else if (target.rfind("~/", 0) == 0)
+            {
+                target.replace(0, 1, std::getenv("HOME"));
+            }
+
+            dot.set_target_path(target);
+        }
 
         if (value.HasMember("source") && value["source"].IsString())
             dot.set_source_path(value["source"].GetString());
@@ -70,5 +85,4 @@ const std::list<core::Dotconfig> json::JSONManifestReader::get_dotconfigs()
 
     return dotconfigs;
 }
-
 

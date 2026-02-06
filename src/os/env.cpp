@@ -1,8 +1,9 @@
 #include "os/env.hpp"
 #include "enum/package_manager_enum.hpp"
 #include "enum/xdg_session_type_enum.hpp"
-#include "fs/file.hpp"
 #include "utils/log.hpp"
+#include "fs/file.hpp"
+#include "fs/dir.hpp"
 #include <cstdlib>
 #include <pwd.h>
 #include <string>
@@ -10,7 +11,7 @@
 
 std::string os::detect_distro_str()
 {
-  std::string os_rel = fs::file::get_content("/etc/os-release");
+  std::string os_rel = hprof_fs::file::get_content("/etc/os-release");
 
   int pos = os_rel.find("ID=");
   /* to 'ID=' */

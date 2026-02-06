@@ -6,7 +6,7 @@
 
 #define CONFIG_PATH "~/.config"
 
-namespace fs {
+namespace hprof_fs {
 namespace dir {
 bool create(const std::string& path_name);
 bool exists(const std::string& path_name);

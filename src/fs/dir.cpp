@@ -7,21 +7,21 @@
 #include <string>
 #include <system_error>
 
-bool fs::dir::exists(const std::string& path_name) {
+bool hprof_fs::dir::exists(const std::string& path_name) {
     return std::filesystem::exists(path_name) ? true : false;
 }
 
-bool fs::dir::is_emp(const std::string& path_name) {
+bool hprof_fs::dir::is_emp(const std::string& path_name) {
     return std::filesystem::is_empty(path_name) ? true : false;
 }
 
-bool fs::dir::move(const std::string& src, const std::string& new_path) {
+bool hprof_fs::dir::move(const std::string& src, const std::string& new_path) {
     std::error_code ec;
     std::filesystem::rename(src, new_path, ec);
     return ec ? true : false;
 }
 
-bool fs::dir::copy(const std::string& src, const std::string& new_path) {
+bool hprof_fs::dir::copy(const std::string& src, const std::string& new_path) {
     try {
         std::filesystem::path source(src);
         std::filesystem::path dest(new_path);
@@ -52,12 +52,12 @@ bool fs::dir::copy(const std::string& src, const std::string& new_path) {
     }
 }
 
-std::string fs::dir::get_absolute(const std::string& src) {
+std::string hprof_fs::dir::get_absolute(const std::string& src) {
     return std::filesystem::absolute(src).string();
 }
 
-bool fs::dir::make_bak(const std::string& file_src) {
-    std::filesystem::path src_path = fs::dir::get_absolute(file_src);
+bool hprof_fs::dir::make_bak(const std::string& file_src) {
+    std::filesystem::path src_path = hprof_fs::dir::get_absolute(file_src);
 
     if (!std::filesystem::exists(src_path)) {
         hypr_log::file_not_exists(src_path);
@@ -77,11 +77,11 @@ bool fs::dir::make_bak(const std::string& file_src) {
     return true;
 }
 
-bool fs::dir::is_dir(const std::string& src) {
+bool hprof_fs::dir::is_dir(const std::string& src) {
     return std::filesystem::is_directory(src) ? true : false;
 }
 
-bool fs::dir::create(const std::string& path_name) {
+bool hprof_fs::dir::create(const std::string& path_name) {
     std::error_code ec;
     if (std::filesystem::create_directories(path_name, ec))
         return true;
@@ -90,9 +90,9 @@ bool fs::dir::create(const std::string& path_name) {
     return {};
 }
 
-const std::list<std::string> fs::dir::list_files(const std::string& path) {
+const std::list<std::string> hprof_fs::dir::list_files(const std::string& path) {
     static std::list<std::string> empty;
-    if (!fs::dir::exists(path))
+    if (!hprof_fs::dir::exists(path))
         return empty;
     std::list<std::string> files;
     for (auto& entry : std::filesystem::directory_iterator(path)) {
@@ -102,7 +102,7 @@ const std::list<std::string> fs::dir::list_files(const std::string& path) {
     return files;
 }
 
-bool fs::dir::remove(const std::string &path)
+bool hprof_fs::dir::remove(const std::string &path)
 {
   return std::filesystem::remove_all(path);
 }

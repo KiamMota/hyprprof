@@ -14,9 +14,9 @@ core::ConfigFile::ConfigFile()
 const std::string core::ConfigFile::get_config_content()
 {
   std::string path = HyprprofPath::config_path();
-  if(!fs::file::exists(path))
+  if(!hprof_fs::file::exists(path))
     throw std::runtime_error("config.json doesn't exists!");
-  return fs::file::get_content(path);
+  return hprof_fs::file::get_content(path);
 }
 
 const std::string core::ConfigFile::get_current_profile_name()
@@ -37,7 +37,7 @@ const std::string core::ConfigFile::get_username()
 
 void core::ConfigFile::set_file_content(const std::string &content)
 {
-  fs::file::overwrite(HyprprofPath::config_path(), content);
+  hprof_fs::file::overwrite(HyprprofPath::config_path(), content);
 }
 
 void core::ConfigFile::change_username(const std::string &name)

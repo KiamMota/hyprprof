@@ -1,60 +1,78 @@
 #include "fs/file.hpp"
 #include "fs/dir.hpp"
+
 #include <fstream>
 #include <stdexcept>
 #include <string>
 #include <filesystem>
 #include <system_error>
 
-bool fs::file::exists(const std::string& file_name) {
-    return std::filesystem::exists(std::filesystem::path(file_name));
+namespace hprof_fs::file {
+
+bool exists(const std::string& file_name)
+{
+    return std::filesystem::exists(file_name);
 }
 
-std::string fs::file::get_content(const std::string& file_name) {
-    if (!fs::file::exists(file_name))
+std::string get_content(const std::string& file_name)
+{
+    if (!exists(file_name))
         return {};
-    std::ifstream file(file_name);
-    std::string file_contents{std::istreambuf_iterator<char>(file),
-                              std::istreambuf_iterator<char>()};
-    return file_contents;
+
+    std::ifstream file(file_name, std::ios::in | std::ios::binary);
+    if (!file.is_open())
+        throw std::runtime_error("cannot open file: " + file_name);
+
+    return std::string(
+        std::istreambuf_iterator<char>(file),
+        std::istreambuf_iterator<char>()
+    );
 }
 
-bool fs::file::is_file(const std::string& file_name) {
-    std::string all_path = std::filesystem::absolute(file_name);
-    return std::filesystem::is_regular_file(all_path);
+bool is_file(const std::string& file_name)
+{
+    return std::filesystem::is_regular_file(
+        std::filesystem::absolute(file_name)
+    );
 }
 
-bool fs::file::create(const std::string& file) {
+bool create(const std::string& file)
+{
     std::ofstream outf(file);
-    if (!outf.is_open()) {
-        throw std::runtime_error("file is not open!");
-        return false;
-    }
-    outf.close();
+    if (!outf.is_open())
+        throw std::runtime_error("cannot create file: " + file);
+
     return true;
 }
 
-bool fs::file::move(const std::string& src, const std::string& new_scr) {
+bool move(const std::string& src, const std::string& dest)
+{
     std::error_code ec;
-    std::filesystem::path abs_src = fs::dir::get_absolute(src);
-    std::filesystem::rename(abs_src, new_scr, ec);
-    return !ec ? true : false;
+    std::filesystem::rename(
+        hprof_fs::dir::get_absolute(src),
+        dest,
+        ec
+    );
+    return !ec;
 }
 
-void fs::file::insert(const std::string& file_src, const std::string& content) {
+void insert(const std::string& file_src, const std::string& content)
+{
     std::ofstream file(file_src, std::ios::app);
-    if (!file.is_open()) {
-        throw std::runtime_error("Não foi possível abrir o arquivo: " + file_src);
-    }
-
-    file << content;
-    file.close();
-}
-
-void fs::file::overwrite(const std::string& file_src, const std::string& content) {
-    std::ofstream file(file_src, std::ios::out); // sobrescreve
     if (!file.is_open())
-        throw std::runtime_error("cannot open: " + file_src);
+        throw std::runtime_error("cannot open file: " + file_src);
 
     file << content;
 }
+
+void overwrite(const std::string& file_src, const std::string& content)
+{
+    std::ofstream file(file_src, std::ios::out | std::ios::trunc);
+    if (!file.is_open())
+        throw std::runtime_error("cannot open file: " + file_src);
+
+    file << content;
+}
+
+} // namespace hprof_fs::file
+

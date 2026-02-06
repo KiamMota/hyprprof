@@ -1,7 +1,7 @@
 #ifndef JSON_FILE_PARSER_HPP
 #define JSON_FILE_PARSER_HPP
 
-#include "dotconfig.hpp"
+#include "dotfile.hpp"
 #include "profile/profile_model.hpp"
 #include "rapidjson/document.h"
 #include <list>
@@ -18,7 +18,7 @@ class JSONManifestReader {
     JSONManifestReader();
     void run(const std::string& json_str);
     const profile::Profile get_profile();
-    const std::list<core::Dotconfig> get_dotconfigs();
+    const std::list<core::DotFile> get_dotconfigs();
     
 };
 } // namespace json

@@ -1,8 +1,8 @@
-#ifndef DOTCONFIG_HPP
-#define DOTCONFIG_HPP
+#ifndef HPROF_FS_DOTCONFIG_HPP
+#define HPROF_FS_DOTCONFIG_HPP
 
 #include <string>
-namespace fs {
+namespace hprof_fs {
 namespace dotconfig {
 std::string get_config_path();
 bool exists(const std::string& app);
