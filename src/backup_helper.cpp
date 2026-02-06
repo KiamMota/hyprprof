@@ -47,7 +47,7 @@ void BackupHelper::write_in_metajson(const std::string& path, const std::string&
 
     meta_json_insert(buffer.GetString());
 }
-void BackupHelper::create_backup_path_and_register_in_meta_json(const std::string& src_path) {
+void BackupHelper::create_copy_backup_path_and_register_in_meta_json(const std::string& src_path) {
     std::string abs = hprof_fs::dir::get_absolute(src_path);
     std::string last_path = hprof_fs::dir::get_last_dir(abs);
 

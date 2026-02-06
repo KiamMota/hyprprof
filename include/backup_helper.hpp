@@ -13,7 +13,7 @@ namespace core
     public:
       static const std::string meta_json_path() noexcept;
       static const std::string meta_json_content();
-      static void create_backup_path_and_register_in_meta_json(const std::string& src_path);
+      static void create_copy_backup_path_and_register_in_meta_json(const std::string& src_path);
   };
 
 
