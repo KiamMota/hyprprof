@@ -21,6 +21,8 @@ namespace profile {
 
     static const std::string manifest_path(const std::string& path) noexcept;
     static const std::string manifest_content(const std::string& path);
+    static const std::string concat_dotfile_path(const std::string& src, const std::string& name) noexcept;
+    static bool has_this_dotfile(const std::string& path, const std::string& name) noexcept;
     static const std::string config_path(const std::string& path) noexcept;
     static const std::string readme_path(const std::string& path) noexcept;
     static const std::string waybar_path(const std::string& path) noexcept;

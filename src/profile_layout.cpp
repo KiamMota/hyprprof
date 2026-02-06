@@ -61,6 +61,16 @@ const std::string ProfileLayout::dotfiles_path(const std::string& path) noexcept
   return hprof_fs::dir::get_absolute(path) + "config/dotfiles"; 
 }
 
+const std::string ProfileLayout::concat_dotfile_path(const std::string &path, const std::string& name) noexcept
+{
+return hprof_fs::dir::get_absolute(path) + "/config/dotfiles/" + name;
+}
+
+bool ProfileLayout::has_this_dotfile(const std::string& path, const std::string &name) noexcept
+{
+  return hprof_fs::dir::exists(concat_dotfile_path(path, name)); 
+}
+
 const std::string ProfileLayout::manifest_content(const std::string &path)
 {
   return hprof_fs::file::get_content(manifest_path(path));
