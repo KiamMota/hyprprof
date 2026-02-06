@@ -1,0 +1,28 @@
+#ifndef DOTCONFIG_HPP
+#define DOTCONFIG_HPP
+
+#include <string>
+namespace core
+{
+  class Dotconfig
+  {
+    private: 
+      std::string _name;
+      std::string _pack;
+      std::string _target_path;
+      std::string _source_path;
+    public:
+      Dotconfig() = default;
+      Dotconfig& set_name(const std::string& name);
+      Dotconfig& set_pack(const std::string& pack);
+      Dotconfig& set_target_path(const std::string& path);
+      Dotconfig& set_source_path(const std::string& path);
+      const std::string& name() const noexcept;
+      const std::string& pack() const noexcept;
+      const std::string& target() const noexcept;
+      const std::string& source_path() const noexcept;
+    
+  };
+}
+
+#endif // DOTCONFIG_HPP

@@ -8,13 +8,6 @@
 #include "profile/profile_layout_exceptions.hpp"
 #include "json/json_exceptions.hpp"
 #include "json/json_manifest_reader.hpp"
-#include <bits/types/cookie_io_functions_t.h>
-#include <cstdlib>
-#include <iostream>
-#include <stdexcept>
-#include <string>
-#include <sys/types.h>
-#include <unistd.h>
 
 void use_cases::Install::ensure_profile_layout(const std::string& path) {
     try {
