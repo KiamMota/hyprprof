@@ -48,16 +48,6 @@ void Install::ensure_manifest_content(const std::string& string) {
     }
 }
 
-// Rewrite or create the configuration file to set the active profile.
-void Install::rewrite_config_file() {
-    if (core::ConfigFile::get_config_content().empty()) {
-        // If the config file does not exist, create it with the username empty and current profile set.
-        core::ConfigFile::create_file_content("", _ProfileModel.name());
-        return;
-    }
-    // If config exists, just change the current profile.
-    core::ConfigFile::change_current_profile(_ProfileModel.name());
-}
 
 // Create the folder for the profile inside the Hyprprof directory.
 void Install::create_profile_path(bool overwrite) {
@@ -101,7 +91,6 @@ Install::Install(const std::string& curr_path, bool overwrite)
     create_profile_path(overwrite); // Create the profile folder (with overwrite option if needed).
     finalize_profile_path();         // Copy the profile files into the Hyprprof path.
 
-    rewrite_config_file();           // Update or create the config file to point to the new profile.
 
     tm.stop();                       // Stop the timer.
 

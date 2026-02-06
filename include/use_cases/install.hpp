@@ -18,7 +18,6 @@ namespace use_cases
       void ensure_manifest_content(const std::string& string_file);
       void create_profile_path(bool overwrite);
       void finalize_profile_path();
-      void rewrite_config_file(); 
       const std::string load_from_file(const std::string& file);
       std::string _profile_path_in_hyprprof_path;  
 public:
