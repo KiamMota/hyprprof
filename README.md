@@ -1,6 +1,24 @@
-# HyprProf — Your Hyprland Super Toolkit 🛠️
+# HyprProf — Hyprland's profile manager 🛠️
 
-Hyprprof is like a magic wand for your Hyprland setup. It lets you pack all your favorite configs, dotfiles, and tools into a neat, shareable profile so you can summon your perfect workspace anywhere.
+## What is a Profile?
+
+**Definition:**
+A profile in **HyprProf** is a structured representation of a complete Hyprland environment. It serves as a domain-specific abstraction that allows the system to manage, deploy, and share environments reliably and reproducibly.
+
+
+### Core Components of a Profile
+
+* **Name** — unique identifier of the profile.
+* **Version** — version of the profile, useful for tracking updates.
+* **Authors** — creators or maintainers of the profile.
+* **Description** — textual explanation of the profile's purpose.
+* **Hypr Configuration (`hypr/`)** — settings and dotfiles for the Hyprland compositor.
+* **Wayland Constraints (`wayland/`)** — compatible Wayland versions.
+* **Dotfiles** — additional configurations for terminal, bar, launcher, and other components.
+  
+**Purpose:**
+Profiles allow **HyprProf** to automate the deployment of complete environments, ensure consistency across systems, and facilitate sharing or version control of user setups.
+
 
 ## Features ✨
 
