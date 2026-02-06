@@ -10,6 +10,7 @@ class Use
     std::string _profile_name;
     std::string _profile_path;
     json::JSONManifestReader _manifest;
+    void change_config_file();
     void check_first_time_using_hyprprof();
     void ensure_profile_exists_in_hyprprof_path();
     void copy_hypr_path();

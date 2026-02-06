@@ -2,7 +2,6 @@
 #include "backup_helper.hpp"
 #include "config_file.hpp"
 #include "fs/dotconfig.hpp"
-#include "fs/file.hpp"
 #include "hyprprof_path.hpp"
 #include "os/hyprctl.hpp"
 #include "profile_layout.hpp"
@@ -11,6 +10,11 @@
 #include <cstdlib>
 
 namespace use_cases {
+
+void Use::change_config_file()
+{
+  core::ConfigFile::change_current_profile(_profile_name);
+}
 
 void Use::ensure_profile_exists_in_hyprprof_path() {
     if (!core::HyprprofPath::path_exists_in_hyprprof_path(_profile_name)) {
