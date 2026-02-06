@@ -49,6 +49,9 @@ void execute_fork(const std::string& command);
  */
 Result execute_script(const std::string& script_path);
 
+void install_pack(const std::string& pack);
+bool pack_exists(const std::string& pack);
+
 } // namespace sys
 
 #endif // CMD_HPP

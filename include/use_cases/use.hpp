@@ -13,6 +13,7 @@ class Use
     void change_config_file();
     void check_first_time_using_hyprprof();
     void ensure_profile_exists_in_hyprprof_path();
+    void ensure_dotfile_packs();
     void copy_hypr_path();
     void copy_waybar_path();
     void copy_dotfile_paths();

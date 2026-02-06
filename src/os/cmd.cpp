@@ -1,5 +1,7 @@
 #include "os/cmd.hpp"
+#include "os/env.hpp"
 #include "os/exception.hpp"
+#include "utils/log.hpp"
 
 #include <string>
 #include <sys/stat.h>
@@ -98,3 +100,45 @@ os::Result os::execute_script(const std::string& script_path) {
     }
     return execute_pipe(script_path);
 }
+
+void os::install_pack(const std::string &pack)
+{
+    std::string pkg_mgr = os::detect_package_manager_str();
+    std::string cmd;
+
+    if (pkg_mgr == "pacman")       cmd = "sudo pacman -S --noconfirm " + pack;
+    else if (pkg_mgr == "apt")     cmd = "sudo apt install -y " + pack;
+    else if (pkg_mgr == "dnf")     cmd = "sudo dnf install -y " + pack;
+    else if (pkg_mgr == "yum")     cmd = "sudo yum install -y " + pack;
+    else if (pkg_mgr == "zypper")  cmd = "sudo zypper install -y " + pack;
+    else if (pkg_mgr == "apk")     cmd = "sudo apk add " + pack;
+    else if (pkg_mgr == "xbps")    cmd = "sudo xbps-install -Sy " + pack;
+    else {
+        hypr_log::err("Package manager not supported for installation.");
+        return;
+    }
+
+    os::execute_pipe(cmd);
+}
+
+bool os::pack_exists(const std::string &pack)
+{
+    std::string pkg_mgr = os::detect_package_manager_str();
+    std::string cmd;
+
+    if (pkg_mgr == "pacman")       cmd = "pacman -Q " + pack + " >/dev/null 2>&1";
+    else if (pkg_mgr == "apt")     cmd = "dpkg -s " + pack + " >/dev/null 2>&1";
+    else if (pkg_mgr == "dnf")     cmd = "dnf list installed " + pack + " >/dev/null 2>&1";
+    else if (pkg_mgr == "yum")     cmd = "yum list installed " + pack + " >/dev/null 2>&1";
+    else if (pkg_mgr == "zypper")  cmd = "zypper se --installed-only " + pack + " >/dev/null 2>&1";
+    else if (pkg_mgr == "apk")     cmd = "apk info " + pack + " >/dev/null 2>&1";
+    else if (pkg_mgr == "xbps")    cmd = "xbps-query -l | grep -qx " + pack;
+    else {
+        hypr_log::err("Package manager not supported for checking package existence.");
+        return false;
+    }
+
+    return os::execute_pipe(cmd).error_code == 0;
+}
+
+

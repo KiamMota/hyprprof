@@ -43,6 +43,9 @@ void Use::copy_hypr_path()
     hprof_fs::dir::copy(profile::ProfileLayout::hypr_path(_profile_path), hypr_sys_path);
 }
 
+void Use::ensure_dotfile_packs()
+{
+}
 
 void Use::copy_waybar_path() {
 
