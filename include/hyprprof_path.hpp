@@ -1,3 +1,21 @@
+// ┌──────────────┐                                                                  
+// │ HyprprofPath │                                                                  
+// └┬─────────────┘                                                                  
+//  │                                                                                
+//  │ This is a static object that represents                                        
+//  │ the system's ~/.config/hyprprof directory.                                     
+//  │                                                                                
+//  │    Methods:                                                                    
+//  │                                                                                
+//  ├───────► root_path() returns the root hyprprof path.                            
+//  ├───────► backup_path() returns the backup path in hyprprof path.                
+//  ├───────► config_file_path() returns the config file                             
+//  ├───────► has_app_path(string) returnst true if path exists                      
+//  ├───────► make_app_path(string) returns string of path in hyprprof path          
+//  ├───────► profiles() returns Returns a list of profiles within the hyprprof path.
+//  └───────► create_path_in_hyprprof_path(string) create a path in hyprprofpath.    
+
+
 #ifndef HYPRPROF_PATH_HPP
 #define HYPRPROF_PATH_HPP
 
