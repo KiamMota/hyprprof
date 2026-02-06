@@ -1,45 +1,82 @@
-# Hyprprof Profile Layout
+# HyprProf Profile Layout — Beginner-Friendly Guide
 
-This document describes the correct structure of a Hyprprof profile to ensure functionality and compatibility.
+This guide explains the structure of a HyprProf profile in a simple way, making it easier to create, use, and share Hyprland setups.
 
-## Directory and File Structure
+---
+
+## What is a HyprProf Profile?
+
+A **profile** in HyprProf is a packaged configuration of your Hyprland environment. It contains all the files and settings needed to quickly apply a consistent setup across systems. Think of it as a blueprint that tells HyprProf what to configure, where, and how.
+
+Each profile is structured so that the program can read it automatically, apply dotfiles, Hypr configurations, and optional resources like wallpapers or fonts.
+
+---
+
+## Profile Directory Structure
+
+Every profile should follow this layout:
 
 ```
-profile_name/
-├── hyprprof.json            # Main profile configuration file (mandatory)
-├── config/                  # Mandatory folder containing profile-specific configurations
-│   ├── waybar/              # Optional folder for Waybar configurations
-│   ├── hypr/                # Optional folder for Hyprland configurations
-│   └── dotfiles/
-├── assets/                  # Optional folder for additional resources (backgrounds, fonts, icons, etc.)
-└── README.md                # Optional file for documentation or profile description
+profile_name/              # Root folder named after your profile
+├── hyprprof.json          # Main configuration file (mandatory)
+├── config/                # Folder for application-specific configs (mandatory)
+│   ├── hypr/              # Hyprland configs (optional)
+│   ├── waybar/            # Waybar configs (optional)
+│   └── dotconfigs/        # Additional dotfiles (optional)
+├── assets/                # Extra resources like fonts, icons, wallpapers (optional)
+└── README.md              # Profile description or instructions (optional)
 ```
 
-## Components Description
+This structure allows HyprProf to know exactly where to look for each configuration type.
 
-### hyprprof.json (mandatory)
+---
 
-* Contains the profile's configuration schema.
-* Must follow the format described in the [Hyprprof JSON documentation](https://github.com/KiamMota/hyprprof/blob/main/doc/json.md).
+## File and Folder Details
 
-### config/ (mandatory)
+### `hyprprof.json` (mandatory)
 
-* Contains all necessary configuration files for the profile.
-* Can include subfolders like `waybar/` or `hypr/` for specific application setups.
-* Can include `dotconfigs/` for system dotfiles.
+* Contains metadata about the profile: name, authors, description, version, and constraints for Hyprland or Wayland.
+* Must follow HyprProf's JSON schema to work correctly.
+* Example fields:
 
-### dotconfigs/ (optional)
+  * `hyprprof.name`
+  * `hyprprof.version`
+  * `hyprprof.authors`
+  * `dotfiles` and `version_constraints`
 
-* Holds dotfiles for applications such as `kitty`, `neovim`, `zsh`, etc.
-* Hyprprof will copy these into the user’s system configuration folder when the profile is used.
+### `config/` (mandatory)
 
-### assets/ (optional)
+* Holds the configuration files that HyprProf will deploy.
+* Can have subfolders for specific applications:
 
-* Contains additional resources like backgrounds, fonts, or icons.
-* Useful for enhancing the visual appearance of the profile.
+  * `hypr/` — Hyprland configuration files
+  * `waybar/` — Waybar status bar configuration
+  * `dotconfigs/` — Other application dotfiles like terminal, editor, or shell
 
-### README.md (optional)
+### `dotconfigs/` (optional)
 
-* Provides a description of the profile or instructions for use.
-* Helps others understand the purpose and setup of the profile.
-****
+* Contains dotfiles for user applications.
+* HyprProf will copy them into the proper system folders when the profile is applied.
+* Examples include:
+
+  * `kitty` terminal configs
+  * `neovim` or `vim` configs
+  * `zsh` or `bash` shell configs
+
+### `assets/` (optional)
+
+* Store extra resources here like:
+
+  * Wallpapers
+  * Fonts
+  * Icons
+* These can enhance the appearance of your environment but are not required for functionality.
+
+### `README.md` (optional)
+
+* Provides a human-readable explanation of the profile.
+* Can include instructions, purpose, or notes for sharing with others.
+
+---
+
+By following this structure, anyone can create a profile that HyprProf understands, making it easier to manage and distribute your Hyprland setups consistently.
