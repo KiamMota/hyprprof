@@ -11,7 +11,7 @@ core::ConfigFile::ConfigFile()
 {
 }
 
-const std::string core::ConfigFile::get_config_content()
+const std::string core::ConfigFile::get_content()
 {
   std::string path = HyprprofPath::config_path();
   if(!hprof_fs::file::exists(path))
@@ -21,7 +21,7 @@ const std::string core::ConfigFile::get_config_content()
 
 const std::string core::ConfigFile::get_current_profile_name()
 {
-  std::string json = get_config_content();
+  std::string json = get_content();
   rapidjson::Document doc;
   doc.Parse(json.c_str());
   return doc["current_profile"].GetString();
@@ -29,7 +29,7 @@ const std::string core::ConfigFile::get_current_profile_name()
 
 const std::string core::ConfigFile::get_username()
 {
-  std::string json = get_config_content();
+  std::string json = get_content();
   rapidjson::Document doc;
   doc.Parse(json.c_str());
   return doc["username"].GetString();
@@ -42,7 +42,7 @@ void core::ConfigFile::set_file_content(const std::string &content)
 
 void core::ConfigFile::change_username(const std::string &name)
 {
-    std::string json = get_config_content();
+    std::string json = get_content();
     rapidjson::Document doc;
     doc.Parse(json.c_str());
 
@@ -61,14 +61,24 @@ void core::ConfigFile::change_username(const std::string &name)
 
 void core::ConfigFile::change_current_profile(const std::string &curr)
 {
-    std::string json = get_config_content();
+    std::string json;
+    if (hprof_fs::file::exists(HyprprofPath::config_path()))
+        json = get_content();
+
     rapidjson::Document doc;
-    doc.Parse(json.c_str());
+    if (json.empty() || doc.Parse(json.c_str()).HasParseError())
+        doc.SetObject(); // arquivo vazio ou inválido → criar objeto novo
+
+    auto& allocator = doc.GetAllocator();
 
     if (!doc.HasMember("current_profile"))
-        doc.AddMember("current_profile", "", doc.GetAllocator());
+        doc.AddMember("current_profile", rapidjson::Value(curr.c_str(), allocator), allocator);
+    else
+        doc["current_profile"].SetString(curr.c_str(), allocator);
 
-    doc["current_profile"].SetString(curr.c_str(), doc.GetAllocator());
+    // Se não existir username, adiciona vazio
+    if (!doc.HasMember("username"))
+        doc.AddMember("username", "", allocator);
 
     rapidjson::StringBuffer buffer;
     rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
@@ -76,6 +86,7 @@ void core::ConfigFile::change_current_profile(const std::string &curr)
 
     set_file_content(buffer.GetString());
 }
+
 
 void core::ConfigFile::create_file_content(const std::string &username, const std::string &current_profile)
 {

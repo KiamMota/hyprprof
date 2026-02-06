@@ -15,6 +15,10 @@ namespace use_cases {
 // Change the currently active profile in the configuration file to this profile.
 void Use::change_config_file() 
 {
+  if(core::ConfigFile::get_content().empty())
+  {
+    core::ConfigFile::create_file_content("", "");
+  }
     // Log which profile is currently being set.
     hypr_log::ok("current profile: ", _profile_name);
 
@@ -37,6 +41,12 @@ void Use::ensure_profile_exists_in_hyprprof_path() {
 // Check if there is a configuration file and if the requested profile can be used.
 void Use::check_config_file() {
     // If there is no current profile set:
+    if(core::ConfigFile::get_content().empty())
+    {
+      hypr_log::warn("no profile setted");
+    core::ConfigFile::create_file_content("", "");
+      return;
+    }
     if (core::ConfigFile::get_current_profile_name().empty()) {
         // Warn the user that no profile is set.
         hypr_log::warn("no profile setted.");
@@ -152,6 +162,8 @@ Use::Use(const std::string& prof) {
 
     // Compute the absolute path to the profile directory.
     _profile_path = core::HyprprofPath::concat_str_path(_profile_name);
+
+    std::cout << profile::ProfileLayout::manifest_content(_profile_path);
 
     // Ensure the profile exists on disk.
     ensure_profile_exists_in_hyprprof_path();

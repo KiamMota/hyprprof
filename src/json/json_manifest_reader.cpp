@@ -11,10 +11,19 @@ json::JSONManifestReader::JSONManifestReader() { _json_schema = HYPRPROF_JSON_SC
 
 void json::JSONManifestReader::run(const std::string& json_str) {
     _json_str = json_str;
-    _document.Parse(_json_str.c_str());
     
+    _document.Parse(_json_str.c_str());
+    if (_document.HasParseError()) {
+        throw std::runtime_error("JSON parse error in profile manifest.");
+    }
+    if (!_document.IsObject()) {
+        throw std::runtime_error("Profile manifest JSON is not an object.");
+    }
+
+
     JSONSchemaValidator::validate_schema(_json_str, _json_schema);
 }
+
 
 const profile::Profile json::JSONManifestReader::get_profile() {
     profile::Profile prof{};

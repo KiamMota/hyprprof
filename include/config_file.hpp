@@ -28,7 +28,7 @@ public:
      * 
      * @return std::string The JSON or raw content of the configuration file.
      */
-    static const std::string get_config_content();
+    static const std::string get_content();
 
     /**
      * @brief Returns the username stored in the configuration file.

@@ -1,6 +1,7 @@
 #include "fs/dir.hpp"
 #include "fs/file.hpp"
 #include "profile/profile_layout_exceptions.hpp"
+#include <stdexcept>
 #include "profile_layout.hpp"
 
 
@@ -14,7 +15,7 @@ void ProfileLayout::check_required_paths(const std::string &path)
   std::string mainfest_path = manifest_path(path);
 
   if(!hprof_fs::file::exists(mainfest_path))
-      throw ProfileLayoutFileException("hyrprof.json");
+      throw ProfileLayoutFileException("hyprprof.json");
   if(!hprof_fs::dir::exists(config))
       throw ProfileLayoutDirException("config");
 }
@@ -25,11 +26,11 @@ bool ProfileLayout::has_dotfiles_path(const std::string& path) noexcept
 }
 bool ProfileLayout::has_hypr_path(const std::string& path) noexcept 
 { 
-  return false; 
+  return hprof_fs::dir::exists(hypr_path(path)); 
 }
 bool ProfileLayout::has_waybar_path(const std::string& path) noexcept 
 { 
-  return false; 
+  return hprof_fs::dir::exists(waybar_path(path)); 
 }
 bool ProfileLayout::has_readme_path(const std::string& path) noexcept { return false; }
 bool ProfileLayout::has_assets_path(const std::string& path) noexcept { return false; }
@@ -73,6 +74,8 @@ bool ProfileLayout::has_this_dotfile(const std::string& path, const std::string 
 
 const std::string ProfileLayout::manifest_content(const std::string &path)
 {
+  if(!hprof_fs::file::exists(manifest_path(path)))
+    throw std::runtime_error("manifest file doesnt exists!");
   return hprof_fs::file::get_content(manifest_path(path));
 }
 
