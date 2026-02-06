@@ -22,6 +22,9 @@ profile_name/              # Root folder named after your profile
 │   ├── waybar/            # Waybar configs (optional)
 │   └── dotconfigs/        # Additional dotfiles (optional)
 ├── assets/                # Extra resources like fonts, icons, wallpapers (optional)
+│   ├── bgs/
+│   ├── fonts/
+│   ├── icons/
 └── README.md              # Profile description or instructions (optional)
 ```
 
