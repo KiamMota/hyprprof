@@ -18,21 +18,15 @@ Commands:
 
   use
     Use the current configuration or a specific configuration by name.
-    Examples:
-      hyprprof use
-      hyprprof use <name>
 
   export <name>
     Export the current environment into a .hyprprof file.
-    Example: hyprprof export my_profile
 
-  show
+  using 
     Display information about the current profile.
-    Example: hyprprof show
 
   list
     Show all installed profiles.
-    Example: hyprprof list
 
   remove <name|current>
     Delete a profile from the system.
