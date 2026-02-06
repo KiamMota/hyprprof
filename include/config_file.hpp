@@ -5,9 +5,9 @@
 
 namespace core {
 
-class GlobalConfig {
+class ConfigFile {
 private:
-  GlobalConfig();
+  ConfigFile();
   public:
     static const std::string get_config_content();
     static const std::string get_username();

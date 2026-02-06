@@ -1,13 +1,11 @@
 #include "use_cases/install.hpp"
 #include "fs/dir.hpp"
 #include "fs/file.hpp"
-#include "global_config.hpp"
 #include "hyprprof_path.hpp"
 #include "profile_layout.hpp"
 #include "timestamp.hpp"
 #include "utils/log.hpp"
 #include "profile/profile_layout_exceptions.hpp"
-#include "global_config.hpp"
 #include "json/json_exceptions.hpp"
 #include "json/json_manifest_reader.hpp"
 #include <bits/types/cookie_io_functions_t.h>
@@ -45,11 +43,11 @@ void use_cases::Install::ensure_manifest_content(const std::string& string) {
 }
 
 void use_cases::Install::rewrite_config_file() {
-    if (core::GlobalConfig::get_config_content().empty()) {
-        core::GlobalConfig::create_file_content("", _ProfileModel.name());
+    if (core::ConfigFile::get_config_content().empty()) {
+        core::ConfigFile::create_file_content("", _ProfileModel.name());
         return;
     }
-    core::GlobalConfig::change_current_profile(_ProfileModel.name());
+    core::ConfigFile::change_current_profile(_ProfileModel.name());
 }
 
 void use_cases::Install::create_profile_path(bool overwrite) {

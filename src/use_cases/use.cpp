@@ -1,5 +1,5 @@
 #include "use_cases/use.hpp"
-#include "global_config.hpp"
+#include "config_file.hpp"
 #include "hyprprof_path.hpp"
 #include "utils/log.hpp"
 #include <cstdlib>
@@ -14,10 +14,10 @@ void Use::ensure_profile_exists_in_hyprprof_path() {
 }
 
 void Use::check_first_time_using_hyprprof() {
-    if (!core::GlobalConfig::get_current_profile_name().empty()) {
+    if (!core::ConfigFile::get_current_profile_name().empty()) {
         return;
     }
-    hypr_log::warn("is your first time using hyprprof.");
+    hypr_log::warn("no profile setted.");
     hypr_log::warn("all current system settings will be queued in ",
                    core::HyprprofPath::path() + "/_bak");
 

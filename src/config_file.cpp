@@ -3,15 +3,15 @@
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/prettywriter.h"
-#include "global_config.hpp"
+#include "config_file.hpp"
 #include <stdexcept>
 #include <string>
 
-core::GlobalConfig::GlobalConfig()
+core::ConfigFile::ConfigFile()
 {
 }
 
-const std::string core::GlobalConfig::get_config_content()
+const std::string core::ConfigFile::get_config_content()
 {
   std::string path = HyprprofPath::config_path();
   if(!fs::file::exists(path))
@@ -19,7 +19,7 @@ const std::string core::GlobalConfig::get_config_content()
   return fs::file::get_content(path);
 }
 
-const std::string core::GlobalConfig::get_current_profile_name()
+const std::string core::ConfigFile::get_current_profile_name()
 {
   std::string json = get_config_content();
   rapidjson::Document doc;
@@ -27,7 +27,7 @@ const std::string core::GlobalConfig::get_current_profile_name()
   return doc["username"].GetString();
 }
 
-const std::string core::GlobalConfig::get_username()
+const std::string core::ConfigFile::get_username()
 {
   std::string json = get_config_content();
   rapidjson::Document doc;
@@ -35,12 +35,12 @@ const std::string core::GlobalConfig::get_username()
   return doc["current_profile"].GetString();
 }
 
-void core::GlobalConfig::set_file_content(const std::string &content)
+void core::ConfigFile::set_file_content(const std::string &content)
 {
   fs::file::overwrite(HyprprofPath::config_path(), content);
 }
 
-void core::GlobalConfig::change_username(const std::string &name)
+void core::ConfigFile::change_username(const std::string &name)
 {
     std::string json = get_config_content();
     rapidjson::Document doc;
@@ -59,7 +59,7 @@ void core::GlobalConfig::change_username(const std::string &name)
     set_file_content(buffer.GetString());
 }
 
-void core::GlobalConfig::change_current_profile(const std::string &curr)
+void core::ConfigFile::change_current_profile(const std::string &curr)
 {
     std::string json = get_config_content();
     rapidjson::Document doc;
@@ -77,7 +77,7 @@ void core::GlobalConfig::change_current_profile(const std::string &curr)
     set_file_content(buffer.GetString());
 }
 
-void core::GlobalConfig::create_file_content(const std::string &username, const std::string &current_profile)
+void core::ConfigFile::create_file_content(const std::string &username, const std::string &current_profile)
 {
     rapidjson::Document doc;
     doc.SetObject(); 

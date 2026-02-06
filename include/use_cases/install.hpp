@@ -1,7 +1,7 @@
 #ifndef APP_SERVICE_HPP
 #define APP_SERVICE_HPP
 
-#include "global_config.hpp"
+#include "config_file.hpp"
 #include "json/json_manifest_reader.hpp"
 #include "profile/profile_model.hpp"
 #include <string>
