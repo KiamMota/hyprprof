@@ -57,10 +57,10 @@ Use::Use(const std::string& prof)
   TimeStamp tm{};
   tm.start();
     _profile_name = prof;
-    _profile_path = core::HyprprofPath::concat_str_path(_profile_path);
+    _profile_path = core::HyprprofPath::concat_str_path(_profile_name);
     ensure_profile_exists_in_hyprprof_path();
     check_first_time_using_hyprprof();
-    _manifest.run(hprof_fs::file::get_content(_profile_path));
+    _manifest.run(profile::ProfileLayout::manifest_content(_profile_path));
     copy_hypr_path();
     copy_waybar_path();
     copy_dotfile_paths();

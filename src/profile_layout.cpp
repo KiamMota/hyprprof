@@ -61,6 +61,11 @@ const std::string ProfileLayout::dotfiles_path(const std::string& path) noexcept
   return hprof_fs::dir::get_absolute(path) + "config/dotfiles"; 
 }
 
+const std::string ProfileLayout::manifest_content(const std::string &path)
+{
+  return hprof_fs::file::get_content(manifest_path(path));
+}
+
 const std::string ProfileLayout::assets_path(const std::string& path) noexcept { 
   return hprof_fs::dir::get_absolute(path) + "/assets"; 
 }
