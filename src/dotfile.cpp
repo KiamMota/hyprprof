@@ -44,7 +44,7 @@ const std::string& DotFile::target() const noexcept
     return _target_path;
 }
 
-const std::string& DotFile::source_path() const noexcept
+const std::string& DotFile::source() const noexcept
 {
     return _source_path;
 }

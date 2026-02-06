@@ -1,6 +1,8 @@
 #include "use_cases/use.hpp"
 #include "config_file.hpp"
+#include "fs/file.hpp"
 #include "hyprprof_path.hpp"
+#include "profile_layout.hpp"
 #include "utils/log.hpp"
 #include <cstdlib>
 
@@ -22,10 +24,16 @@ void Use::check_first_time_using_hyprprof() {
                    core::HyprprofPath::path() + "/_bak");
 
   }
-Use::Use(const std::string& prof) {
+Use::Use(const std::string& prof)
+{
     _profile = prof;
     ensure_profile_exists_in_hyprprof_path();
     check_first_time_using_hyprprof();
-}
 
+  std::string path = profile::ProfileLayout::manifest_path(core::HyprprofPath::concat_str_path(_profile));
+  _manifest.run(hprof_fs::file::get_content(path));
+
+  
+
+}
 } // namespace use_cases

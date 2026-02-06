@@ -20,7 +20,7 @@ namespace core
       const std::string& name() const noexcept;
       const std::string& pack() const noexcept;
       const std::string& target() const noexcept;
-      const std::string& source_path() const noexcept;
+      const std::string& source() const noexcept;
     
   };
 }

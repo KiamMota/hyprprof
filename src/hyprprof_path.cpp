@@ -37,7 +37,7 @@ const std::string core::HyprprofPath::concat_str_path(const std::string& path) n
 
 void core::HyprprofPath::create_required_paths() {
     std::string config_path = path() + "/config.json";
-    std::string _bak_path = path() + "/_bak/";
+    std::string _bak_path = path() + "/.backup/";
 
     if (!hprof_fs::file::exists(config_path))
         hprof_fs::file::create(config_path);
