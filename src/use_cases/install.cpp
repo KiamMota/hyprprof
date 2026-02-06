@@ -9,72 +9,108 @@
 #include "json/json_exceptions.hpp"
 #include "json/json_manifest_reader.hpp"
 
-void use_cases::Install::ensure_profile_layout(const std::string& path) {
+namespace use_cases {
+
+// Verify that the profile folder structure is correct.
+void Install::ensure_profile_layout(const std::string& path) {
     try {
+        // Check all required directories and files exist in the profile path.
         profile::ProfileLayout::check_required_paths(path);
     } catch (profile::ProfileLayoutDirException const& ex) {
+        // Log an error if any required directory is missing.
         hypr_log::err(ex.what());
-        std::exit(0);
+        std::exit(0); // Terminate since the profile cannot be used.
     } catch (profile::ProfileLayoutFileException const& ex) {
+        // Log an error if any required file is missing.
         hypr_log::err(ex.what());
         std::exit(0);
     }
 }
 
-void use_cases::Install::ensure_required_paths() { core::HyprprofPath::create_required_paths(); }
+// Ensure that the main Hyprprof directories exist (like config, backup).
+void Install::ensure_required_paths() {
+    core::HyprprofPath::create_required_paths();
+}
 
-void use_cases::Install::ensure_manifest_content(const std::string& string) {
+// Validate that the profile manifest (hyprprof.json) is readable and correct.
+void Install::ensure_manifest_content(const std::string& string) {
     try {
+        // Parse the manifest JSON and load it into the manifest reader.
         _ManifestReader.run(string);
     } catch (json::JsonEmptyException const& ex) {
+        // If the JSON is empty, log and abort.
         hypr_log::err("hyprprof.json is empty!");
         std::exit(0);
     } catch (json::JsonParseException const& ex) {
+        // If the JSON is malformed, log the parsing error and abort.
         hypr_log::err(ex.what());
-          std::exit(0);
+        std::exit(0);
     }
 }
 
-void use_cases::Install::rewrite_config_file() {
+// Rewrite or create the configuration file to set the active profile.
+void Install::rewrite_config_file() {
     if (core::ConfigFile::get_config_content().empty()) {
+        // If the config file does not exist, create it with the username empty and current profile set.
         core::ConfigFile::create_file_content("", _ProfileModel.name());
         return;
     }
+    // If config exists, just change the current profile.
     core::ConfigFile::change_current_profile(_ProfileModel.name());
 }
 
-void use_cases::Install::create_profile_path(bool overwrite) {
+// Create the folder for the profile inside the Hyprprof directory.
+void Install::create_profile_path(bool overwrite) {
     try {
+        // Attempt to create a folder for the profile.
         core::HyprprofPath::create_path_in_hyprprof_path(_ProfileModel.name(), overwrite);
     } catch (std::runtime_error const& r) {
+        // Log any errors and suggest using --overwrite if the folder already exists.
         hypr_log::err(r.what());
         hypr_log::log("to overwrite profile, use --overwrite");
         std::exit(0);
     }
 }
 
-void use_cases::Install::finalize_profile_path() {
+// Copy the profile files from the source location to the Hyprprof path.
+void Install::finalize_profile_path() {
     hprof_fs::dir::copy(_current_path, _profile_path_in_hyprprof_path);
 }
 
-use_cases::Install::Install(const std::string& curr_path, bool overwrite)
-    : _current_path(hprof_fs::dir::get_absolute(curr_path)) {
-
-    TimeStamp tm{};
+// Constructor orchestrates the entire installation process.
+Install::Install(const std::string& curr_path, bool overwrite)
+    : _current_path(hprof_fs::dir::get_absolute(curr_path)) // Resolve absolute path of source.
+{
+    TimeStamp tm{};   // Start a timer for profiling installation duration.
     tm.start();
-    ensure_required_paths();
-    ensure_profile_layout(curr_path);
+
+    ensure_required_paths(); // Create Hyprprof root directories if missing.
+    ensure_profile_layout(curr_path); // Validate folder/file layout of the profile.
+    
+    // Load and parse the profile manifest JSON.
     ensure_manifest_content(
-        hprof_fs::file::get_content(profile::ProfileLayout::manifest_path(_current_path)));
+        hprof_fs::file::get_content(profile::ProfileLayout::manifest_path(_current_path))
+    );
+
+    // Extract profile metadata (name, authors, dotfiles, etc.) from manifest.
     _ProfileModel = _ManifestReader.get_profile();
+
+    // Compute the path where the profile will reside inside Hyprprof.
     _profile_path_in_hyprprof_path = core::HyprprofPath::concat_str_path(_ProfileModel.name());
-    create_profile_path(overwrite);
-    finalize_profile_path();
-    rewrite_config_file();
-    tm.stop();
+
+    create_profile_path(overwrite); // Create the profile folder (with overwrite option if needed).
+    finalize_profile_path();         // Copy the profile files into the Hyprprof path.
+
+    rewrite_config_file();           // Update or create the config file to point to the new profile.
+
+    tm.stop();                       // Stop the timer.
+
+    // Log the installation result and duration.
     hypr_log::ok("installed.");
     std::cout << "completed in: " << tm.to_string() << std::endl;
-    std::cout << "profile created in: " << core::HyprprofPath::concat_str_path(_ProfileModel.name())
-              << std::endl;
+    std::cout << "profile created in: " << core::HyprprofPath::concat_str_path(_ProfileModel.name()) << std::endl;
     std::cout << "to use: hyprprof use " << _ProfileModel.name() << std::endl;
 }
+
+} // namespace use_cases
+

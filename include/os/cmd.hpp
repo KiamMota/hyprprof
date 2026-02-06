@@ -3,26 +3,44 @@
 
 #include <stdexcept>
 #include <string>
+
 namespace os {
 
+/**
+ * @file cmd.hpp
+ * @brief Provides functions for executing shell commands, scripts, and package management operations.
+ *
+ * This module contains utilities for:
+ *  - Running commands synchronously or asynchronously
+ *  - Capturing command output and exit codes
+ *  - Checking and installing system packages
+ * 
+ * @note All functions execute OS-level commands and may throw exceptions if commands fail.
+ */
 
+/**
+ * @struct Result
+ * @brief Represents the result of a command execution.
+ *
+ * @var Result::output
+ *   Captures the stdout of the executed command.
+ * @var Result::error_code
+ *   Contains the exit code of the executed process.
+ */
 typedef struct {
-    std::string output;
-    int error_code;
+    std::string output; ///< Standard output of the command
+    int error_code;     ///< Process exit code
 } Result;
 
 /**
  * @brief Executes a command using a POSIX shell through a pipe.
  *
  * @param command Command string executed exactly as provided.
+ * @return Result containing the command's stdout and exit code.
  *
- * @return Result where:
- *  - output contains the full stdout of the command
- *  - error_code is the process exit code
- *
- * @note Blocks the calling thread until completion.
- * @note stderr is not captured.
- * @warning No escaping or sanitization is performed.
+ * @note Blocks the calling thread until the command completes.
+ * @note Standard error is not captured.
+ * @warning The command is executed directly; no escaping or sanitization is performed.
  */
 Result execute_pipe(const std::string& command);
 
@@ -31,8 +49,8 @@ Result execute_pipe(const std::string& command);
  *
  * @param command Command string to execute.
  *
- * @note Does not block the caller.
- * @note Does not return execution status.
+ * @note Non-blocking: returns immediately without waiting for the command to finish.
+ * @note Does not provide stdout or exit code.
  * @warning Creates a new OS process.
  */
 void execute_fork(const std::string& command);
@@ -41,17 +59,32 @@ void execute_fork(const std::string& command);
  * @brief Executes a script at the given path.
  *
  * @param script_path Path to the script (relative or absolute).
- *
- * @return Result containing stdout and exit code.
+ * @return Result containing the script's stdout and exit code.
  *
  * @throws std::runtime_error If the script cannot be executed.
- * @note Requires execute permission and respects the script shebang.
+ * @note Requires execute permission and respects the script's shebang.
  */
 Result execute_script(const std::string& script_path);
 
+/**
+ * @brief Installs a system package using the detected package manager.
+ *
+ * @param pack Name of the package to install.
+ *
+ * @note This function uses the OS package manager (apt, pacman, dnf, etc.).
+ * @warning May require root privileges.
+ */
 void install_pack(const std::string& pack);
+
+/**
+ * @brief Checks whether a system package is already installed.
+ *
+ * @param pack Name of the package to check.
+ * @return true if the package is installed, false otherwise.
+ */
 bool pack_exists(const std::string& pack);
 
-} // namespace sys
+} // namespace os
 
 #endif // CMD_HPP
+
