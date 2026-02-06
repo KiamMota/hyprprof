@@ -10,6 +10,8 @@ void register_commands() {
     cli::register_command("install",
                           [](const std::vector<std::string>& args) { cli::cmd::install(args); });
     cli::register_command("use", [](const std::vector<std::string>& args) { cli::cmd::use(args);});
+    cli::register_command("using", [](const std::vector<std::string>& args){cli::cmd::using_(args);});
+    cli::register_command("list", [](const std::vector<std::string>& args){cli::cmd::list(args);});
 
 }
 

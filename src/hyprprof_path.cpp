@@ -2,7 +2,10 @@
 #include "fs/dir.hpp"
 #include "fs/dotconfig.hpp"
 #include "fs/file.hpp"
+#include <filesystem>
+#include <list>
 #include <stdexcept>
+#include <string>
 
 core::HyprprofPath::HyprprofPath() {}
 
@@ -31,6 +34,20 @@ void core::HyprprofPath::create_path_in_hyprprof_path(const std::string& name, b
 
 const std::string core::HyprprofPath::concat_str_path(const std::string& path) noexcept {
     return hprof_fs::dotconfig::get_config_path() + "/hyprprof/" + path;
+}
+
+std::list<std::string> core::HyprprofPath::profile_paths() noexcept {
+    std::list<std::string> profile_paths;
+    for (const auto& p : std::filesystem::directory_iterator{HyprprofPath::path()}) {
+        if (p.is_directory()) {
+            std::string name = p.path().filename().string();
+            if (!name.empty() && name[0] != '.') { // ignora diretórios que começam com '.'
+                profile_paths.push_back(name);
+            }
+        }
+    }
+
+    return profile_paths;
 }
 
 void core::HyprprofPath::create_required_paths() {

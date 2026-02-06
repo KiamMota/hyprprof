@@ -1,6 +1,7 @@
 #ifndef HYPRPROF_PATH_HPP
 #define HYPRPROF_PATH_HPP
 
+#include <list>
 #include <string>
 namespace core
 {
@@ -81,6 +82,8 @@ namespace core
          * @param overwrite Whether to overwrite if the directory exists.
          */
         static void create_path_in_hyprprof_path(const std::string& name, bool overwrite);
+
+        static std::list<std::string> profile_paths() noexcept;
     };
 }
 
