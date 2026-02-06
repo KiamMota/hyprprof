@@ -74,14 +74,14 @@ use_cases::Install::Install(const std::string& curr_path, bool overwrite)
     ensure_manifest_content(
         fs::file::get_content(profile::ProfileLayout::manifest_path(_current_path)));
     _ProfileModel = _ManifestReader.get_profile();
-    _profile_path_in_hyprprof_path = core::HyprprofPath::build_path(_ProfileModel.name());
+    _profile_path_in_hyprprof_path = core::HyprprofPath::concat_str_path(_ProfileModel.name());
     create_profile_path(overwrite);
     finalize_profile_path();
     rewrite_config_file();
     tm.stop();
     hypr_log::ok("installed.");
     std::cout << "completed in: " << tm.to_string() << std::endl;
-    std::cout << "profile created in: " << core::HyprprofPath::build_path(_ProfileModel.name())
+    std::cout << "profile created in: " << core::HyprprofPath::concat_str_path(_ProfileModel.name())
               << std::endl;
     std::cout << "to use: hyprprof use " << _ProfileModel.name() << std::endl;
 }

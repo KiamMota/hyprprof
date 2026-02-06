@@ -22,10 +22,6 @@ bool core::HyprprofPath::path_exists_in_hyprprof_path(const std::string& path) n
     return fs::dir::exists(fs::dotconfig::get_config_path() + "/hyprprof/" + path);
 }
 
-bool core::HyprprofPath::has_config_file() noexcept {
-    return fs::file::exists(fs::dotconfig::get_config_path() + "/hyprprof/config.json");
-}
-
 void core::HyprprofPath::create_path_in_hyprprof_path(const std::string& name, bool overwrite) {
     if (fs::dir::exists(fs::dotconfig::get_config_path() + "/hyprprof/" + name) &&
         overwrite == false)
@@ -35,7 +31,7 @@ void core::HyprprofPath::create_path_in_hyprprof_path(const std::string& name, b
     fs::dir::create(fs::dotconfig::get_config_path() + "/hyprprof/" + name);
 }
 
-const std::string core::HyprprofPath::build_path(const std::string& path) noexcept {
+const std::string core::HyprprofPath::concat_str_path(const std::string& path) noexcept {
     return fs::dotconfig::get_config_path() + "/hyprprof/" + path;
 }
 
