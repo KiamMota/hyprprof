@@ -21,6 +21,12 @@ bool hprof_fs::dir::move(const std::string& src, const std::string& new_path) {
     return ec ? true : false;
 }
 
+const std::string hprof_fs::dir::get_last_dir(const std::string &path)
+{
+  std::filesystem::path abs = std::filesystem::absolute(path);
+  return abs.filename().string();
+}
+
 bool hprof_fs::dir::copy(const std::string& src, const std::string& new_path) {
     try {
         std::filesystem::path source(src);
