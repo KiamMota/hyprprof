@@ -80,8 +80,8 @@ An optional object mapping configuration for individual applications or utilitie
 ```json
 {
   "hyprprof": {
-    "authors": ["Alice", "Bob"],
-    "name": "MyProfile_One",
+    "authors": ["kiammota", "Linus Torvalds"],
+    "name": "hprof_test",
     "version": "1.2.0",
     "description": "This is my Hyprprof profile for testing."
   },
