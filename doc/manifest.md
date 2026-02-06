@@ -1,99 +1,66 @@
-# Hyprprof Manifest Documentation
+# HyprProf Manifest Guide — Introductory Version
 
-This document explains each field in the `Hyprprof` manifest, based on the JSON Schema and validation rules. It serves as a reference for developers and profile creators.
+This document explains the HyprProf manifest, which is the core of how profiles work. The manifest is essentially a map that tells HyprProf everything it needs to know about a profile — what it contains, where files live, and which versions it supports.
+
+Most users will **not edit this file manually**. Instead, HyprProf provides a TUI (Text User Interface) that generates the manifest for you, ensuring all fields are correct and consistent.
 
 ---
 
-## Main Fields
+## What is the Manifest?
 
-### `hyprprof`
+A manifest is a **JSON file called `hyprprof.json`** located in the root folder of a profile. It contains:
 
-A required object containing general profile information.
+* Profile metadata (name, authors, description, version)
+* System version constraints (Hyprland and Wayland)
+* Dotfile and application configuration mappings
 
-* **`authors`**: array of strings.
+It is the single source of truth for HyprProf to deploy, validate, and manage profiles.
 
-  * Contains the names of the profile authors.
-  * **Rules**:
+## Main Sections
 
-    * Must have at least one author.
-    * Each author cannot be empty.
+### 1. `hyprprof`
 
-* **`name`**: string.
+Contains **general information about the profile**.
 
-  * Profile name.
-  * **Rules**:
+* **`name`** — Profile identifier. Used to distinguish profiles. Must contain only letters and underscores.
+* **`version`** — Profile version. Follows a numeric pattern like `1.0.0`. Helps track updates.
+* **`authors`** — Array of strings listing who created or maintains the profile.
+* **`description`** — Text explaining what the profile is for. Optional but recommended.
 
-    * Cannot be empty.
-    * Can only contain uppercase and lowercase letters and underscores.
+This section allows HyprProf to **display meaningful info** about the profile in the TUI or CLI.
 
-* **`version`**: string.
+### 2. `version_constraints`
 
-  * Profile version.
-  * **Rules**:
+Defines **minimum system requirements** for the profile.
 
-    * Cannot be empty.
-    * Must be a numeric version with three parts separated by dots, optionally followed by additional digits (like `1.0.0` or `1.0.0.1`).
+* **`hyprland`** — Minimum compatible Hyprland version. Can use `^` to indicate compatible range.
+* **`wayland`** — Minimum compatible Wayland version. Same format.
 
-* **`description`**: string.
+HyprProf reads this section to **ensure the profile won’t break the system** when applied.
 
-  * Profile description.
-  * **Rules**:
+### 3. `dotfiles`
 
-    * Can be empty.
-    * Cannot exceed 255 characters.
+Optional section that lists **application-specific configurations** that will be copied into the user system.
 
-### `version_constraints`
+Each dotfile object has:
 
-A required object defining minimum versions of dependencies.
+* **`pack`** — The package or tool name (like `kitty`, `neovim`).
+* **`target`** — Path on the system where the files should be placed. `$DOTCONFIG` will be automatically expanded to `~/.config`.
+* **`source`** — Subfolder inside the profile (`config/dotfiles/<source>`) containing the files to copy.
 
-* **`hyprland`**: string.
+HyprProf will iterate over this section and copy files, installing required packages if necessary.
 
-  * Minimum compatible Hyprland version.
-  * **Rules**:
+### How the Manifest Works in Practice
 
-    * Cannot be empty.
-    * Must be in the format `X.Y.Z` or `^X.Y.Z`.
-    * The system version must be equal or higher than the specified version.
+1. HyprProf reads `hyprprof.json`.
+2. Validates the profile metadata and version constraints.
+3. Checks which dotfiles exist.
+4. Applies configuration files to the correct system locations.
+5. Manages backups automatically.
 
-* **`wayland`**: string.
+Because the manifest defines **all the relationships and paths**, HyprProf can safely automate profile application, updates, and sharing.
 
-  * Minimum compatible Wayland version.
-  * **Rules**:
-
-    * Cannot be empty.
-    * Must be in the format `X.Y.Z` or `^X.Y.Z`.
-    * The system version must be equal or higher than the specified version.
-
-### `dotfiles`
-
-An optional object mapping configuration for applications or utilities.
-
-* Each key inside `dotfiles` can be any name (`kitty`, `nvim`, `zsh`, etc.).
-* **Structure of each object**:
-
-  * **`pack`**: string. Name of the package or tool.
-  * **`target`**: string. Destination path on the user's system.
-  * **`source`**: string. Source path of the dotfile.
-* **Rules**:
-
-  * Objects are optional; their absence is allowed.
-  * If present, all three fields (`pack`, `target`, `source`) are required.
-  * No additional fields are allowed inside each dotfile.
-
-### General Constraints
-
-* No extra fields are allowed outside `hyprprof`, `version_constraints`, and `dotfiles`.
-* All internal objects must respect the defined types and required fields.
-* Name and version fields follow specific patterns:
-
-  * `name`: only letters and underscores.
-  * `version`: three-part numeric version, optionally with extra digits.
-  * `hyprland` and `wayland` versions: numeric versions with optional caret (`^`) prefix.
- 
-
-# Hyprprof Manifest Example
-
-This is an example of a valid `Hyprprof` manifest, including explanations about `$DOTCONFIG` expansion and dotfile sources.
+## Example Manifest
 
 ```json
 {
@@ -101,7 +68,7 @@ This is an example of a valid `Hyprprof` manifest, including explanations about 
     "authors": ["Alice", "Bob"],
     "name": "MyProfile_One",
     "version": "1.2.0",
-    "description": "This is my Hyprprof profile for testing."
+    "description": "Example HyprProf profile."
   },
   "version_constraints": {
     "hyprland": "^0.23.5",
@@ -122,14 +89,18 @@ This is an example of a valid `Hyprprof` manifest, including explanations about 
 }
 ```
 
-## Notes
+**Notes:**
 
-* `$DOTCONFIG` in the manifest will be expanded by the Hyprprof interpreter to the user's `~/.config` directory. For example, `"target": "$DOTCONFIG/kitty"` becomes `~/.config/kitty`.
-* The `source` field in each dotfile object points to a **subdirectory inside `config/dotfiles`** from which the files will be copied. For example, `"source": "kitty"` means files are taken from `config/dotfiles/kitty`.
-* Dotfile objects are optional; if present, they must contain `pack`, `target`, and `source`. No additional fields are allowed.
-* All other fields follow validation rules:
+* `$DOTCONFIG` will automatically point to `~/.config`.
+* `source` paths are relative to `config/dotfiles/` inside the profile.
+* Dotfile objects are optional, but if present, they **must have all three fields** (`pack`, `target`, `source`).
+* The manifest allows HyprProf to **understand the profile’s structure without asking the user**.
 
-  * `name`: letters and underscores only.
-  * `version`: numeric format `X.Y.Z`.
-  * Hyprland and Wayland versions: optional `^` prefix allowed.
+---
 
+### Takeaways
+
+* The manifest is **the heart of every HyprProf profile**.
+* Users usually **don’t write it manually**; the TUI handles creation.
+* Every field exists so that HyprProf can **reliably apply, share, and manage profiles**.
+* Understanding it helps you **debug, extend, or inspect profiles**, but rarely requires manual editing.
