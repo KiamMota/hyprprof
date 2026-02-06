@@ -30,7 +30,6 @@ void Use::check_first_time_using_hyprprof() {
     hypr_log::warn("no profile setted.");
     hypr_log::warn("all current system settings will be queued in ",
                    core::HyprprofPath::backup_path());
-
   }
 
 void Use::copy_hypr_path()
@@ -68,6 +67,7 @@ Use::Use(const std::string& prof)
     copy_hypr_path();
     copy_waybar_path();
     copy_dotfile_paths();
+    change_config_file();
   tm.stop();
     std::cout << "timestamp: " << tm.to_string() << std::endl;
 

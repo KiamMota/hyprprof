@@ -24,7 +24,7 @@ const std::string core::ConfigFile::get_current_profile_name()
   std::string json = get_config_content();
   rapidjson::Document doc;
   doc.Parse(json.c_str());
-  return doc["username"].GetString();
+  return doc["current_profile"].GetString();
 }
 
 const std::string core::ConfigFile::get_username()
@@ -32,7 +32,7 @@ const std::string core::ConfigFile::get_username()
   std::string json = get_config_content();
   rapidjson::Document doc;
   doc.Parse(json.c_str());
-  return doc["current_profile"].GetString();
+  return doc["username"].GetString();
 }
 
 void core::ConfigFile::set_file_content(const std::string &content)
