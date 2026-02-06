@@ -2,7 +2,6 @@
 
 This guide explains the structure of a HyprProf profile in a simple way, making it easier to create, use, and share Hyprland setups.
 
----
 
 ## What is a HyprProf Profile?
 
@@ -10,7 +9,6 @@ A **profile** in HyprProf is a packaged configuration of your Hyprland environme
 
 Each profile is structured so that the program can read it automatically, apply dotfiles, Hypr configurations, and optional resources like wallpapers or fonts.
 
----
 
 ## Profile Directory Structure
 
@@ -29,7 +27,6 @@ profile_name/              # Root folder named after your profile
 
 This structure allows HyprProf to know exactly where to look for each configuration type.
 
----
 
 ## File and Folder Details
 
