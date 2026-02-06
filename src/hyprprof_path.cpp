@@ -10,7 +10,7 @@ const std::string core::HyprprofPath::path() noexcept {
     return hprof_fs::dotconfig::get_config_path() + "/hyprprof";
 }
 const std::string core::HyprprofPath::config_path() noexcept {
-    return hprof_fs::dotconfig::get_config_path() + "/hyprprof/config.json";
+    return hprof_fs::dotconfig::get_config_path() + "/hyprprof/.config.json";
 }
 
 const std::string core::HyprprofPath::backup_path() noexcept { return path() + "/.backup"; }
@@ -34,7 +34,7 @@ const std::string core::HyprprofPath::concat_str_path(const std::string& path) n
 }
 
 void core::HyprprofPath::create_required_paths() {
-    std::string config_path = path() + "/config.json";
+    std::string config_path = path() + "/.config.json";
     std::string _bak_path = path() + "/.backup/";
     std::string backup_meta_json = path() + "/.backup/.meta.json";
 
