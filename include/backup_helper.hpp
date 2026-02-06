@@ -64,7 +64,7 @@ public:
      * 
      * @param src_path The source file or directory to back up.
      */
-    static void create_copy_backup_path_and_register_in_meta_json(const std::string& src_path);
+    static void create_copy_backup_path_and_register_in_meta_json(const std::string& path_name, const std::string& original_path);
 };
 
 } // namespace core

@@ -81,7 +81,7 @@ void Use::copy_hypr_path()
         !hprof_fs::dir::is_emp(profile::ProfileLayout::hypr_path(_profile_path)))
     {
         // Backup the current system Hypr configs before applying the new profile.
-        core::BackupHelper::create_copy_backup_path_and_register_in_meta_json(hypr_sys_path);
+        core::BackupHelper::create_copy_backup_path_and_register_in_meta_json("hypr", hypr_sys_path);
     }
 
     // Copy the Hypr configuration from the profile to the system path.
@@ -123,7 +123,7 @@ void Use::copy_waybar_path() {
     if (profile::ProfileLayout::has_waybar_path(_profile_path) &&
         !hprof_fs::dir::is_emp(profile::ProfileLayout::waybar_path(_profile_path))) {
         // Backup current Waybar configs before applying the new profile.
-        core::BackupHelper::create_copy_backup_path_and_register_in_meta_json(waybar_sys_path);
+        core::BackupHelper::create_copy_backup_path_and_register_in_meta_json("waybar", waybar_sys_path);
     }
 
     // Copy Waybar configuration from the profile to the system directory.
@@ -147,7 +147,7 @@ void Use::copy_dotfile_paths()
         std::string src_path = profile::ProfileLayout::concat_dotfile_path(_profile_path, dot.source());
 
         // Backup and copy the dotfile to the system directory.
-        core::BackupHelper::create_copy_backup_path_and_register_in_meta_json(src_path);
+        core::BackupHelper::create_copy_backup_path_and_register_in_meta_json(dot.name(), dot.target());
     }
 }
 
