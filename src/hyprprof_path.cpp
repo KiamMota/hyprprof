@@ -13,6 +13,11 @@ const std::string core::HyprprofPath::config_path() noexcept {
     return fs::dotconfig::get_config_path() + "/hyprprof/config.json";
 }
 
+const std::string core::HyprprofPath::bak_path() noexcept
+{
+  return path() + "/.bak";
+}
+
 bool core::HyprprofPath::path_exists_in_hyprprof_path(const std::string& path) noexcept {
     return fs::dir::exists(fs::dotconfig::get_config_path() + "/hyprprof/" + path);
 }
@@ -21,7 +26,7 @@ bool core::HyprprofPath::has_config_file() noexcept {
     return fs::file::exists(fs::dotconfig::get_config_path() + "/hyprprof/config.json");
 }
 
-void core::HyprprofPath::create_path(const std::string& name, bool overwrite) {
+void core::HyprprofPath::create_path_in_hyprprof_path(const std::string& name, bool overwrite) {
     if (fs::dir::exists(fs::dotconfig::get_config_path() + "/hyprprof/" + name) &&
         overwrite == false)
         throw std::runtime_error("path named '" + name + "' already exists in " + HyprprofPath::path());
@@ -30,7 +35,7 @@ void core::HyprprofPath::create_path(const std::string& name, bool overwrite) {
     fs::dir::create(fs::dotconfig::get_config_path() + "/hyprprof/" + name);
 }
 
-const std::string core::HyprprofPath::get_path(const std::string& path) noexcept {
+const std::string core::HyprprofPath::build_path(const std::string& path) noexcept {
     return fs::dotconfig::get_config_path() + "/hyprprof/" + path;
 }
 
