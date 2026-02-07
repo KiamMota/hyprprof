@@ -2,7 +2,7 @@
 #include "fs/dir.hpp"
 #include "fs/file.hpp"
 #include "hyprprof_path.hpp"
-#include "profile_layout.hpp"
+#include "profile_layout_helper.hpp"
 #include "timestamp.hpp"
 #include "utils/log.hpp"
 #include "profile/profile_layout_exceptions.hpp"
@@ -15,7 +15,7 @@ namespace use_cases {
 void Install::ensure_profile_layout(const std::string& path) {
     try {
         // Check all required directories and files exist in the profile path.
-        profile::ProfileLayout::check_required_paths(path);
+        profile::ProfileLayoutHelper::check_required_paths(path);
     } catch (profile::ProfileLayoutDirException const& ex) {
         // Log an error if any required directory is missing.
         hypr_log::err(ex.what());
@@ -79,7 +79,7 @@ Install::Install(const std::string& curr_path, bool overwrite)
     
     // Load and parse the profile manifest JSON.
     ensure_manifest_content(
-        hprof_fs::file::get_content(profile::ProfileLayout::manifest_path(_current_path))
+        hprof_fs::file::get_content(profile::ProfileLayoutHelper::manifest_path(_current_path))
     );
 
     // Extract profile metadata (name, authors, dotfiles, etc.) from manifest.

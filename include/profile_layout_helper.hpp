@@ -12,13 +12,13 @@ namespace profile {
  * paths to profile components, and access files within a profile directory.
  * All methods are static and the class cannot be instantiated.
  */
-class ProfileLayout
+class ProfileLayoutHelper
 {
 private:
     /**
      * @brief Private constructor to prevent instantiation.
      */
-    ProfileLayout();
+    ProfileLayoutHelper();
 
 public:
     /**

@@ -5,7 +5,7 @@
 #include "fs/dotconfig.hpp"
 #include "hyprprof_path.hpp"
 #include "os/hyprctl.hpp"
-#include "profile_layout.hpp"
+#include "profile_layout_helper.hpp"
 #include "timestamp.hpp"
 #include "utils/log.hpp"
 #include <cstdlib>
@@ -31,7 +31,7 @@ void Use::ensure_profile_exists_in_hyprprof_path() {
     // If the profile folder does not exist inside the Hyprprof root path:
     if (!core::HyprprofPath::path_exists_in_hyprprof_path(_profile_name)) {
         // Log an error indicating the profile is missing.
-        hypr_log::err("profile doesn't exists in ", core::HyprprofPath::path());
+        hypr_log::err("profile doesn't exists in ", core::HyprprofPath::root_path());
 
         // Terminate the program immediately since the profile is required.
         std::exit(0);
@@ -77,15 +77,15 @@ void Use::copy_hypr_path()
     std::string hypr_sys_path = hprof_fs::dotconfig::app_path("hypr");
 
     // If the profile contains Hypr configs and they are not empty:
-    if (profile::ProfileLayout::has_hypr_path(_profile_path) &&
-        !hprof_fs::dir::is_emp(profile::ProfileLayout::hypr_path(_profile_path)))
+    if (profile::ProfileLayoutHelper::has_hypr_path(_profile_path) &&
+        !hprof_fs::dir::is_emp(profile::ProfileLayoutHelper::hypr_path(_profile_path)))
     {
         // Backup the current system Hypr configs before applying the new profile.
         core::BackupHelper::create_copy_backup_path_and_register_in_meta_json("hypr", hypr_sys_path);
     }
 
     // Copy the Hypr configuration from the profile to the system path.
-    hprof_fs::dir::copy(profile::ProfileLayout::hypr_path(_profile_path), hypr_sys_path);
+    hprof_fs::dir::copy(profile::ProfileLayoutHelper::hypr_path(_profile_path), hypr_sys_path);
 }
 
 // Ensure that all required packages for dotfiles are installed.
@@ -120,14 +120,14 @@ void Use::copy_waybar_path() {
     std::string waybar_sys_path = hprof_fs::dotconfig::app_path("waybar");
 
     // If the profile contains Waybar configs and they are not empty:
-    if (profile::ProfileLayout::has_waybar_path(_profile_path) &&
-        !hprof_fs::dir::is_emp(profile::ProfileLayout::waybar_path(_profile_path))) {
+    if (profile::ProfileLayoutHelper::has_waybar_path(_profile_path) &&
+        !hprof_fs::dir::is_emp(profile::ProfileLayoutHelper::waybar_path(_profile_path))) {
         // Backup current Waybar configs before applying the new profile.
         core::BackupHelper::create_copy_backup_path_and_register_in_meta_json("waybar", waybar_sys_path);
     }
 
     // Copy Waybar configuration from the profile to the system directory.
-    hprof_fs::dir::copy(profile::ProfileLayout::waybar_path(_profile_path), waybar_sys_path);
+    hprof_fs::dir::copy(profile::ProfileLayoutHelper::waybar_path(_profile_path), waybar_sys_path);
 }
 
 // Copy all dotfile paths from the profile to the system directory.
@@ -137,14 +137,14 @@ void Use::copy_dotfile_paths()
     for (const auto& dot : _manifest.get_dotconfigs())
     {
         // Skip dotfiles that do not actually exist in the profile directory.
-        if (!profile::ProfileLayout::has_this_dotfile(_profile_path, dot.source()))
+        if (!profile::ProfileLayoutHelper::has_this_dotfile(_profile_path, dot.source()))
             continue;
 
         // Log the dotfile being applied.
         hypr_log::log("applying: ", dot.name());
 
         // Determine the full source path of the dotfile in the profile.
-        std::string src_path = profile::ProfileLayout::concat_dotfile_path(_profile_path, dot.source());
+        std::string src_path = profile::ProfileLayoutHelper::concat_dotfile_path(_profile_path, dot.source());
 
         // Backup and copy the dotfile to the system directory.
         core::BackupHelper::create_copy_backup_path_and_register_in_meta_json(dot.name(), dot.target());
@@ -163,7 +163,7 @@ Use::Use(const std::string& prof) {
     // Compute the absolute path to the profile directory.
     _profile_path = core::HyprprofPath::concat_str_path(_profile_name);
 
-    std::cout << profile::ProfileLayout::manifest_content(_profile_path);
+    std::cout << profile::ProfileLayoutHelper::manifest_content(_profile_path);
 
     // Ensure the profile exists on disk.
     ensure_profile_exists_in_hyprprof_path();
@@ -172,7 +172,7 @@ Use::Use(const std::string& prof) {
     check_config_file();
 
     // Load the profile's manifest JSON.
-    _manifest.run(profile::ProfileLayout::manifest_content(_profile_path));
+    _manifest.run(profile::ProfileLayoutHelper::manifest_content(_profile_path));
 
     // Copy and backup Hypr configuration.
     copy_hypr_path();

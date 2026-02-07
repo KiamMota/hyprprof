@@ -7,12 +7,12 @@
 //  │                                                                                                           
 //  │    Methods:                                                                                               
 //  ├───────► create_required_paths()         Create the required directories: hyprprof/, .backup/, and .config/
-//  ├───────► path()                          returns the root hyprprof path.                                   
+//  ├───────► root_path()                     returns the root hyprprof path.                                   
 //  ├───────► backup_path()                   returns the backup path in hyprprof path.                         
 //  ├───────► config_path()                   returns the config file                                           
-//  ├───────► path_exists_in_hyprprof_path    returns true if path exists                                       
+//  ├───────► path_exists_in_hyprprof_path()  returns true if path exists                                       
 //  ├───────► concat_str_path(string)         returns string of path in hyprprof path                           
-//  ├───────► create_path_in_hyprprof_path(string) create a path in hyprprofpath.                               
+//  ├───────► create_path_in_hyprprof_path(string, bool) create a path in hyprprofpath, if exists, doesnt overwrite, wait the bool result.                               
 //  └───────► profile_paths()                 returns a list of profiles within the hyprprof path.              
 
 
@@ -51,7 +51,7 @@ namespace core
          * 
          * @return std::string The absolute path to the Hyprprof directory.
          */
-        static const std::string path() noexcept;
+        static const std::string root_path() noexcept;
 
         /**
          * @brief Returns the configuration path inside Hyprprof.
