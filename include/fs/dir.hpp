@@ -4,8 +4,6 @@
 #include <list>
 #include <string>
 
-#define CONFIG_PATH "~/.config"
-
 namespace hprof_fs {
 namespace dir {
 bool create(const std::string& path_name);
