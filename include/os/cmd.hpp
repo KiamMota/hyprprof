@@ -8,13 +8,14 @@ namespace os {
 
 /**
  * @file cmd.hpp
- * @brief Provides functions for executing shell commands, scripts, and package management operations.
+ * @brief Provides functions for executing shell commands, scripts, and package management
+ * operations.
  *
  * This module contains utilities for:
  *  - Running commands synchronously or asynchronously
  *  - Capturing command output and exit codes
  *  - Checking and installing system packages
- * 
+ *
  * @note All functions execute OS-level commands and may throw exceptions if commands fail.
  */
 
@@ -42,7 +43,7 @@ typedef struct {
  * @note Standard error is not captured.
  * @warning The command is executed directly; no escaping or sanitization is performed.
  */
-Result execute_pipe(const std::string& command);
+Result pipe(const std::string& command);
 
 /**
  * @brief Executes a command by forking a new process.
@@ -53,7 +54,7 @@ Result execute_pipe(const std::string& command);
  * @note Does not provide stdout or exit code.
  * @warning Creates a new OS process.
  */
-void execute_fork(const std::string& command);
+void fork(const std::string& command);
 
 /**
  * @brief Executes a script at the given path.
@@ -64,7 +65,7 @@ void execute_fork(const std::string& command);
  * @throws std::runtime_error If the script cannot be executed.
  * @note Requires execute permission and respects the script's shebang.
  */
-Result execute_script(const std::string& script_path);
+Result exec_script(const std::string& script_path);
 
 /**
  * @brief Installs a system package using the detected package manager.
@@ -87,4 +88,3 @@ bool pack_exists(const std::string& pack);
 } // namespace os
 
 #endif // CMD_HPP
-

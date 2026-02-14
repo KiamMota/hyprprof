@@ -3,7 +3,4 @@
 
 #define RELOAD_COMMAND "hyprctl reload"
 
-os::Result os::hyprctl::reload()
-{
-  return execute_pipe(RELOAD_COMMAND);
-}
+os::Result os::hyprctl::reload() { return pipe(RELOAD_COMMAND); }

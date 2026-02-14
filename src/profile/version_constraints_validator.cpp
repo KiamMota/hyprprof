@@ -26,8 +26,7 @@ static std::vector<int> split_version(const std::string& ver) {
 
 static void check_pipe_result(const os::Result& res) {
     if (res.error_code != 0)
-        throw os::PipeException("command failed with code " +
-                                        std::to_string(res.error_code));
+        throw os::PipeException("command failed with code " + std::to_string(res.error_code));
     if (res.output.empty())
         throw os::PipeException("command returned empty output");
 }
@@ -92,14 +91,13 @@ bool profile::VersionConstraintsChecker::wayland_is_equal(const std::string& ver
     return _version == system_wayland_version();
 }
 
-
 std::string profile::VersionConstraintsChecker::system_hyprland_version() {
-    auto res = os::execute_pipe(HYPRLAND_VERSION_COMMAND);
+    auto res = os::pipe(HYPRLAND_VERSION_COMMAND);
     check_pipe_result(res);
 
     std::string version_output = res.output;
     int ini_pos = strlen("Hyprland ");
-    int end_pos = ini_pos + 7;  // captura apenas X.Y.Z
+    int end_pos = ini_pos + 7; // captura apenas X.Y.Z
     if (version_output.size() < end_pos)
         throw std::runtime_error("Failed to parse Hyprland version from output");
 
@@ -107,9 +105,9 @@ std::string profile::VersionConstraintsChecker::system_hyprland_version() {
 }
 
 std::string profile::VersionConstraintsChecker::system_wayland_version() {
-    auto res = os::execute_pipe(WAYLAND_VERSION_COMMAND);
+    auto res = os::pipe(WAYLAND_VERSION_COMMAND);
     check_pipe_result(res);
 
     std::string version_output = res.output;
-    return version_output.substr(0, version_output.find_first_of("\n"));  // pega a primeira linha
+    return version_output.substr(0, version_output.find_first_of("\n")); // pega a primeira linha
 }

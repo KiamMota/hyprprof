@@ -12,13 +12,13 @@
 //
 // Fork-based execution: executes a shell command in a child process
 //
-void ::os::execute_fork(const std::string& command) {
+void ::os::fork(const std::string& command) {
     // Check if the command string is empty: cannot execute an empty command
     if (command.empty())
-        throw ::os::ForkException("command is empty!"); 
+        throw ::os::ForkException("command is empty!");
 
     // Fork a new process
-    pid_t pid = fork();
+    pid_t pid = ::fork();
 
     // pid < 0 means fork failed, no child created
     if (pid < 0) {
@@ -62,8 +62,8 @@ void ::os::execute_fork(const std::string& command) {
 //
 // Pipe-based execution: executes command and captures stdout
 //
-os::Result os::execute_pipe(const std::string& command) {
-    os::Result res; // Struct to hold stdout and exit code
+os::Result os::pipe(const std::string& command) {
+    os::Result res;               // Struct to hold stdout and exit code
     std::array<char, 256> buffer; // Temporary buffer to read output
 
     // Open a pipe to the command using POSIX popen()
@@ -87,13 +87,13 @@ os::Result os::execute_pipe(const std::string& command) {
 
         // If non-zero, raise exception
         if (res.error_code != 0) {
-            throw ::os::PipeException(
-                "command exited with non-zero code: " + std::to_string(res.error_code));
+            throw ::os::PipeException("command exited with non-zero code: " +
+                                      std::to_string(res.error_code));
         }
     } else if (WIFSIGNALED(status)) {
         // Terminated by signal
-        throw ::os::PipeException(
-            "command terminated by signal: " + std::to_string(WTERMSIG(status)));
+        throw ::os::PipeException("command terminated by signal: " +
+                                  std::to_string(WTERMSIG(status)));
     }
 
     // Trim trailing newline if present to make output cleaner
@@ -107,7 +107,7 @@ os::Result os::execute_pipe(const std::string& command) {
 //
 // Executes a script file by path
 //
-os::Result os::execute_script(const std::string& script_path) {
+os::Result os::exec_script(const std::string& script_path) {
     Result res;
 
     // Empty path is invalid
@@ -128,60 +128,73 @@ os::Result os::execute_script(const std::string& script_path) {
     // Check if file is executable for the user
     if (!(st.st_mode & S_IXUSR)) {
         // Make it executable if necessary
-        res = execute_pipe("chmod +x " + script_path);
+        res = pipe("chmod +x " + script_path);
         if (res.error_code != 0)
             return res;
     }
 
     // Finally execute it through a pipe
-    return execute_pipe(script_path);
+    return pipe(script_path);
 }
 
 //
 // Installs a system package using the detected package manager
 //
-void os::install_pack(const std::string &pack) {
+void os::install_pack(const std::string& pack) {
     std::string pkg_mgr = os::detect_package_manager_str();
     std::string cmd;
 
     // Build installation command based on OS package manager
-    if (pkg_mgr == "pacman")       cmd = "sudo pacman -S --noconfirm " + pack;
-    else if (pkg_mgr == "apt")     cmd = "sudo apt install -y " + pack;
-    else if (pkg_mgr == "dnf")     cmd = "sudo dnf install -y " + pack;
-    else if (pkg_mgr == "yum")     cmd = "sudo yum install -y " + pack;
-    else if (pkg_mgr == "zypper")  cmd = "sudo zypper install -y " + pack;
-    else if (pkg_mgr == "apk")     cmd = "sudo apk add " + pack;
-    else if (pkg_mgr == "xbps")    cmd = "sudo xbps-install -Sy " + pack;
+    if (pkg_mgr == "pacman")
+        cmd = "sudo pacman -S --noconfirm " + pack;
+    else if (pkg_mgr == "apt")
+        cmd = "sudo apt install -y " + pack;
+    else if (pkg_mgr == "dnf")
+        cmd = "sudo dnf install -y " + pack;
+    else if (pkg_mgr == "yum")
+        cmd = "sudo yum install -y " + pack;
+    else if (pkg_mgr == "zypper")
+        cmd = "sudo zypper install -y " + pack;
+    else if (pkg_mgr == "apk")
+        cmd = "sudo apk add " + pack;
+    else if (pkg_mgr == "xbps")
+        cmd = "sudo xbps-install -Sy " + pack;
     else {
         hypr_log::err("Package manager not supported for installation.");
         return;
     }
 
     // Execute the installation command, blocking until done
-    os::execute_pipe(cmd);
+    os::pipe(cmd);
 }
 
 //
 // Checks if a system package is installed
 //
-bool os::pack_exists(const std::string &pack) {
+bool os::pack_exists(const std::string& pack) {
     std::string pkg_mgr = os::detect_package_manager_str();
     std::string cmd;
 
     // Construct package query command for each known package manager
-    if (pkg_mgr == "pacman")       cmd = "pacman -Q " + pack + " >/dev/null 2>&1";
-    else if (pkg_mgr == "apt")     cmd = "dpkg -s " + pack + " >/dev/null 2>&1";
-    else if (pkg_mgr == "dnf")     cmd = "dnf list installed " + pack + " >/dev/null 2>&1";
-    else if (pkg_mgr == "yum")     cmd = "yum list installed " + pack + " >/dev/null 2>&1";
-    else if (pkg_mgr == "zypper")  cmd = "zypper se --installed-only " + pack + " >/dev/null 2>&1";
-    else if (pkg_mgr == "apk")     cmd = "apk info " + pack + " >/dev/null 2>&1";
-    else if (pkg_mgr == "xbps")    cmd = "xbps-query -l | grep -qx " + pack;
+    if (pkg_mgr == "pacman")
+        cmd = "pacman -Q " + pack + " >/dev/null 2>&1";
+    else if (pkg_mgr == "apt")
+        cmd = "dpkg -s " + pack + " >/dev/null 2>&1";
+    else if (pkg_mgr == "dnf")
+        cmd = "dnf list installed " + pack + " >/dev/null 2>&1";
+    else if (pkg_mgr == "yum")
+        cmd = "yum list installed " + pack + " >/dev/null 2>&1";
+    else if (pkg_mgr == "zypper")
+        cmd = "zypper se --installed-only " + pack + " >/dev/null 2>&1";
+    else if (pkg_mgr == "apk")
+        cmd = "apk info " + pack + " >/dev/null 2>&1";
+    else if (pkg_mgr == "xbps")
+        cmd = "xbps-query -l | grep -qx " + pack;
     else {
         hypr_log::err("Package manager not supported for checking package existence.");
         return false;
     }
 
     // Execute the query and return true if exit code is zero (package found)
-    return os::execute_pipe(cmd).error_code == 0;
+    return os::pipe(cmd).error_code == 0;
 }
-
