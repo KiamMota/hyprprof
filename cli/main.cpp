@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "cmd.hpp" 
+#include "cmd.hpp"
 #include "message.hpp"
 #include "dispatcher.hpp"
 
@@ -9,10 +9,11 @@ void register_commands() {
     // registra o comando "install"
     cli::register_command("install",
                           [](const std::vector<std::string>& args) { cli::cmd::install(args); });
-    cli::register_command("use", [](const std::vector<std::string>& args) { cli::cmd::use(args);});
-    cli::register_command("using", [](const std::vector<std::string>& args){cli::cmd::using_(args);});
-    cli::register_command("list", [](const std::vector<std::string>& args){cli::cmd::list(args);});
-
+    cli::register_command("use", [](const std::vector<std::string>& args) { cli::cmd::use(args); });
+    cli::register_command("using",
+                          [](const std::vector<std::string>& args) { cli::cmd::using_(args); });
+    cli::register_command("list",
+                          [](const std::vector<std::string>& args) { cli::cmd::list(args); });
 }
 
 int main(int argc, char* argv[]) {
