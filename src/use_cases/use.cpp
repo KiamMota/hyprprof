@@ -13,17 +13,15 @@
 namespace use_cases {
 
 // Change the currently active profile in the configuration file to this profile.
-void Use::change_config_file() 
-{
-  if(core::ConfigFile::get_content().empty())
-  {
-    core::ConfigFile::create_file_content("", "");
-  }
+void Use::change_config_file() {
+    if (core::ConfigFile::get_content().empty()) {
+        core::ConfigFile::create_file_content("", "");
+    }
     // Log which profile is currently being set.
     hypr_log::ok("current profile: ", _profile_name);
 
     // Update the configuration file to record the new active profile.
-    core::ConfigFile::change_current_profile(_profile_name); 
+    core::ConfigFile::change_current_profile(_profile_name);
 }
 
 // Ensures that the profile exists in the Hyprprof directory before proceeding.
@@ -41,11 +39,10 @@ void Use::ensure_profile_exists_in_hyprprof_path() {
 // Check if there is a configuration file and if the requested profile can be used.
 void Use::check_config_file() {
     // If there is no current profile set:
-    if(core::ConfigFile::get_content().empty())
-    {
-      hypr_log::warn("no profile setted");
-    core::ConfigFile::create_file_content("", "");
-      return;
+    if (core::ConfigFile::get_content().empty()) {
+        hypr_log::warn("no profile setted");
+        core::ConfigFile::create_file_content("", "");
+        return;
     }
     if (core::ConfigFile::get_current_profile_name().empty()) {
         // Warn the user that no profile is set.
@@ -68,8 +65,7 @@ void Use::check_config_file() {
 }
 
 // Copy the Hypr configuration files from the profile to the system directory.
-void Use::copy_hypr_path()
-{
+void Use::copy_hypr_path() {
     // Inform the user that the Hypr profile is being applied.
     hypr_log::log("applying hyprprof...");
 
@@ -78,10 +74,10 @@ void Use::copy_hypr_path()
 
     // If the profile contains Hypr configs and they are not empty:
     if (profile::ProfileLayoutHelper::has_hypr_path(_profile_path) &&
-        !hprof_fs::dir::is_emp(profile::ProfileLayoutHelper::hypr_path(_profile_path)))
-    {
+        !hprof_fs::dir::is_emp(profile::ProfileLayoutHelper::hypr_path(_profile_path))) {
         // Backup the current system Hypr configs before applying the new profile.
-        core::BackupHelper::create_copy_backup_path_and_register_in_meta_json("hypr", hypr_sys_path);
+        core::BackupHelper::create_copy_backup_path_and_register_in_meta_json("hypr",
+                                                                              hypr_sys_path);
     }
 
     // Copy the Hypr configuration from the profile to the system path.
@@ -89,19 +85,16 @@ void Use::copy_hypr_path()
 }
 
 // Ensure that all required packages for dotfiles are installed.
-void Use::ensure_dotfile_packs()
-{
+void Use::ensure_dotfile_packs() {
     // Iterate through all dotfiles listed in the profile's manifest.
-    for (const auto& dot : _manifest.get_dotconfigs())
-    {
+    for (const auto& dot : _manifest.get_dotconfigs()) {
         const std::string& pack_name = dot.pack();
 
         // Log which package is being checked.
         hypr_log::log("checking for: ", dot.pack());
 
         // If the package is specified and does not exist on the system:
-        if (!pack_name.empty() && !os::pack_exists(pack_name))
-        {
+        if (!pack_name.empty() && !os::pack_exists(pack_name)) {
             // Log that the package will be installed.
             hypr_log::log("Installing missing package: ", pack_name);
 
@@ -123,7 +116,8 @@ void Use::copy_waybar_path() {
     if (profile::ProfileLayoutHelper::has_waybar_path(_profile_path) &&
         !hprof_fs::dir::is_emp(profile::ProfileLayoutHelper::waybar_path(_profile_path))) {
         // Backup current Waybar configs before applying the new profile.
-        core::BackupHelper::create_copy_backup_path_and_register_in_meta_json("waybar", waybar_sys_path);
+        core::BackupHelper::create_copy_backup_path_and_register_in_meta_json("waybar",
+                                                                              waybar_sys_path);
     }
 
     // Copy Waybar configuration from the profile to the system directory.
@@ -131,11 +125,9 @@ void Use::copy_waybar_path() {
 }
 
 // Copy all dotfile paths from the profile to the system directory.
-void Use::copy_dotfile_paths()
-{
+void Use::copy_dotfile_paths() {
     // Iterate through each dotfile in the manifest.
-    for (const auto& dot : _manifest.get_dotconfigs())
-    {
+    for (const auto& dot : _manifest.get_dotconfigs()) {
         // Skip dotfiles that do not actually exist in the profile directory.
         if (!profile::ProfileLayoutHelper::has_this_dotfile(_profile_path, dot.source()))
             continue;
@@ -144,10 +136,12 @@ void Use::copy_dotfile_paths()
         hypr_log::log("applying: ", dot.name());
 
         // Determine the full source path of the dotfile in the profile.
-        std::string src_path = profile::ProfileLayoutHelper::concat_dotfile_path(_profile_path, dot.source());
+        std::string src_path =
+            profile::ProfileLayoutHelper::concat_dotfile_path(_profile_path, dot.source());
 
         // Backup and copy the dotfile to the system directory.
-        core::BackupHelper::create_copy_backup_path_and_register_in_meta_json(dot.name(), dot.target());
+        core::BackupHelper::create_copy_backup_path_and_register_in_meta_json(dot.name(),
+                                                                              dot.target());
     }
 }
 
@@ -198,4 +192,3 @@ Use::Use(const std::string& prof) {
 }
 
 } // namespace use_cases
-

@@ -6,7 +6,6 @@
 
 namespace net {
 bool is_url(const std::string& str) {
-    // Regex simples para URLs http, https e git
     static const std::regex url_regex(R"(^(https?|git)://[^\s/$.?#].[^\s]*$)", std::regex::icase);
     return std::regex_match(str, url_regex);
 }

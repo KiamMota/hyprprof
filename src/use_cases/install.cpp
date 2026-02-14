@@ -2,6 +2,8 @@
 #include "fs/dir.hpp"
 #include "fs/file.hpp"
 #include "hyprprof_path.hpp"
+#include "net/base.hpp"
+#include "net/download.hpp"
 #include "profile_layout_helper.hpp"
 #include "timestamp.hpp"
 #include "utils/log.hpp"
@@ -12,7 +14,8 @@
 namespace use_cases {
 
 // Verify that the profile folder structure is correct.
-void Install::ensure_profile_layout(const std::string& path) {
+void Install::ensure_profile(const std::string& path) {
+
     try {
         // Check all required directories and files exist in the profile path.
         profile::ProfileLayoutHelper::check_required_paths(path);
@@ -28,9 +31,7 @@ void Install::ensure_profile_layout(const std::string& path) {
 }
 
 // Ensure that the main Hyprprof directories exist (like config, backup).
-void Install::ensure_required_paths() {
-    core::HyprprofPath::create_required_paths();
-}
+void Install::ensure_required_paths() { core::HyprprofPath::create_required_paths(); }
 
 // Validate that the profile manifest (hyprprof.json) is readable and correct.
 void Install::ensure_manifest_content(const std::string& string) {
@@ -47,7 +48,6 @@ void Install::ensure_manifest_content(const std::string& string) {
         std::exit(0);
     }
 }
-
 
 // Create the folder for the profile inside the Hyprprof directory.
 void Install::create_profile_path(bool overwrite) {
@@ -71,16 +71,15 @@ void Install::finalize_profile_path() {
 Install::Install(const std::string& curr_path, bool overwrite)
     : _current_path(hprof_fs::dir::get_absolute(curr_path)) // Resolve absolute path of source.
 {
-    TimeStamp tm{};   // Start a timer for profiling installation duration.
+    TimeStamp tm{}; // Start a timer for profiling installation duration.
     tm.start();
 
-    ensure_required_paths(); // Create Hyprprof root directories if missing.
-    ensure_profile_layout(curr_path); // Validate folder/file layout of the profile.
-    
+    ensure_required_paths();
+    ensure_profile(profile_name);
+
     // Load and parse the profile manifest JSON.
     ensure_manifest_content(
-        hprof_fs::file::get_content(profile::ProfileLayoutHelper::manifest_path(_current_path))
-    );
+        hprof_fs::file::get_content(profile::ProfileLayoutHelper::manifest_path(_current_path)));
 
     // Extract profile metadata (name, authors, dotfiles, etc.) from manifest.
     _ProfileModel = _ManifestReader.get_profile();
@@ -89,17 +88,16 @@ Install::Install(const std::string& curr_path, bool overwrite)
     _profile_path_in_hyprprof_path = core::HyprprofPath::concat_str_path(_ProfileModel.name());
 
     create_profile_path(overwrite); // Create the profile folder (with overwrite option if needed).
-    finalize_profile_path();         // Copy the profile files into the Hyprprof path.
+    finalize_profile_path();        // Copy the profile files into the Hyprprof path.
 
-
-    tm.stop();                       // Stop the timer.
+    tm.stop(); // Stop the timer.
 
     // Log the installation result and duration.
     hypr_log::ok("installed.");
     std::cout << "completed in: " << tm.to_string() << std::endl;
-    std::cout << "profile created in: " << core::HyprprofPath::concat_str_path(_ProfileModel.name()) << std::endl;
+    std::cout << "profile created in: " << core::HyprprofPath::concat_str_path(_ProfileModel.name())
+              << std::endl;
     std::cout << "to use: hyprprof use " << _ProfileModel.name() << std::endl;
 }
 
 } // namespace use_cases
-
