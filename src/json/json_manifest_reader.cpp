@@ -15,15 +15,13 @@ namespace json {
 
 // Constructor for JSONManifestReader
 // Initializes the reader with the predefined Hyprprof JSON schema.
-JSONManifestReader::JSONManifestReader() { 
-    _json_schema = HYPRPROF_JSON_SCHEMA; 
-}
+JSONManifestReader::JSONManifestReader() { _json_schema = HYPRPROF_JSON_SCHEMA; }
 
 // Parses and validates a JSON string.
 // Throws runtime_error if parsing fails or if the JSON does not conform to the schema.
 void JSONManifestReader::run(const std::string& json_str) {
     _json_str = json_str;
-    
+
     // Parse the JSON string into a RapidJSON document
     _document.Parse(_json_str.c_str());
 
@@ -72,8 +70,7 @@ const profile::Profile JSONManifestReader::get_profile() {
 
 // Returns a list of DotFile objects representing the dotfiles in the JSON.
 // Handles environment variable expansion for "$DOTCONFIG" and "~".
-const std::list<core::DotFile> JSONManifestReader::get_dotconfigs()
-{
+const std::list<core::DotFile> JSONManifestReader::get_dotconfigs() {
     std::list<core::DotFile> dotconfigs;
 
     // If "dotfiles" is missing or not an object, return an empty list
@@ -83,8 +80,7 @@ const std::list<core::DotFile> JSONManifestReader::get_dotconfigs()
     const auto& dotfiles = _document["dotfiles"].GetObject();
 
     // Iterate over all dotfile entries
-    for (auto it = dotfiles.MemberBegin(); it != dotfiles.MemberEnd(); ++it)
-    {
+    for (auto it = dotfiles.MemberBegin(); it != dotfiles.MemberEnd(); ++it) {
         const char* name = it->name.GetString();
         const auto& value = it->value;
 
@@ -96,19 +92,15 @@ const std::list<core::DotFile> JSONManifestReader::get_dotconfigs()
             dot.set_pack(value["pack"].GetString());
 
         // Optional: set target path if present and is a string
-        if (value.HasMember("target") && value["target"].IsString())
-        {
+        if (value.HasMember("target") && value["target"].IsString()) {
             std::string target = value["target"].GetString();
 
             // Resolve "$DOTCONFIG" and "~" to actual paths
-            const std::string dotconfig_path = hprof_fs::dotconfig::get_config_path(); 
+            const std::string dotconfig_path = hprof_fs::dotconfig::get_config_path();
 
-            if (target.rfind("$DOTCONFIG", 0) == 0)
-            {
+            if (target.rfind("$DOTCONFIG", 0) == 0) {
                 target.replace(0, std::string("$DOTCONFIG").size(), dotconfig_path);
-            }
-            else if (target.rfind("~/", 0) == 0)
-            {
+            } else if (target.rfind("~/", 0) == 0) {
                 target.replace(0, 1, std::getenv("HOME"));
             }
 
