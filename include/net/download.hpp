@@ -3,7 +3,7 @@
 
 #include <string>
 namespace net {
-void download_with_git(const std::string& url);
+const std::string download_with_git(const std::string& url);
 
 }
 
