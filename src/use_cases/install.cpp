@@ -75,7 +75,7 @@ Install::Install(const std::string& curr_path, bool overwrite)
     tm.start();
 
     ensure_required_paths();
-    ensure_profile(profile_name);
+    ensure_profile(curr_path);
 
     // Load and parse the profile manifest JSON.
     ensure_manifest_content(
