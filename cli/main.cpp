@@ -4,6 +4,7 @@
 #include "cmd.hpp"
 #include "message.hpp"
 #include "dispatcher.hpp"
+#include "utils/version.hpp"
 
 void register_commands() {
     // registra o comando "install"
@@ -38,7 +39,7 @@ int main(int argc, char* argv[]) {
     }
 
     if (first_arg == "-v" || first_arg == "--version") {
-        std::cout << "hyprprof version 0.1\n";
+        std::cout << app::version::VERSION << std::endl;
         return 0;
     }
 
