@@ -5,11 +5,8 @@
 #include <regex>
 
 namespace net {
-bool is_url(const std::string& str) {
-    static const std::regex url_regex(R"(^(https?|git)://[^\s/$.?#].[^\s]*$)", std::regex::icase);
-    return std::regex_match(str, url_regex);
-}
 
+bool is_url(const std::string& str) { return str.find("https://") != std::string::npos; }
 void check_url(const std::string& url) {
     if (url.empty()) {
         throw NetException("URL cannot be empty");

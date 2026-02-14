@@ -74,6 +74,8 @@ Install::Install(const std::string& curr_path, bool overwrite)
     TimeStamp tm{}; // Start a timer for profiling installation duration.
     tm.start();
 
+    std::cout << "path: " << curr_path << std::endl;
+
     ensure_required_paths();
     ensure_profile(curr_path);
 
