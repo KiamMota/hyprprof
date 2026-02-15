@@ -1,8 +1,8 @@
 #ifndef JSON_SCHEMAS_HPP
 #define JSON_SCHEMAS_HPP
 
-#define HYPRPROF_JSON_SCHEMA \
-R"(
+#define HYPRPROF_JSON_SCHEMA                                                                       \
+    R"(
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
@@ -27,19 +27,6 @@ R"(
       "properties": {
         "hyprland": { "type": "string" },
         "wayland": { "type": "string" }
-      }
-    },
-    "dotfiles": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "object",
-        "required": ["pack", "target", "source"],
-        "properties": {
-          "pack": { "type": "string" },
-          "target": { "type": "string" },
-          "source": { "type": "string" }
-        },
-        "additionalProperties": false
       }
     }
   },

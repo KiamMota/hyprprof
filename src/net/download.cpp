@@ -10,10 +10,6 @@ namespace net {
 const std::string download_with_git(const std::string& url) {
     check_url(url);
 
-    if (!is_git(url)) {
-        throw std::invalid_argument("URL não é um repositório Git válido.");
-    }
-
     // Extrai o nome do projeto a partir da URL
     std::string repo_name = url.substr(url.find_last_of('/') + 1);
     if (repo_name.size() > 4 && repo_name.substr(repo_name.size() - 4) == ".git") {

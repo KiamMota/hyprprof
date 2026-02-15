@@ -1,7 +1,6 @@
 #ifndef APP_SERVICE_HPP
 #define APP_SERVICE_HPP
 
-#include "config_file.hpp"
 #include "json/json_manifest_reader.hpp"
 #include "profile/profile_model.hpp"
 #include <string>
@@ -11,6 +10,8 @@ class Install {
     json::JSONManifestReader _ManifestReader;
     profile::Profile _ProfileModel;
     std::string _current_path;
+
+  protected:
     void ensure_required_paths();
     void ensure_profile(const std::string& profile_root);
     void ensure_manifest_content(const std::string& string_file);
@@ -20,7 +21,8 @@ class Install {
     std::string _profile_path_in_hyprprof_path;
 
   public:
-    Install(const std::string& curr_path, bool overwrite);
+    Install();
+    void install(const std::string& curr_path, bool overwrite);
 };
 } // namespace use_cases
 

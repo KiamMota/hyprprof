@@ -6,6 +6,7 @@
 #include "net/download.hpp"
 #include "use_cases/install.hpp"
 #include "cli_log.hpp"
+#include "use_cases/internet_install.hpp"
 #include "use_cases/show_things.hpp"
 #include "use_cases/use.hpp"
 
@@ -20,10 +21,13 @@ void cli::cmd::install(const std::vector<std::string>& args) {
 
     // Cria o objeto de instalação
     if (net::is_url(config_name)) {
-        config_name = net::download_with_git(config_name);
+        use_cases::InternetInstall instnet;
+        instnet.install(config_name);
+        return;
     }
 
-    use_cases::Install inst{config_name, overwrite_flag};
+    use_cases::Install inst;
+    inst.install(config_name, overwrite_flag);
 }
 
 void cli::cmd::use(const std::vector<std::string>& args) {

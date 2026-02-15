@@ -13,15 +13,13 @@ class JSONManifestReader {
   private:
     rapidjson::Document _document;
     std::string _json_str;
-    std::string _json_schema;
+
   public:
     JSONManifestReader();
     void run(const std::string& json_str);
     const profile::Profile get_profile();
     const std::list<core::DotFile> get_dotconfigs();
-    
 };
 } // namespace json
-
 
 #endif

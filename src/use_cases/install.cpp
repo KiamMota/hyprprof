@@ -2,8 +2,6 @@
 #include "fs/dir.hpp"
 #include "fs/file.hpp"
 #include "hyprprof_path.hpp"
-#include "net/base.hpp"
-#include "net/download.hpp"
 #include "profile_layout_helper.hpp"
 #include "timestamp.hpp"
 #include "utils/log.hpp"
@@ -68,16 +66,16 @@ void Install::finalize_profile_path() {
 }
 
 // Constructor orchestrates the entire installation process.
-Install::Install(const std::string& curr_path, bool overwrite)
-    : _current_path(hprof_fs::dir::get_absolute(curr_path)) // Resolve absolute path of source.
-{
+Install::Install() {}
+
+void Install::install(const std::string& path, bool overwrite) {
+
+    _current_path = hprof_fs::dir::get_absolute(path); // Resolve absolute path of source.
     TimeStamp tm{}; // Start a timer for profiling installation duration.
     tm.start();
 
-    std::cout << "path: " << curr_path << std::endl;
-
     ensure_required_paths();
-    ensure_profile(curr_path);
+    ensure_profile(path);
 
     // Load and parse the profile manifest JSON.
     ensure_manifest_content(

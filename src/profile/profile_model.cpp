@@ -51,19 +51,18 @@ profile::Profile& profile::Profile::set_hyprland_version(const std::string& vers
 
     std::regex pat(R"(^\^?\d+\.\d+\.\d+$)");
     if (!std::regex_match(version, pat)) {
-        throw profile::InvalidPatternException("Hyprland version must be in format ^X.Y.Z or X.Y.Z");
+        throw profile::InvalidPatternException(
+            "Hyprland version must be in format ^X.Y.Z or X.Y.Z");
     }
 
-    std::string min_version = VersionConstraintsChecker::system_hyprland_version(); 
+    std::string min_version = VersionConstraintsChecker::system_hyprland_version();
     if (!VersionConstraintsChecker::hyprland_is_equal_or_greater(version)) {
-        throw std::runtime_error(
-            "Hyprland version " + version + " is outdated. Minimum required for this profile: " + min_version
-        );
+        throw std::runtime_error("Hyprland version " + version +
+                                 " is outdated. Minimum required for this profile: " + min_version);
     }
 
     return *this;
 }
-
 
 profile::Profile& profile::Profile::set_wayland_version(const std::string& version) {
     if (version.empty())
@@ -72,18 +71,15 @@ profile::Profile& profile::Profile::set_wayland_version(const std::string& versi
     std::regex pat(R"(^\^?\d+\.\d+\.\d+$)");
     if (!std::regex_match(version, pat)) {
         throw profile::InvalidPatternException("Wayland version must be in format ^X.Y.Z or X.Y.Z");
-
     }
     std::string min_version = VersionConstraintsChecker::system_wayland_version();
     if (!VersionConstraintsChecker::wayland_is_equal_or_greater(version)) {
-        throw std::runtime_error(
-            "Wayland version " + version + " is outdated. Minimum required for this profile: " + min_version
-        );
+        throw std::runtime_error("Wayland version " + version +
+                                 " is outdated. Minimum required for this profile: " + min_version);
     }
 
     return *this;
 }
-
 
 const std::string& profile::Profile::version() const noexcept { return _version; }
 const std::string& profile::Profile::name() const noexcept { return _name; }

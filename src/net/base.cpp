@@ -1,8 +1,6 @@
 #include "net/base.hpp"
-#include <regex>
 
 #include <string>
-#include <regex>
 
 namespace net {
 
@@ -10,13 +8,6 @@ bool is_url(const std::string& str) { return str.find("https://") != std::string
 void check_url(const std::string& url) {
     if (url.empty()) {
         throw NetException("URL cannot be empty");
-    }
-
-    const std::regex url_regex(R"(^(https?|ftp)://([a-zA-Z0-9\-\.]+)(:[0-9]+)?(/[\w\-/]*)?$)",
-                               std::regex::extended);
-
-    if (!std::regex_match(url, url_regex)) {
-        throw NetException("Invalid URL format");
     }
 
     const std::string forbidden_chars = " <>\"{}|\\^`";

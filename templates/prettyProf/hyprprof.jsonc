@@ -1,0 +1,14 @@
+{
+  // this profile is auto generated
+  "hyprprof": {
+    "authors": [
+      "hyprprof team"
+    ],
+    "name": "prettyProf",
+    "version": "1.0.0"
+  },
+  "version_constraints": {
+    "hyprland": "^0.12.2",
+    "wayland": "^1.0.0"
+  }
+}

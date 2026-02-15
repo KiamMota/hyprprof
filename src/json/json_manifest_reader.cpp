@@ -15,7 +15,7 @@ namespace json {
 
 // Constructor for JSONManifestReader
 // Initializes the reader with the predefined Hyprprof JSON schema.
-JSONManifestReader::JSONManifestReader() { _json_schema = HYPRPROF_JSON_SCHEMA; }
+JSONManifestReader::JSONManifestReader() {}
 
 // Parses and validates a JSON string.
 // Throws runtime_error if parsing fails or if the JSON does not conform to the schema.
@@ -36,7 +36,7 @@ void JSONManifestReader::run(const std::string& json_str) {
     }
 
     // Validate the JSON against the schema
-    JSONSchemaValidator::validate_schema(_json_str, _json_schema);
+    JSONSchemaValidator::validate_schema(_json_str, HYPRPROF_JSON_SCHEMA);
 }
 
 // Returns a Profile object constructed from the parsed JSON.
